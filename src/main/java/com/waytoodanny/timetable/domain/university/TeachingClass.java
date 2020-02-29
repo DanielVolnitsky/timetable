@@ -1,11 +1,11 @@
-package com.waytoodanny.timetable.domain;
+package com.waytoodanny.timetable.domain.university;
 
 import lombok.Builder;
 
 @Builder
 public class TeachingClass {
-  private final Teacher teacher;
   private final Subject subject;
-  private final Room room;
+  private final Teacher teacher;
   private final StudentGroup group;
+  private final int classesNumber;
 }

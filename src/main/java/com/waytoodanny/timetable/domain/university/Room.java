@@ -1,4 +1,4 @@
-package com.waytoodanny.timetable.domain;
+package com.waytoodanny.timetable.domain.university;
 
 import lombok.Builder;
 

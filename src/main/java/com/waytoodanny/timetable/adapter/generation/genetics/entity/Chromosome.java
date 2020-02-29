@@ -1,16 +1,18 @@
-package com.waytoodanny.timetable.adapter.genetics.entity;
-
-import com.waytoodanny.timetable.domain.TeachingClass;
+package com.waytoodanny.timetable.adapter.generation.genetics.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Represents a full timetable candidate. Consist of genes each presenting one
+ */
 public class Chromosome {
   private static final int academicHoursPerDay = 6;
   private static final int daysPerWeek = 5;
   private static final int numberOfRooms = 30;
   private static final int classesPerWeek = academicHoursPerDay * daysPerWeek * numberOfRooms;
-  private final List<TeachingClass> classes = new ArrayList<>(classesPerWeek);
+  private final List<Gene> genes = new ArrayList<>(classesPerWeek);
   // Number of crossover points of parent's class tables
   int crossoverPointsNumber;
   // Number of classes that is moved randomly by single mutation operation
