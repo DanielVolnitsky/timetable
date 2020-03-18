@@ -1,8 +1,8 @@
 package com.waytoodanny.timetable.domain.university;
 
-import lombok.AllArgsConstructor;
+import lombok.Value;
 
-@AllArgsConstructor
+@Value
 public class Subject {
   private final String name;
 }
