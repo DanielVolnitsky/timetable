@@ -1,6 +1,6 @@
-package com.waytoodanny.timetable.adapter.generation.genetics;
+package com.waytoodanny.timetable.service.generation.genetics;
 
-import com.waytoodanny.timetable.application.port.GenerateTimetableUseCase;
+import com.waytoodanny.timetable.service.generation.GenerateTimetableUseCase;
 import com.waytoodanny.timetable.domain.timetable.Timetable;
 
 /**

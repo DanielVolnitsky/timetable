@@ -1,2 +1,9 @@
 server:
   port: 8081
+
+timetable:
+  generation:
+    algorithm:
+      genetics:
+        #5%, 1%, 0.1% etc.
+        mutation-rate: 5

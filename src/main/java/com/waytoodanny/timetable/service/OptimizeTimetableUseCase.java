@@ -1,4 +1,4 @@
-package com.waytoodanny.timetable.application.port;
+package com.waytoodanny.timetable.service;
 
 import com.waytoodanny.timetable.domain.timetable.Timetable;
 

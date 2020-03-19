@@ -1,4 +1,4 @@
-package com.waytoodanny.timetable.adapter.generation.genetics.entity;
+package com.waytoodanny.timetable.service.generation.genetics.entity;
 
 /**
  * Represents
