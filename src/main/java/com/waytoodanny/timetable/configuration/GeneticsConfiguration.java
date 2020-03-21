@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
 @ConfigurationProperties("timetable.generation.algorithm.genetics")
-public class GeneticsProperties {
+public class GeneticsConfiguration {
   private double mutationRate;
+  private int populationSize = 10;
 }

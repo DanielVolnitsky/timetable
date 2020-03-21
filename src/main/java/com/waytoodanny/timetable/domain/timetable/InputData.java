@@ -1,18 +1,34 @@
 package com.waytoodanny.timetable.domain.timetable;
 
-import com.waytoodanny.timetable.domain.university.ClassesStartTimes;
-import com.waytoodanny.timetable.domain.university.Room;
+import com.waytoodanny.timetable.domain.university.Rooms;
 import com.waytoodanny.timetable.domain.university.TeachingClass;
-import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
-@Getter
-@Builder
+import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.toList;
+
+@RequiredArgsConstructor
+@EqualsAndHashCode
 public class InputData {
-  private final List<TeachingClass> teachingClasses;
-  private final List<Room> rooms;
-  private final int workingDaysPerWeek;
-  private final ClassesStartTimes classesStartTimes;
+  @Getter
+  private final Set<TeachingClass> teachingClasses;
+  @Getter
+  private final Rooms rooms;
+
+  private List<TeachingClass> singleWeekClasses;
+
+  public List<TeachingClass> singleWeekClasses() {
+    if (nonNull(singleWeekClasses)) {
+      return singleWeekClasses;
+    }
+    singleWeekClasses = teachingClasses.stream()
+        .flatMap(c -> c.singleWeekClasses().stream())
+        .collect(toList());
+    return singleWeekClasses;
+  }
 }

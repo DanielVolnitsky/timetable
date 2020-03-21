@@ -1,13 +1,17 @@
 package com.waytoodanny.timetable;
 
-import com.waytoodanny.timetable.configuration.GeneticsProperties;
+import com.waytoodanny.timetable.configuration.GeneticsConfiguration;
+import com.waytoodanny.timetable.configuration.UniversityConfiguration;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(GeneticsProperties.class)
+@EnableConfigurationProperties({
+    GeneticsConfiguration.class,
+    UniversityConfiguration.class
+})
 public class Application implements CommandLineRunner {
 
   public static void main(String[] args) {

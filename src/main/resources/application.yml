@@ -1,9 +1,15 @@
 server:
   port: 8081
 
+university:
+  academicHoursPerDay: 3
+  daysPerWeek: 5
+  availableRooms: 10
+
 timetable:
   generation:
     algorithm:
       genetics:
+        populationSize: 10
         #5%, 1%, 0.1% etc.
         mutation-rate: 5
