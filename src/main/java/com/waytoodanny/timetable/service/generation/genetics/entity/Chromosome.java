@@ -6,7 +6,7 @@ import java.util.List;
 
 @Value
 public class Chromosome {
-  private List<Gene> classes;
+  private List<Gene> genes;
 
   //TODO
 //  public int fitnessValue() {

@@ -2,6 +2,7 @@ package com.waytoodanny.timetable.domain.university;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.function.Predicate;
 
 @Getter
 @Builder
+@ToString
 public class TeachingClass {
   private final Subject subject;
   private final Teacher teacher;

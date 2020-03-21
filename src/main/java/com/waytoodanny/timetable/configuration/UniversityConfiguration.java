@@ -1,20 +1,17 @@
 package com.waytoodanny.timetable.configuration;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.stream.IntStream;
 
 @Data
+@Accessors(chain = true)
 @ConfigurationProperties("university")
 public class UniversityConfiguration {
   private int academicHoursPerDay;
   private int daysPerWeek;
-  private int availableRooms;
-
-  public int totalClassesPerWeek() {
-    return academicHoursPerDay * daysPerWeek * availableRooms;
-  }
 
   public int timeSlotsPerWeek() {
     return academicHoursPerDay * daysPerWeek;

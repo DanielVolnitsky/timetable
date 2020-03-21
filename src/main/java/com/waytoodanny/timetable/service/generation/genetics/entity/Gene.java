@@ -2,13 +2,14 @@ package com.waytoodanny.timetable.service.generation.genetics.entity;
 
 import com.waytoodanny.timetable.domain.university.Room;
 import com.waytoodanny.timetable.domain.university.TeachingClass;
-import lombok.Builder;
-import lombok.Singular;
-import lombok.Value;
+import lombok.*;
 
 import java.util.List;
 
 @Builder
+@Getter
+@EqualsAndHashCode
+@ToString
 public class Gene {
   private int timeSlot;
   @Singular

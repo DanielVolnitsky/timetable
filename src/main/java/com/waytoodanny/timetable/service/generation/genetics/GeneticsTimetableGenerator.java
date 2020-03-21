@@ -22,8 +22,6 @@ public class GeneticsTimetableGenerator implements GenerateTimetableUseCase {
 
   @Override
   public Timetable timetable(InputData input) {
-    int periodsPerWeek = universityConfiguration.totalClassesPerWeek();
-
     Population firstGen = populationGenerator.population(input);
     return null;
   }
