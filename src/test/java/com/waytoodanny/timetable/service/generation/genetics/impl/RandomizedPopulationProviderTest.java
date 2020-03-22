@@ -14,7 +14,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RandomPopulationGeneratorTest {
+class RandomizedPopulationProviderTest {
 
   private GeneticsConfiguration geneticsConfig = new GeneticsConfiguration()
       .setPopulationSize(3);
@@ -25,9 +25,7 @@ class RandomPopulationGeneratorTest {
 
   @Test
   void population_positiveScenario() {
-
-
-    var sut = new RandomPopulationGenerator(univConfig, geneticsConfig);
+    var sut = new RandomizedPopulationProvider(univConfig, geneticsConfig);
 
     var rooms = Rooms.of(
         new Room("1", 10),
@@ -39,8 +37,8 @@ class RandomPopulationGeneratorTest {
     var teacher1 = Teacher.builder().name("T1").build();
     var teacher2 = Teacher.builder().name("T1").build();
     var group1 = new StudentGroup("SG1", 11);
-    var group2 = new StudentGroup("SG1", 10);
-    var group3 = new StudentGroup("SG1", 16);
+    var group2 = new StudentGroup("SG2", 10);
+    var group3 = new StudentGroup("SG2", 16);
     var class1 = TeachingClass.builder()
         .subject(subject1)
         .teacher(teacher1)
@@ -66,12 +64,21 @@ class RandomPopulationGeneratorTest {
 
     Chromosome[] resultChromosomes = resultPopulation.getChromosomes();
     assertThat(resultChromosomes).isNotNull();
+    assertThat(resultChromosomes.length).isEqualTo(geneticsConfig.getPopulationSize());
     Arrays.stream(resultChromosomes).forEach(c -> {
       assertThatChromosomeHasCorrectGenesCount(c, rooms);
+      assertThatEachRoomIsAppropriateForAssignedClass(c);
       assertThatChromosomeContainsTeachingClassExactly(c, class1, 2);
       assertThatChromosomeContainsTeachingClassExactly(c, class2, 1);
       assertThatChromosomeContainsTeachingClassExactly(c, class3, 2);
     });
+  }
+
+  private void assertThatEachRoomIsAppropriateForAssignedClass(Chromosome c) {
+    c.getGenes()
+        .stream()
+        .flatMap(g -> g.getTeachingTuples().stream())
+        .forEach(t -> assertThat(t.getTeachingClass().roomRequirements()).accepts(t.getRoom()));
   }
 
   private void assertThatChromosomeContainsTeachingClassExactly(Chromosome chromosome,

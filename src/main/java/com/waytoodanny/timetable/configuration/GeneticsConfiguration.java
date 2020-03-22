@@ -9,5 +9,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("timetable.generation.algorithm.genetics")
 public class GeneticsConfiguration {
   private double mutationRate;
-  private int populationSize = 10;
+  private int populationSize;
 }

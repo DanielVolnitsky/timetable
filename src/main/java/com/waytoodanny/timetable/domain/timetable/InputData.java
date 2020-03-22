@@ -22,7 +22,7 @@ public class InputData {
 
   private List<TeachingClass> singleWeekClasses;
 
-  public List<TeachingClass> singleWeekClasses() {
+  public List<TeachingClass> classesToScheduleForWeek() {
     if (nonNull(singleWeekClasses)) {
       return singleWeekClasses;
     }

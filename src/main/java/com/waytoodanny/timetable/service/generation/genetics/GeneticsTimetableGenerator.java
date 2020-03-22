@@ -16,13 +16,13 @@ import lombok.Value;
 @Value
 public class GeneticsTimetableGenerator implements GenerateTimetableUseCase {
 
-  private final PopulationGenerator populationGenerator;
+  private final PopulationProvider populationProvider;
   private final UniversityConfiguration universityConfiguration;
   private final GeneticsConfiguration geneticsConfiguration;
 
   @Override
   public Timetable timetable(InputData input) {
-    Population firstGen = populationGenerator.population(input);
+    Population firstGen = populationProvider.population(input);
     return null;
   }
 }
