@@ -1,13 +1,31 @@
 package com.waytoodanny.timetable.configuration;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
+import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
-@Data
-@Accessors(chain = true) //TODO make global rule
-@ConfigurationProperties("timetable.generation.algorithm.genetics")
+import java.util.Collection;
+
+@Configuration
+@EnableConfigurationProperties(GeneticsProperties.class)
 public class GeneticsConfiguration {
-  private double mutationRate;
-  private int populationSize;
+
+  @Bean
+  @Primary
+  public ScheduleConstraint compositeScheduleConstraint(Collection<ScheduleConstraint> constraints) {
+    return (chromosome, initial) -> {
+      FitnessFunction fitnessFunction = FitnessFunction.minimal();
+      for (ScheduleConstraint constraint : constraints) {
+        FitnessFunction updatedFitness = constraint.fitness(chromosome, fitnessFunction);
+        if (updatedFitness.equals(FitnessFunction.unacceptable())) {
+          return updatedFitness;
+        }
+        fitnessFunction = updatedFitness;
+      }
+      return fitnessFunction;
+    };
+  }
 }
