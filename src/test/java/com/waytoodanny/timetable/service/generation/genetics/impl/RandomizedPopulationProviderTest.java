@@ -1,7 +1,7 @@
 package com.waytoodanny.timetable.service.generation.genetics.impl;
 
-import com.waytoodanny.timetable.configuration.GeneticsConfiguration;
-import com.waytoodanny.timetable.configuration.UniversityConfiguration;
+import com.waytoodanny.timetable.configuration.GeneticsProperties;
+import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
 import com.waytoodanny.timetable.domain.university.*;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
@@ -16,16 +16,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class RandomizedPopulationProviderTest {
 
-  private GeneticsConfiguration geneticsConfig = new GeneticsConfiguration()
+  private GeneticsProperties geneticsProperties = new GeneticsProperties()
       .setPopulationSize(3);
 
-  private UniversityConfiguration univConfig = new UniversityConfiguration()
+  private UniversityProperties universityProperties = new UniversityProperties()
       .setAcademicHoursPerDay(3)
       .setDaysPerWeek(5);
 
   @Test
   void population_positiveScenario() {
-    var sut = new RandomizedPopulationProvider(univConfig, geneticsConfig);
+    var sut = new RandomizedPopulationProvider(universityProperties, geneticsProperties);
 
     var rooms = Rooms.of(
         new Room("1", 10),
@@ -64,7 +64,7 @@ class RandomizedPopulationProviderTest {
 
     Chromosome[] resultChromosomes = resultPopulation.getChromosomes();
     assertThat(resultChromosomes).isNotNull();
-    assertThat(resultChromosomes.length).isEqualTo(geneticsConfig.getPopulationSize());
+    assertThat(resultChromosomes.length).isEqualTo(geneticsProperties.getPopulationSize());
     Arrays.stream(resultChromosomes).forEach(c -> {
       assertThatChromosomeHasCorrectGenesCount(c, rooms);
       assertThatEachRoomIsAppropriateForAssignedClass(c);
@@ -94,7 +94,7 @@ class RandomizedPopulationProviderTest {
   }
 
   private void assertThatChromosomeHasCorrectGenesCount(Chromosome chromosome, Rooms rooms) {
-    int maxGenesPossible = univConfig.getAcademicHoursPerDay() * rooms.size();
+    int maxGenesPossible = universityProperties.getAcademicHoursPerDay() * rooms.size();
     assertThat(maxGenesPossible)
         .isGreaterThanOrEqualTo(chromosome.getGenes().size());
   }

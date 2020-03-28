@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 @Data
 @Accessors(chain = true)
 @ConfigurationProperties("university")
-public class UniversityConfiguration {
+public class UniversityProperties {
   private int academicHoursPerDay;
   private int daysPerWeek;
 

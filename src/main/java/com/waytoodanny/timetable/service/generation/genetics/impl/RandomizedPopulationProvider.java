@@ -1,7 +1,7 @@
 package com.waytoodanny.timetable.service.generation.genetics.impl;
 
-import com.waytoodanny.timetable.configuration.GeneticsConfiguration;
-import com.waytoodanny.timetable.configuration.UniversityConfiguration;
+import com.waytoodanny.timetable.configuration.GeneticsProperties;
+import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
 import com.waytoodanny.timetable.domain.university.Rooms;
 import com.waytoodanny.timetable.service.generation.genetics.PopulationProvider;
@@ -20,8 +20,8 @@ import static java.util.stream.Collectors.*;
 @Component
 public class RandomizedPopulationProvider implements PopulationProvider {
 
-  UniversityConfiguration universityConfiguration;
-  GeneticsConfiguration geneticsConfiguration;
+  UniversityProperties universityProperties;
+  GeneticsProperties geneticsConfiguration;
 
   @Override
   public Population population(InputData input) {
@@ -34,7 +34,7 @@ public class RandomizedPopulationProvider implements PopulationProvider {
 
   private Chromosome randomChromosome(InputData input) {
     Rooms rooms = input.getRooms();
-    int timeSlotsPerWeek = universityConfiguration.timeSlotsPerWeek();
+    int timeSlotsPerWeek = universityProperties.timeSlotsPerWeek();
 
     //TODO benchmark
     List<Gene> genes = input.classesToScheduleForWeek().stream()
