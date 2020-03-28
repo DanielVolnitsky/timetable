@@ -4,9 +4,10 @@ import com.waytoodanny.timetable.configuration.GeneticsConfiguration;
 import com.waytoodanny.timetable.configuration.UniversityConfiguration;
 import com.waytoodanny.timetable.domain.timetable.InputData;
 import com.waytoodanny.timetable.domain.timetable.Timetable;
-import com.waytoodanny.timetable.service.generation.GenerateTimetableUseCase;
+import com.waytoodanny.timetable.service.generation.TimetableGenerator;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import lombok.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * 1. Initialize starting population.
@@ -14,7 +15,8 @@ import lombok.Value;
  * Each chromosome consists of genes.
  */
 @Value
-public class GeneticsTimetableGenerator implements GenerateTimetableUseCase {
+@Component
+public class GeneticsTimetableGenerator implements TimetableGenerator {
 
   private final PopulationProvider populationProvider;
   private final UniversityConfiguration universityConfiguration;
@@ -22,7 +24,7 @@ public class GeneticsTimetableGenerator implements GenerateTimetableUseCase {
 
   @Override
   public Timetable timetable(InputData input) {
-    Population firstGen = populationProvider.population(input);
+    Population firstPopulation = populationProvider.population(input);
     return null;
   }
 }

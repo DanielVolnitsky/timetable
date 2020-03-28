@@ -8,6 +8,8 @@ import lombok.experimental.Accessors;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Builder
 @Getter
 @EqualsAndHashCode
@@ -19,6 +21,8 @@ public class Gene {
   @Singular
   private List<Tuple> teachingTuples;
 
+  private Rooms usedRooms;
+
   public Gene merge(Gene other) {
     GeneBuilder builder = Gene.builder()
         .timeSlot(this.timeSlot)
@@ -27,6 +31,19 @@ public class Gene {
     other.getTeachingTuples().forEach(builder::teachingTuple);
 
     return builder.build();
+  }
+
+  public Rooms usedRooms() {
+    if (isNull(this.usedRooms)) {
+      this.usedRooms = Rooms.of(this.getTeachingTuples().stream()
+          .map(Tuple::getRoom)
+          .toArray(Room[]::new));
+    }
+    return this.usedRooms;
+  }
+
+  public boolean isAllRoomsUnique() {
+    return usedRooms().isAllUnique();
   }
 
   @Value

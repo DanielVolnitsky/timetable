@@ -9,6 +9,7 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Gene;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import lombok.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -16,10 +17,11 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.*;
 
 @Value
+@Component
 public class RandomizedPopulationProvider implements PopulationProvider {
 
-  private final UniversityConfiguration universityConfiguration;
-  private final GeneticsConfiguration geneticsConfiguration;
+  UniversityConfiguration universityConfiguration;
+  GeneticsConfiguration geneticsConfiguration;
 
   @Override
   public Population population(InputData input) {

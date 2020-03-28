@@ -1,15 +1,25 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity;
 
-import lombok.Value;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Optional;
 
-@Value
+@RequiredArgsConstructor
+
+@EqualsAndHashCode
+@ToString
 public class Chromosome {
-  private List<Gene> genes;
 
-  //TODO
-//  public int fitnessValue() {
-//
-//  }
+  @Getter
+  private final List<Gene> genes;
+
+  @Setter
+  @Accessors(chain = true)
+  private FitnessFunction fitnessFunction;
+
+  public Optional<FitnessFunction> fitnessFunction() {
+    return Optional.ofNullable(fitnessFunction);
+  }
 }
