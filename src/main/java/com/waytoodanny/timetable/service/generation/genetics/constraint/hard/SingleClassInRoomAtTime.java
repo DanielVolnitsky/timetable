@@ -16,7 +16,7 @@ public class SingleClassInRoomAtTime implements HardConstraint {
     return chromosome.getGenes().stream()
         .filter(not(Gene::isAllRoomsUnique))
         .findAny()
-        .map(g -> FitnessFunction.unacceptable())
+        .map(g -> FitnessFunction.UNACCEPTABLE)
         .orElseGet(() -> initial.plus(this.weight()));
   }
 }

@@ -12,13 +12,16 @@ import static java.util.stream.Collectors.toList;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Builder
-@Getter
 @EqualsAndHashCode
 @ToString
 public class Gene {
+
+  @Getter
   @Setter
   @Accessors(fluent = true)
   private int timeSlot;
+
+  @Getter
   @Singular
   private List<Tuple> teachingTuples;
 
@@ -31,14 +34,14 @@ public class Gene {
         .timeSlot(this.timeSlot)
         .teachingTuples(this.teachingTuples);
 
-    other.getTeachingTuples().forEach(builder::teachingTuple);
+    other.teachingTuples.forEach(builder::teachingTuple);
 
     return builder.build();
   }
 
   public Rooms usedRooms() {
     if (isNull(this.usedRooms)) {
-      this.usedRooms = Rooms.of(this.getTeachingTuples().stream()
+      this.usedRooms = Rooms.of(this.teachingTuples.stream()
           .map(Tuple::getRoom)
           .toArray(Room[]::new));
     }

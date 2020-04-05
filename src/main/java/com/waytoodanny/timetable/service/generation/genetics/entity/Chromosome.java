@@ -4,22 +4,16 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
-
+@Getter
 @EqualsAndHashCode
 @ToString
 public class Chromosome {
 
-  @Getter
   private final List<Gene> genes;
 
   @Setter
   @Accessors(chain = true)
   private FitnessFunction fitnessFunction;
-
-  public Optional<FitnessFunction> fitnessFunction() {
-    return Optional.ofNullable(fitnessFunction);
-  }
 }

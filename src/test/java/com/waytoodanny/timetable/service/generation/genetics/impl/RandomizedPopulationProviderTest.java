@@ -4,7 +4,9 @@ import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
 import com.waytoodanny.timetable.domain.university.*;
+import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
+import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Gene;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import org.junit.jupiter.api.Test;
@@ -23,9 +25,11 @@ class RandomizedPopulationProviderTest {
       .setAcademicHoursPerDay(3)
       .setDaysPerWeek(5);
 
+  private ScheduleConstraint constraintStub = (chromosome, initial) -> new FitnessFunction(1);
+
   @Test
   void population_positiveScenario() {
-    var sut = new RandomizedPopulationProvider(universityProperties, geneticsProperties);
+    var sut = new RandomizedPopulationProvider(constraintStub, universityProperties, geneticsProperties);
 
     var rooms = Rooms.of(
         new Room("1", 10),

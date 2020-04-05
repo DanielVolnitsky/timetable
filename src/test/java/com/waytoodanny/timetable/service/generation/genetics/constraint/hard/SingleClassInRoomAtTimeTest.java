@@ -38,7 +38,7 @@ class SingleClassInRoomAtTimeTest {
                 .teachingTuple(new Gene.Tuple(blankTeachingCLass, room3)).build())
     );
 
-    FitnessFunction result = sut.fitness(chromosome, FitnessFunction.minimal());
+    FitnessFunction result = sut.fitness(chromosome, FitnessFunction.INITIAL);
     assertThat(result).isEqualTo(new FitnessFunction(100));
   }
 
@@ -61,8 +61,8 @@ class SingleClassInRoomAtTimeTest {
                 .build())
     );
 
-    FitnessFunction result = sut.fitness(chromosome, FitnessFunction.minimal());
-    assertThat(result).isEqualTo(FitnessFunction.unacceptable());
+    FitnessFunction result = sut.fitness(chromosome, FitnessFunction.INITIAL);
+    assertThat(result).isEqualTo(FitnessFunction.UNACCEPTABLE);
   }
 
   @Test
@@ -85,7 +85,7 @@ class SingleClassInRoomAtTimeTest {
                 .build())
     );
 
-    FitnessFunction result = sut.fitness(chromosome, FitnessFunction.minimal());
-    assertThat(result).isEqualTo(FitnessFunction.unacceptable());
+    FitnessFunction result = sut.fitness(chromosome, FitnessFunction.INITIAL);
+    assertThat(result).isEqualTo(FitnessFunction.UNACCEPTABLE);
   }
 }

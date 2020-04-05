@@ -16,7 +16,7 @@ public class TeacherSingleClassAtTime implements HardConstraint {
     return chromosome.getGenes().stream()
         .filter(not(Gene::isEachTeacherOccursOnce))
         .findAny()
-        .map(g -> FitnessFunction.unacceptable())
+        .map(g -> FitnessFunction.UNACCEPTABLE)
         .orElseGet(() -> initial.plus(this.weight()));
   }
 }

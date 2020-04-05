@@ -19,7 +19,7 @@ public class StudentGroupSingleClassAtTime implements HardConstraint {
     return chromosome.getGenes().stream()
         .filter(not(Gene::isEachStudentGroupOccursOnce))
         .findAny()
-        .map(g -> FitnessFunction.unacceptable())
+        .map(g -> FitnessFunction.UNACCEPTABLE)
         .orElseGet(() -> initial.plus(this.weight()));
   }
 }

@@ -3,19 +3,16 @@ package com.waytoodanny.timetable.service.generation.genetics.entity;
 import lombok.Value;
 
 /**
- * Tells how good a chromosome is, how it fits requirements
+ * Determines the fitness value of each chromosome and the chromosomes
+ * with the highest fitness value is selected for crossover process.
  */
 @Value
 public class FitnessFunction {
+
+  public static final FitnessFunction UNACCEPTABLE = new FitnessFunction(Integer.MIN_VALUE);
+  public static final FitnessFunction INITIAL = new FitnessFunction(0);
+
   int value;
-
-  public static FitnessFunction minimal() {
-    return new FitnessFunction(0);
-  }
-
-  public static FitnessFunction unacceptable() {
-    return new FitnessFunction(Integer.MIN_VALUE);
-  }
 
   public int fitness() {
     return 0;
