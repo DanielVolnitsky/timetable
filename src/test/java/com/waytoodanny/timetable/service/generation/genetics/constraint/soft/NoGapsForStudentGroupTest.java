@@ -27,7 +27,7 @@ class NoGapsForStudentGroupTest {
       .setAcademicHoursPerDay(3)
       .setDaysPerWeek(1);
 
-  NoGapsForStudentGroup sut = new NoGapsForStudentGroup(universityProperties);
+  NoGapsForStudentGroup sut = new NoGapsForStudentGroup(new TimeSlots(universityProperties), universityProperties);
 
   @Test
   void fitnessWhenAllGroupsHaveNoGaps() {

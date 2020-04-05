@@ -1,6 +1,7 @@
 package com.waytoodanny.timetable.service.generation.genetics.constraint.soft;
 
 import com.waytoodanny.timetable.configuration.UniversityProperties;
+import com.waytoodanny.timetable.domain.timetable.TimeSlots;
 import com.waytoodanny.timetable.domain.university.StudentGroup;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.SoftConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
@@ -19,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 public class NoGapsForStudentGroup implements SoftConstraint {
 
   UniversityProperties universityProperties;
+  TimeSlots timeSlots;
 
   @Override
   public FitnessFunction fitness(Chromosome chromosome, FitnessFunction initial) {
@@ -38,18 +40,22 @@ public class NoGapsForStudentGroup implements SoftConstraint {
   }
 
   private int daysWithoutGap(StudentGroup sg, Chromosome chromosome) {
-    return io.vavr.collection.List.ofAll(studentGroupTimeSlots(sg, chromosome))
-        .grouped(universityProperties.getAcademicHoursPerDay())
-        .count(this::noGap);
-  }
+    int result = universityProperties.getDaysPerWeek();
 
-  private boolean noGap(io.vavr.collection.List<Integer> daySlots) {
-    for (int i = 0; i < daySlots.size() - 1; i++) {
-      if (daySlots.get(i + 1) - daySlots.get(i) != 1) {
-        return false;
+    List<Integer> groupSlots = studentGroupTimeSlots(sg, chromosome);
+    for (int i = 0; i < groupSlots.size() - 1; i++) {
+      Integer curr = groupSlots.get(i);
+      Integer next = groupSlots.get(i + 1);
+      if (timeSlots.relateToSameDay(curr, next) && isGapBetween(curr, next)) {
+        result -= 1;
       }
     }
-    return true;
+
+    return result;
+  }
+
+  private boolean isGapBetween(Integer curr, Integer next) {
+    return next - curr != 1;
   }
 
   private List<Integer> studentGroupTimeSlots(StudentGroup sg, Chromosome chromosome) {

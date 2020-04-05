@@ -36,7 +36,7 @@ public class Application implements CommandLineRunner {
     var subject1 = new Subject("S1");
     var subject2 = new Subject("S2");
     var teacher1 = Teacher.builder().name("T1").build();
-    var teacher2 = Teacher.builder().name("T1").build();
+    var teacher2 = Teacher.builder().name("T2").build();
     var group1 = new StudentGroup("SG1", 11);
     var group2 = new StudentGroup("SG2", 10);
     var group3 = new StudentGroup("SG2", 16);
