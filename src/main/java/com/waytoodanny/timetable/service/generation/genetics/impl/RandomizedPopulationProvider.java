@@ -42,7 +42,6 @@ public class RandomizedPopulationProvider implements PopulationProvider {
     Rooms rooms = input.getRooms();
     int timeSlotsPerWeek = universityProperties.timeSlotsPerWeek();
 
-    //TODO benchmark
     List<Gene> genes = input.classesToScheduleForWeek().stream()
         .collect(collectingAndThen(
             toMap(

@@ -9,6 +9,6 @@ timetable:
   generation:
     algorithm:
       genetics:
-        populationSize: 3000
+        populationSize: 1000
         #5%, 1%, 0.1% etc.
         mutation-rate: 5
