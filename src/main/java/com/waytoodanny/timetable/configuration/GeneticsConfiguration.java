@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import java.util.Collection;
+import java.util.Random;
 
 @Configuration
 @EnableConfigurationProperties(GeneticsProperties.class)
@@ -37,5 +38,10 @@ public class GeneticsConfiguration {
 
       return fitnessFunction;
     };
+  }
+
+  @Bean
+  public Random random() {
+    return new Random();
   }
 }
