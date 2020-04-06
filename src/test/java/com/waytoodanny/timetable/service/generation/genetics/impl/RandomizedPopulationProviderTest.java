@@ -3,7 +3,12 @@ package com.waytoodanny.timetable.service.generation.genetics.impl;
 import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
-import com.waytoodanny.timetable.domain.university.*;
+import com.waytoodanny.timetable.domain.university.Room;
+import com.waytoodanny.timetable.domain.university.Rooms;
+import com.waytoodanny.timetable.domain.university.StudentGroup;
+import com.waytoodanny.timetable.domain.university.Subject;
+import com.waytoodanny.timetable.domain.university.Teacher;
+import com.waytoodanny.timetable.domain.university.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
@@ -18,14 +23,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class RandomizedPopulationProviderTest {
 
-  private GeneticsProperties geneticsProperties = new GeneticsProperties()
+  GeneticsProperties geneticsProperties = new GeneticsProperties()
       .setPopulationSize(3);
 
-  private UniversityProperties universityProperties = new UniversityProperties()
+  UniversityProperties universityProperties = new UniversityProperties()
       .setAcademicHoursPerDay(3)
       .setDaysPerWeek(5);
 
-  private ScheduleConstraint constraintStub = (chromosome, initial) -> new FitnessFunction(1);
+  ScheduleConstraint constraintStub = (chromosome, initial) -> new FitnessFunction(1);
 
   @Test
   void population_positiveScenario() {

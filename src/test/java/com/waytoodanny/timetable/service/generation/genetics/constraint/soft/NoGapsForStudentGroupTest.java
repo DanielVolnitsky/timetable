@@ -1,6 +1,7 @@
 package com.waytoodanny.timetable.service.generation.genetics.constraint.soft;
 
 import com.waytoodanny.timetable.configuration.UniversityProperties;
+import com.waytoodanny.timetable.domain.timetable.TimeSlots;
 import com.waytoodanny.timetable.domain.university.Room;
 import com.waytoodanny.timetable.domain.university.StudentGroup;
 import com.waytoodanny.timetable.domain.university.TeachingClass;
@@ -25,9 +26,10 @@ class NoGapsForStudentGroupTest {
 
   UniversityProperties universityProperties = new UniversityProperties()
       .setAcademicHoursPerDay(3)
-      .setDaysPerWeek(1);
+      .setDaysPerWeek(2);
 
-  NoGapsForStudentGroup sut = new NoGapsForStudentGroup(new TimeSlots(universityProperties), universityProperties);
+  NoGapsForStudentGroup sut = new NoGapsForStudentGroup(
+      universityProperties, new TimeSlots(universityProperties));
 
   @Test
   void fitnessWhenAllGroupsHaveNoGaps() {
@@ -43,7 +45,13 @@ class NoGapsForStudentGroupTest {
             Gene.builder()
                 .timeSlot(3)
                 .teachingTuple(new Gene.Tuple(class2, room))
-                .teachingTuple(new Gene.Tuple(class1, room)).build()));
+                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+            Gene.builder()
+                .timeSlot(4).build(),
+            Gene.builder()
+                .timeSlot(5)
+                .teachingTuple(new Gene.Tuple(class1, room))
+                .teachingTuple(new Gene.Tuple(class2, room)).build()));
 
     var expected = FitnessFunction.INITIAL.plus(sut.weight());
     var result = sut.fitness(chromosome, FitnessFunction.INITIAL);
@@ -51,7 +59,7 @@ class NoGapsForStudentGroupTest {
   }
 
   @Test
-  void fitnessWhenOnlyOneGroupHasNoGaps() {
+  void fitnessWhenOneGroupHasSingleGap() {
     var chromosome = new Chromosome(
         List.of(
             Gene.builder()
@@ -63,15 +71,47 @@ class NoGapsForStudentGroupTest {
             Gene.builder()
                 .timeSlot(3)
                 .teachingTuple(new Gene.Tuple(class2, room))
-                .teachingTuple(new Gene.Tuple(class1, room)).build()));
+                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+            Gene.builder()
+                .timeSlot(4).build(),
+            Gene.builder()
+                .timeSlot(5)
+                .teachingTuple(new Gene.Tuple(class1, room))
+                .teachingTuple(new Gene.Tuple(class2, room)).build()));
 
-    var expected = FitnessFunction.INITIAL.plus(sut.weight() / 2);
+    var expected = FitnessFunction.INITIAL.plus(sut.weight() - sut.weight() / 4);
     var result = sut.fitness(chromosome, FitnessFunction.INITIAL);
     assertThat(result).isEqualTo(expected);
   }
 
   @Test
-  void fitnessWhenAllGroupsHaveGaps() {
+  void fitnessWhenBothGroupsHaveSingleGap() {
+    var chromosome = new Chromosome(
+        List.of(
+            Gene.builder()
+                .timeSlot(1)
+                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+            Gene.builder()
+                .timeSlot(2).build(),
+            Gene.builder()
+                .timeSlot(3)
+                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+            Gene.builder()
+                .timeSlot(4)
+                .teachingTuple(new Gene.Tuple(class2, room)).build(),
+            Gene.builder()
+                .timeSlot(5).build(),
+            Gene.builder()
+                .timeSlot(6)
+                .teachingTuple(new Gene.Tuple(class2, room)).build()));
+
+    var expected = new FitnessFunction(sut.weight() / 2);
+    var result = sut.fitness(chromosome, FitnessFunction.INITIAL);
+    assertThat(result).isEqualTo(expected);
+  }
+
+  @Test
+  void fitnessWhenOneGroupHasGapsInAllDays() {
     var chromosome = new Chromosome(
         List.of(
             Gene.builder()
@@ -82,8 +122,45 @@ class NoGapsForStudentGroupTest {
                 .timeSlot(2).build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(class2, room))
+                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+            Gene.builder()
+                .timeSlot(4)
+                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+            Gene.builder()
+                .timeSlot(5).build(),
+            Gene.builder()
+                .timeSlot(6)
                 .teachingTuple(new Gene.Tuple(class1, room)).build()));
+
+    var expected = new FitnessFunction(sut.weight() / 2);
+    var result = sut.fitness(chromosome, FitnessFunction.INITIAL);
+    assertThat(result).isEqualTo(expected);
+  }
+
+  @Test
+  void fitnessWhenBothGroupHasGapsInAllDays() {
+    var chromosome = new Chromosome(
+        List.of(
+            Gene.builder()
+                .timeSlot(1)
+                .teachingTuple(new Gene.Tuple(class1, room))
+                .teachingTuple(new Gene.Tuple(class2, room)).build(),
+            Gene.builder()
+                .timeSlot(2).build(),
+            Gene.builder()
+                .timeSlot(3)
+                .teachingTuple(new Gene.Tuple(class1, room))
+                .teachingTuple(new Gene.Tuple(class2, room)).build(),
+            Gene.builder()
+                .timeSlot(4)
+                .teachingTuple(new Gene.Tuple(class1, room))
+                .teachingTuple(new Gene.Tuple(class2, room)).build(),
+            Gene.builder()
+                .timeSlot(5).build(),
+            Gene.builder()
+                .timeSlot(6)
+                .teachingTuple(new Gene.Tuple(class1, room))
+                .teachingTuple(new Gene.Tuple(class2, room)).build()));
 
     var result = sut.fitness(chromosome, FitnessFunction.INITIAL);
     assertThat(result).isEqualTo(FitnessFunction.INITIAL);
