@@ -17,6 +17,6 @@ public class TeacherSingleClassAtTime implements HardConstraint {
         .filter(not(Gene::isEachTeacherOccursOnce))
         .findAny()
         .map(g -> FitnessFunction.UNACCEPTABLE)
-        .orElseGet(() -> initial.plus(this.weight()));
+        .orElse(initial);
   }
 }

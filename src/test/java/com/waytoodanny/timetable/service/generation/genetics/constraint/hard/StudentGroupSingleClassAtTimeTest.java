@@ -48,7 +48,7 @@ class StudentGroupSingleClassAtTimeTest {
     );
 
     FitnessFunction result = sut.fitness(chromosome, FitnessFunction.INITIAL);
-    assertThat(result).isEqualTo(new FitnessFunction(100));
+    assertThat(result).isEqualTo(FitnessFunction.INITIAL);
   }
 
   @Test

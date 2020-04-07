@@ -17,6 +17,6 @@ public class SingleClassInRoomAtTime implements HardConstraint {
         .filter(not(Gene::isAllRoomsUnique))
         .findAny()
         .map(g -> FitnessFunction.UNACCEPTABLE)
-        .orElseGet(() -> initial.plus(this.weight()));
+        .orElse(initial);
   }
 }

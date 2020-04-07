@@ -24,7 +24,7 @@ public class GeneticsConfiguration {
 
       FitnessFunction fitnessFunction = FitnessFunction.INITIAL;
 
-      for (ScheduleConstraint hard : hardConstraints) {
+      for (HardConstraint hard : hardConstraints) {
         FitnessFunction updatedFitness = hard.fitness(chromosome, fitnessFunction);
         if (updatedFitness.equals(FitnessFunction.UNACCEPTABLE)) {
           return updatedFitness;

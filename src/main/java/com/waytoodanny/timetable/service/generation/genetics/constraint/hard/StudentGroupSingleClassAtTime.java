@@ -20,6 +20,6 @@ public class StudentGroupSingleClassAtTime implements HardConstraint {
         .filter(not(Gene::isEachStudentGroupOccursOnce))
         .findAny()
         .map(g -> FitnessFunction.UNACCEPTABLE)
-        .orElseGet(() -> initial.plus(this.weight()));
+        .orElse(initial);
   }
 }

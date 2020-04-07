@@ -5,8 +5,4 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunct
 
 public interface ScheduleConstraint {
   FitnessFunction fitness(Chromosome chromosome, FitnessFunction initial);
-
-  default int weight() {
-    return 100;
-  }
 }
