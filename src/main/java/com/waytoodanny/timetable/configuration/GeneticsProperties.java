@@ -8,6 +8,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Accessors(chain = true) //TODO make global rule
 @ConfigurationProperties("timetable.generation.algorithm.genetics")
 public class GeneticsProperties {
-  private double mutationRate;
   private int populationSize;
+  private double crossoverRate;
+  private int tournamentSelectionSize;
+  private int eliteChromosomesNumber;
+  private double mutationRate;
 }

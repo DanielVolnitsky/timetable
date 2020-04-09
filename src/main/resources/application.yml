@@ -9,6 +9,8 @@ timetable:
   generation:
     algorithm:
       genetics:
-        populationSize: 1000
-        #5%, 1%, 0.1% etc.
-        mutation-rate: 5
+        populationSize: 9
+        crossover-rate: 0.9
+        tournament-selection-size: 3
+        elite-chromosomes-number: 1
+        mutation-rate: 0.1
