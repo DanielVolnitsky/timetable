@@ -5,6 +5,7 @@ import com.waytoodanny.timetable.domain.university.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Gene;
+import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -26,16 +27,16 @@ class SingleClassInRoomAtTimeTest {
         List.of(
             Gene.builder()
                 .timeSlot(2)
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room1)).build(),
+                .settledClass(new SettledClass(blankTeachingCLass, room1)).build(),
             Gene.builder()
                 .timeSlot(1)
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room1))
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room2)).build(),
+                .settledClass(new SettledClass(blankTeachingCLass, room1))
+                .settledClass(new SettledClass(blankTeachingCLass, room2)).build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room1))
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room2))
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room3)).build())
+                .settledClass(new SettledClass(blankTeachingCLass, room1))
+                .settledClass(new SettledClass(blankTeachingCLass, room2))
+                .settledClass(new SettledClass(blankTeachingCLass, room3)).build())
     );
 
     FitnessFunction result = sut.fitness(chromosome, FitnessFunction.INITIAL);
@@ -48,16 +49,16 @@ class SingleClassInRoomAtTimeTest {
         List.of(
             Gene.builder()
                 .timeSlot(2)
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room3)).build(),
+                .settledClass(new SettledClass(blankTeachingCLass, room3)).build(),
             Gene.builder()
                 .timeSlot(1)
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room1))
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room1))
+                .settledClass(new SettledClass(blankTeachingCLass, room1))
+                .settledClass(new SettledClass(blankTeachingCLass, room1))
                 .build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room1))
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room2))
+                .settledClass(new SettledClass(blankTeachingCLass, room1))
+                .settledClass(new SettledClass(blankTeachingCLass, room2))
                 .build())
     );
 
@@ -71,17 +72,17 @@ class SingleClassInRoomAtTimeTest {
         List.of(
             Gene.builder()
                 .timeSlot(2)
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room1)).build(),
+                .settledClass(new SettledClass(blankTeachingCLass, room1)).build(),
             Gene.builder()
                 .timeSlot(1)
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room1))
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room1))
+                .settledClass(new SettledClass(blankTeachingCLass, room1))
+                .settledClass(new SettledClass(blankTeachingCLass, room1))
                 .build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room1))
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room2))
-                .teachingTuple(new Gene.Tuple(blankTeachingCLass, room1))
+                .settledClass(new SettledClass(blankTeachingCLass, room1))
+                .settledClass(new SettledClass(blankTeachingCLass, room2))
+                .settledClass(new SettledClass(blankTeachingCLass, room1))
                 .build())
     );
 

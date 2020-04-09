@@ -8,6 +8,7 @@ import com.waytoodanny.timetable.domain.university.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Gene;
+import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -37,21 +38,21 @@ class NoGapsForStudentGroupTest {
         List.of(
             Gene.builder()
                 .timeSlot(1)
-                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+                .settledClass(new SettledClass(class1, room)).build(),
             Gene.builder()
                 .timeSlot(2)
-                .teachingTuple(new Gene.Tuple(class2, room))
-                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+                .settledClass(new SettledClass(class2, room))
+                .settledClass(new SettledClass(class1, room)).build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(class2, room))
-                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+                .settledClass(new SettledClass(class2, room))
+                .settledClass(new SettledClass(class1, room)).build(),
             Gene.builder()
                 .timeSlot(4).build(),
             Gene.builder()
                 .timeSlot(5)
-                .teachingTuple(new Gene.Tuple(class1, room))
-                .teachingTuple(new Gene.Tuple(class2, room)).build()));
+                .settledClass(new SettledClass(class1, room))
+                .settledClass(new SettledClass(class2, room)).build()));
 
     var expected = FitnessFunction.INITIAL.plus(sut.weight());
     var result = sut.fitness(chromosome, FitnessFunction.INITIAL);
@@ -64,20 +65,20 @@ class NoGapsForStudentGroupTest {
         List.of(
             Gene.builder()
                 .timeSlot(1)
-                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+                .settledClass(new SettledClass(class1, room)).build(),
             Gene.builder()
                 .timeSlot(2)
-                .teachingTuple(new Gene.Tuple(class2, room)).build(),
+                .settledClass(new SettledClass(class2, room)).build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(class2, room))
-                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+                .settledClass(new SettledClass(class2, room))
+                .settledClass(new SettledClass(class1, room)).build(),
             Gene.builder()
                 .timeSlot(4).build(),
             Gene.builder()
                 .timeSlot(5)
-                .teachingTuple(new Gene.Tuple(class1, room))
-                .teachingTuple(new Gene.Tuple(class2, room)).build()));
+                .settledClass(new SettledClass(class1, room))
+                .settledClass(new SettledClass(class2, room)).build()));
 
     var expected = FitnessFunction.INITIAL.plus(sut.weight() - sut.weight() / 4);
     var result = sut.fitness(chromosome, FitnessFunction.INITIAL);
@@ -90,20 +91,20 @@ class NoGapsForStudentGroupTest {
         List.of(
             Gene.builder()
                 .timeSlot(1)
-                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+                .settledClass(new SettledClass(class1, room)).build(),
             Gene.builder()
                 .timeSlot(2).build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+                .settledClass(new SettledClass(class1, room)).build(),
             Gene.builder()
                 .timeSlot(4)
-                .teachingTuple(new Gene.Tuple(class2, room)).build(),
+                .settledClass(new SettledClass(class2, room)).build(),
             Gene.builder()
                 .timeSlot(5).build(),
             Gene.builder()
                 .timeSlot(6)
-                .teachingTuple(new Gene.Tuple(class2, room)).build()));
+                .settledClass(new SettledClass(class2, room)).build()));
 
     var expected = new FitnessFunction(sut.weight() / 2);
     var result = sut.fitness(chromosome, FitnessFunction.INITIAL);
@@ -116,21 +117,21 @@ class NoGapsForStudentGroupTest {
         List.of(
             Gene.builder()
                 .timeSlot(1)
-                .teachingTuple(new Gene.Tuple(class1, room))
-                .teachingTuple(new Gene.Tuple(class2, room)).build(),
+                .settledClass(new SettledClass(class1, room))
+                .settledClass(new SettledClass(class2, room)).build(),
             Gene.builder()
                 .timeSlot(2).build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+                .settledClass(new SettledClass(class1, room)).build(),
             Gene.builder()
                 .timeSlot(4)
-                .teachingTuple(new Gene.Tuple(class1, room)).build(),
+                .settledClass(new SettledClass(class1, room)).build(),
             Gene.builder()
                 .timeSlot(5).build(),
             Gene.builder()
                 .timeSlot(6)
-                .teachingTuple(new Gene.Tuple(class1, room)).build()));
+                .settledClass(new SettledClass(class1, room)).build()));
 
     var expected = new FitnessFunction(sut.weight() / 2);
     var result = sut.fitness(chromosome, FitnessFunction.INITIAL);
@@ -143,24 +144,24 @@ class NoGapsForStudentGroupTest {
         List.of(
             Gene.builder()
                 .timeSlot(1)
-                .teachingTuple(new Gene.Tuple(class1, room))
-                .teachingTuple(new Gene.Tuple(class2, room)).build(),
+                .settledClass(new SettledClass(class1, room))
+                .settledClass(new SettledClass(class2, room)).build(),
             Gene.builder()
                 .timeSlot(2).build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(class1, room))
-                .teachingTuple(new Gene.Tuple(class2, room)).build(),
+                .settledClass(new SettledClass(class1, room))
+                .settledClass(new SettledClass(class2, room)).build(),
             Gene.builder()
                 .timeSlot(4)
-                .teachingTuple(new Gene.Tuple(class1, room))
-                .teachingTuple(new Gene.Tuple(class2, room)).build(),
+                .settledClass(new SettledClass(class1, room))
+                .settledClass(new SettledClass(class2, room)).build(),
             Gene.builder()
                 .timeSlot(5).build(),
             Gene.builder()
                 .timeSlot(6)
-                .teachingTuple(new Gene.Tuple(class1, room))
-                .teachingTuple(new Gene.Tuple(class2, room)).build()));
+                .settledClass(new SettledClass(class1, room))
+                .settledClass(new SettledClass(class2, room)).build()));
 
     var result = sut.fitness(chromosome, FitnessFunction.INITIAL);
     assertThat(result).isEqualTo(FitnessFunction.INITIAL);

@@ -10,14 +10,16 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Gene;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
+import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass;
 import lombok.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.function.Predicate.not;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Value
 @Component
@@ -31,7 +33,6 @@ public class RandomizedPopulationProvider implements PopulationProvider {
   public Population population(InputData input) {
     Chromosome[] chromosomes = Stream.generate(() -> randomChromosome(input))
         .map(c -> c.setFitnessFunction(scheduleConstraint.fitness(c, FitnessFunction.INITIAL)))
-        .filter(not(c -> c.getFitnessFunction().equals(FitnessFunction.UNACCEPTABLE)))
         .limit(geneticsConfiguration.getPopulationSize())
         .toArray(Chromosome[]::new);
 
@@ -45,8 +46,9 @@ public class RandomizedPopulationProvider implements PopulationProvider {
     List<Gene> genes = input.classesToScheduleForWeek().stream()
         .collect(collectingAndThen(
             toMap(
-                c -> randomTimeSlot(timeSlotsPerWeek),
-                c -> Gene.builder().teachingTuple(Gene.Tuple.withAnySuitableRoom(c, rooms)).build(),
+                tClass -> randomTimeSlot(timeSlotsPerWeek),
+                tClass -> Gene.builder()
+                    .settledClass(SettledClass.withAnySuitableRoom(tClass, rooms)).build(),
                 Gene::merge),
             map -> map.entrySet().stream()
                 .map(e -> e.getValue().timeSlot(e.getKey()))
@@ -55,6 +57,7 @@ public class RandomizedPopulationProvider implements PopulationProvider {
     return new Chromosome(genes);
   }
 
+  //TODO
   private int randomTimeSlot(int totalSlots) {
     return (int) (Math.random() * totalSlots);
   }

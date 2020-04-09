@@ -12,8 +12,8 @@ import com.waytoodanny.timetable.domain.university.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
-import com.waytoodanny.timetable.service.generation.genetics.entity.Gene;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
+import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -86,7 +86,7 @@ class RandomizedPopulationProviderTest {
   private void assertThatEachRoomIsAppropriateForAssignedClass(Chromosome c) {
     c.getGenes()
         .stream()
-        .flatMap(g -> g.getTeachingTuples().stream())
+        .flatMap(g -> g.getSettledClasses().stream())
         .forEach(t -> assertThat(t.getTeachingClass().roomRequirements()).accepts(t.getRoom()));
   }
 
@@ -94,8 +94,8 @@ class RandomizedPopulationProviderTest {
                                                                 TeachingClass tClass,
                                                                 int expectedEntries) {
     long resultEntries = chromosome.getGenes().stream()
-        .flatMap(g -> g.getTeachingTuples().stream())
-        .map(Gene.Tuple::getTeachingClass)
+        .flatMap(g -> g.getSettledClasses().stream())
+        .map(SettledClass::getTeachingClass)
         .filter(tClass::equals)
         .count();
 

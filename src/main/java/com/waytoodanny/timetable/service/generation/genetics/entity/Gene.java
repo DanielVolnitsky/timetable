@@ -1,7 +1,16 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity;
 
-import com.waytoodanny.timetable.domain.university.*;
-import lombok.*;
+import com.waytoodanny.timetable.domain.university.Room;
+import com.waytoodanny.timetable.domain.university.Rooms;
+import com.waytoodanny.timetable.domain.university.StudentGroup;
+import com.waytoodanny.timetable.domain.university.Teacher;
+import com.waytoodanny.timetable.domain.university.TeachingClass;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Singular;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.util.HashSet;
@@ -23,7 +32,7 @@ public class Gene {
 
   @Getter
   @Singular
-  private List<Tuple> teachingTuples;
+  private List<SettledClass> settledClasses;
 
   private Rooms usedRooms;
   private List<Teacher> teachersInvolved;
@@ -32,17 +41,17 @@ public class Gene {
   public Gene merge(Gene other) {
     GeneBuilder builder = Gene.builder()
         .timeSlot(this.timeSlot)
-        .teachingTuples(this.teachingTuples);
+        .settledClasses(this.settledClasses);
 
-    other.teachingTuples.forEach(builder::teachingTuple);
+    other.settledClasses.forEach(builder::settledClass);
 
     return builder.build();
   }
 
   public Rooms usedRooms() {
     if (isNull(this.usedRooms)) {
-      this.usedRooms = Rooms.of(this.teachingTuples.stream()
-          .map(Tuple::getRoom)
+      this.usedRooms = Rooms.of(this.settledClasses.stream()
+          .map(SettledClass::getRoom)
           .toArray(Room[]::new));
     }
     return this.usedRooms;
@@ -54,8 +63,8 @@ public class Gene {
 
   public List<Teacher> teachersInvolved() {
     if (isEmpty(teachersInvolved)) {
-      this.teachersInvolved = this.teachingTuples.stream()
-          .map(Tuple::getTeachingClass)
+      this.teachersInvolved = this.settledClasses.stream()
+          .map(SettledClass::getTeachingClass)
           .map(TeachingClass::getTeacher)
           .collect(toList());
     }
@@ -69,8 +78,8 @@ public class Gene {
 
   public List<StudentGroup> studentGroupsInvolved() {
     if (isEmpty(studentGroupsInvolved)) {
-      this.studentGroupsInvolved = this.teachingTuples.stream()
-          .map(Tuple::getTeachingClass)
+      this.studentGroupsInvolved = this.settledClasses.stream()
+          .map(SettledClass::getTeachingClass)
           .map(TeachingClass::getGroup)
           .collect(toList());
     }
@@ -80,17 +89,5 @@ public class Gene {
   public boolean isEachStudentGroupOccursOnce() {
     var sg = studentGroupsInvolved();
     return sg.size() == new HashSet<>(sg).size();
-  }
-
-  @Value
-  public static class Tuple {
-    private final TeachingClass teachingClass;
-    private final Room room;
-
-    public static Tuple withAnySuitableRoom(TeachingClass tc, Rooms availableRooms) {
-      return new Tuple(tc,
-          availableRooms.suitableFor(tc.roomRequirements())
-              .orElseThrow(() -> new IllegalArgumentException("No suitable room for " + tc + " found")));
-    }
   }
 }

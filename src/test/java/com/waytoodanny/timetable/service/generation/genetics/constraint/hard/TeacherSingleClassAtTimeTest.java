@@ -6,6 +6,7 @@ import com.waytoodanny.timetable.domain.university.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Gene;
+import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -34,16 +35,16 @@ class TeacherSingleClassAtTimeTest {
         List.of(
             Gene.builder()
                 .timeSlot(1)
-                .teachingTuple(new Gene.Tuple(teachingClass1, room1)).build(),
+                .settledClass(new SettledClass(teachingClass1, room1)).build(),
             Gene.builder()
                 .timeSlot(2)
-                .teachingTuple(new Gene.Tuple(teachingClass1, room1))
-                .teachingTuple(new Gene.Tuple(teachingClass2, room2)).build(),
+                .settledClass(new SettledClass(teachingClass1, room1))
+                .settledClass(new SettledClass(teachingClass2, room2)).build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(teachingClass3, room1))
-                .teachingTuple(new Gene.Tuple(teachingClass2, room2))
-                .teachingTuple(new Gene.Tuple(teachingClass1, room3)).build())
+                .settledClass(new SettledClass(teachingClass3, room1))
+                .settledClass(new SettledClass(teachingClass2, room2))
+                .settledClass(new SettledClass(teachingClass1, room3)).build())
     );
 
     FitnessFunction result = sut.fitness(chromosome, FitnessFunction.INITIAL);
@@ -56,16 +57,16 @@ class TeacherSingleClassAtTimeTest {
         List.of(
             Gene.builder()
                 .timeSlot(1)
-                .teachingTuple(new Gene.Tuple(teachingClass1, room1)).build(),
+                .settledClass(new SettledClass(teachingClass1, room1)).build(),
             Gene.builder()
                 .timeSlot(2)
-                .teachingTuple(new Gene.Tuple(teachingClass2, room1))
-                .teachingTuple(new Gene.Tuple(teachingClass2, room2)).build(),
+                .settledClass(new SettledClass(teachingClass2, room1))
+                .settledClass(new SettledClass(teachingClass2, room2)).build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(teachingClass3, room1))
-                .teachingTuple(new Gene.Tuple(teachingClass2, room2))
-                .teachingTuple(new Gene.Tuple(teachingClass1, room3)).build())
+                .settledClass(new SettledClass(teachingClass3, room1))
+                .settledClass(new SettledClass(teachingClass2, room2))
+                .settledClass(new SettledClass(teachingClass1, room3)).build())
     );
 
     FitnessFunction result = sut.fitness(chromosome, FitnessFunction.INITIAL);
@@ -78,17 +79,17 @@ class TeacherSingleClassAtTimeTest {
         List.of(
             Gene.builder()
                 .timeSlot(1)
-                .teachingTuple(new Gene.Tuple(teachingClass1, room1))
-                .teachingTuple(new Gene.Tuple(teachingClass1, room1)).build(),
+                .settledClass(new SettledClass(teachingClass1, room1))
+                .settledClass(new SettledClass(teachingClass1, room1)).build(),
             Gene.builder()
                 .timeSlot(2)
-                .teachingTuple(new Gene.Tuple(teachingClass2, room2))
-                .teachingTuple(new Gene.Tuple(teachingClass2, room2)).build(),
+                .settledClass(new SettledClass(teachingClass2, room2))
+                .settledClass(new SettledClass(teachingClass2, room2)).build(),
             Gene.builder()
                 .timeSlot(3)
-                .teachingTuple(new Gene.Tuple(teachingClass3, room3))
-                .teachingTuple(new Gene.Tuple(teachingClass2, room3))
-                .teachingTuple(new Gene.Tuple(teachingClass1, room3)).build())
+                .settledClass(new SettledClass(teachingClass3, room3))
+                .settledClass(new SettledClass(teachingClass2, room3))
+                .settledClass(new SettledClass(teachingClass1, room3)).build())
     );
 
     FitnessFunction result = sut.fitness(chromosome, FitnessFunction.INITIAL);
