@@ -49,7 +49,7 @@ class StudentGroupSingleClassAtTimeTest {
     );
 
     FitnessFunction result = sut.fitness(chromosome, FitnessFunction.INITIAL);
-    assertThat(result).isEqualTo(FitnessFunction.INITIAL);
+    assertThat(result).isEqualTo(FitnessFunction.INITIAL.plus(sut.weight()));
   }
 
   @Test
@@ -71,7 +71,7 @@ class StudentGroupSingleClassAtTimeTest {
     );
 
     FitnessFunction result = sut.fitness(chromosome, FitnessFunction.INITIAL);
-    assertThat(result).isEqualTo(FitnessFunction.UNACCEPTABLE);
+    assertThat(result).isEqualTo(FitnessFunction.INITIAL);
   }
 
   @Test
@@ -94,6 +94,6 @@ class StudentGroupSingleClassAtTimeTest {
     );
 
     FitnessFunction result = sut.fitness(chromosome, FitnessFunction.INITIAL);
-    assertThat(result).isEqualTo(FitnessFunction.UNACCEPTABLE);
+    assertThat(result).isEqualTo(FitnessFunction.INITIAL);
   }
 }

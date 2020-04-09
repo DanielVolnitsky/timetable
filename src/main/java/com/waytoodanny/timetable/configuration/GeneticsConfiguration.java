@@ -32,9 +32,10 @@ public class GeneticsConfiguration {
         fitnessFunction = updatedFitness;
       }
 
-      for (SoftConstraint soft : softConstraints) {
-        fitnessFunction = soft.fitness(chromosome, fitnessFunction);
-      }
+      //TODO temporary disabled. Restore afterwards
+//      for (SoftConstraint soft : softConstraints) {
+//        fitnessFunction = soft.fitness(chromosome, fitnessFunction);
+//      }
 
       return fitnessFunction;
     };
