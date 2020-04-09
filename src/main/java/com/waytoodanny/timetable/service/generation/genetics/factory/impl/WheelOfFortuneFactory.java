@@ -3,7 +3,7 @@ package com.waytoodanny.timetable.service.generation.genetics.factory.impl;
 import com.waytoodanny.timetable.service.generation.genetics.NextGenerationParentsProvider;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import com.waytoodanny.timetable.service.generation.genetics.factory.NextGenerationParentsProviderFactory;
-import com.waytoodanny.timetable.service.generation.genetics.impl.WheelOfFortune;
+import com.waytoodanny.timetable.service.generation.genetics.impl.parentsprovider.WheelOfFortune;
 import lombok.Value;
 import org.springframework.stereotype.Component;
 

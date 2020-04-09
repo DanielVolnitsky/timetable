@@ -11,11 +11,11 @@ import java.util.Iterator;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Getter
 @EqualsAndHashCode
 @ToString
 public class Chromosome implements Iterable<Gene> {
 
+  @Getter
   private final List<Gene> genes;
 
   @Setter
@@ -25,5 +25,9 @@ public class Chromosome implements Iterable<Gene> {
   @Override
   public Iterator<Gene> iterator() {
     return genes.iterator();
+  }
+
+  public int fitnessValue() {
+    return fitnessFunction.getValue();
   }
 }

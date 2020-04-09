@@ -15,6 +15,14 @@ public class Population implements Iterable<Chromosome> {
 
   Chromosome[] chromosomes;
 
+  public Chromosome get(int index) {
+    return chromosomes[index];
+  }
+
+  public int size() {
+    return chromosomes.length;
+  }
+
   public Stream<Chromosome> stream() {
     return Arrays.stream(chromosomes);
   }

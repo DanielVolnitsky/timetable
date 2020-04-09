@@ -1,8 +1,7 @@
-package com.waytoodanny.timetable.service.generation.genetics.impl;
+package com.waytoodanny.timetable.service.generation.genetics.impl.parentsprovider;
 
 import com.waytoodanny.timetable.service.generation.genetics.NextGenerationParentsProvider;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
-import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +33,13 @@ public class WheelOfFortune implements NextGenerationParentsProvider {
 
   private void init() {
     Integer totalFitness = source.stream()
-        .map(Chromosome::getFitnessFunction)
-        .map(FitnessFunction::getValue)
+        .map(Chromosome::fitnessValue)
         .reduce(Integer::sum)
         .orElseThrow(() -> new IllegalArgumentException("No chromosomes with fitness scores provided"));
 
     this.parentBucket = new ArrayList<>();
     for (Chromosome chromosome : source) {
-      double part = chromosome.getFitnessFunction().getValue() / (double) totalFitness * 100;
+      double part = chromosome.fitnessValue() / (double) totalFitness * 100;
       parentBucket.addAll(nCopies((int) Math.ceil(part), chromosome));
     }
   }

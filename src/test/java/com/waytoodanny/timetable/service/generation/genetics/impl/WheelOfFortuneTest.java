@@ -4,6 +4,7 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
+import com.waytoodanny.timetable.service.generation.genetics.impl.parentsprovider.WheelOfFortune;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
