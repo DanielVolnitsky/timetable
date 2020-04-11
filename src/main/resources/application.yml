@@ -3,14 +3,14 @@ server:
 
 university:
   academicHoursPerDay: 3
-  daysPerWeek: 5
+  daysPerWeek: 1
 
 timetable:
   generation:
     algorithm:
       genetics:
-        populationSize: 9
+        populationSize: 100
         crossover-rate: 0.9
-        tournament-selection-size: 3
+        tournament-selection-size: 5
         elite-chromosomes-number: 1
         mutation-rate: 0.1
