@@ -3,6 +3,7 @@ package com.waytoodanny.timetable.service.generation.genetics.entity;
 import lombok.Value;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
@@ -25,6 +26,13 @@ public class Population implements Iterable<Chromosome> {
 
   public Stream<Chromosome> stream() {
     return Arrays.stream(chromosomes);
+  }
+
+  public int highestFitnessValue() {
+    return stream()
+        .max(Comparator.comparingInt(Chromosome::fitnessValue))
+        .map(Chromosome::fitnessValue)
+        .orElse(0);
   }
 
   @Override

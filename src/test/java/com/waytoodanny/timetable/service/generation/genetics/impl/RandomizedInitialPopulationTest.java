@@ -3,12 +3,7 @@ package com.waytoodanny.timetable.service.generation.genetics.impl;
 import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
-import com.waytoodanny.timetable.domain.university.Room;
-import com.waytoodanny.timetable.domain.university.Rooms;
-import com.waytoodanny.timetable.domain.university.StudentGroup;
-import com.waytoodanny.timetable.domain.university.Subject;
-import com.waytoodanny.timetable.domain.university.Teacher;
-import com.waytoodanny.timetable.domain.university.TeachingClass;
+import com.waytoodanny.timetable.domain.university.*;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
@@ -21,10 +16,10 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RandomizedPopulationProviderTest {
+class RandomizedInitialPopulationTest {
 
   GeneticsProperties geneticsProperties = new GeneticsProperties()
-      .setPopulationSize(3);
+      .populationSize(3);
 
   UniversityProperties universityProperties = new UniversityProperties()
       .setAcademicHoursPerDay(3)
@@ -34,7 +29,7 @@ class RandomizedPopulationProviderTest {
 
   @Test
   void population_positiveScenario() {
-    var sut = new RandomizedPopulationProvider(constraintStub, universityProperties, geneticsProperties);
+    var sut = new RandomizedInitialPopulation(constraintStub, universityProperties, geneticsProperties);
 
     var rooms = Rooms.of(
         new Room("1", 10),
@@ -68,12 +63,12 @@ class RandomizedPopulationProviderTest {
         .build();
     var input = new InputData(Set.of(class1, class2, class3), rooms);
 
-    Population resultPopulation = sut.population(input);
+    Population resultPopulation = sut.from(input);
     assertThat(resultPopulation).isNotNull();
 
     Chromosome[] resultChromosomes = resultPopulation.getChromosomes();
     assertThat(resultChromosomes).isNotNull();
-    assertThat(resultChromosomes.length).isEqualTo(geneticsProperties.getPopulationSize());
+    assertThat(resultChromosomes.length).isEqualTo(geneticsProperties.populationSize());
     Arrays.stream(resultChromosomes).forEach(c -> {
       assertThatChromosomeHasCorrectGenesCount(c, rooms);
       assertThatEachRoomIsAppropriateForAssignedClass(c);

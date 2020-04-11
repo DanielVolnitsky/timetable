@@ -1,21 +1,23 @@
 package com.waytoodanny.timetable.service.generation.genetics.impl.parentsprovider;
 
-import com.waytoodanny.timetable.service.generation.genetics.NextGenerationParentsProvider;
+import com.waytoodanny.timetable.service.generation.genetics.NextGenerationParents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
 import static java.util.Collections.nCopies;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.isNull;
 
 //TODO optimize
 @RequiredArgsConstructor
-public class WheelOfFortune implements NextGenerationParentsProvider {
+public class WheelOfFortune implements NextGenerationParents {
 
   private final Population source;
   private final Random random;
@@ -23,12 +25,12 @@ public class WheelOfFortune implements NextGenerationParentsProvider {
   private List<Chromosome> parentBucket;
 
   @Override
-  public Parents get() {
+  public Collection<Parents> get() {
     if (isNull(parentBucket)) {
       init();
-      return parents();
+      return singletonList(parents());
     }
-    return parents();
+    return singletonList(parents());
   }
 
   private void init() {

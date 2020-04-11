@@ -4,36 +4,30 @@ import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
 import com.waytoodanny.timetable.domain.university.Rooms;
-import com.waytoodanny.timetable.service.generation.genetics.PopulationProvider;
+import com.waytoodanny.timetable.service.generation.genetics.InitialPopulation;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
-import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
-import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
-import com.waytoodanny.timetable.service.generation.genetics.entity.Gene;
-import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
-import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass;
+import com.waytoodanny.timetable.service.generation.genetics.entity.*;
 import lombok.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 
 @Value
 @Component
-public class RandomizedPopulationProvider implements PopulationProvider {
+public class RandomizedInitialPopulation implements InitialPopulation {
 
   ScheduleConstraint scheduleConstraint;
   UniversityProperties universityProperties;
   GeneticsProperties geneticsConfiguration;
 
   @Override
-  public Population population(InputData input) {
+  public Population from(InputData input) {
     Chromosome[] chromosomes = Stream.generate(() -> randomChromosome(input))
         .map(c -> c.setFitnessFunction(scheduleConstraint.fitness(c, FitnessFunction.INITIAL)))
-        .limit(geneticsConfiguration.getPopulationSize())
+        .limit(geneticsConfiguration.populationSize())
         .toArray(Chromosome[]::new);
 
     return new Population(chromosomes);

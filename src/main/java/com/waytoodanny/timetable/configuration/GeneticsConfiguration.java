@@ -1,8 +1,9 @@
 package com.waytoodanny.timetable.configuration;
 
 import com.waytoodanny.timetable.service.generation.TimetableGenerator;
-import com.waytoodanny.timetable.service.generation.genetics.GeneticsTimetableGenerator;
-import com.waytoodanny.timetable.service.generation.genetics.PopulationProvider;
+import com.waytoodanny.timetable.service.generation.genetics.Crossover;
+import com.waytoodanny.timetable.service.generation.genetics.InitialPopulation;
+import com.waytoodanny.timetable.service.generation.genetics.Mutation;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.HardConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.SoftConstraint;
@@ -10,6 +11,7 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import com.waytoodanny.timetable.service.generation.genetics.factory.NextGenerationParentsProviderFactory;
+import com.waytoodanny.timetable.service.generation.genetics.impl.GeneticsTimetableGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -53,17 +56,21 @@ public class GeneticsConfiguration {
   }
 
   @Bean
-  public TimetableGenerator timetableGenerator(PopulationProvider pp,
+  public TimetableGenerator timetableGenerator(InitialPopulation pp,
                                                NextGenerationParentsProviderFactory pf,
-                                               Collection<Consumer<Population>> initPopulationHooks) {
+                                               Crossover crossover,
+                                               Mutation mutation,
+                                               Collection<Consumer<Population>> initPopulationHooks,
+                                               Collection<BiConsumer<Integer, Population>> iterationHooks) {
 
-    var gen = new GeneticsTimetableGenerator(pp, pf);
+    var gen = new GeneticsTimetableGenerator(pp, pf, crossover, mutation);
     initPopulationHooks.forEach(gen::onInitialPopulationGenerated);
+    iterationHooks.forEach(gen::onIterationPassed);
     return gen;
   }
 
   @Bean
-  public Consumer<Population> printHook() {
+  public Consumer<Population> logInitialPopulationHook() {
     return p -> {
       Map<Integer, Long> m = p.stream()
           .collect(Collectors.groupingBy(Chromosome::fitnessValue, Collectors.counting()));
@@ -73,6 +80,20 @@ public class GeneticsConfiguration {
       m.keySet().stream()
           .max(Comparator.comparingInt(f -> f))
           .ifPresent(max -> log.info("Initial population max fitness: " + max));
+    };
+  }
+
+  @Bean
+  public BiConsumer<Integer, Population> logIterationResultsHook() {
+    return (i, p) -> {
+      Map<Integer, Long> m = p.stream()
+          .collect(Collectors.groupingBy(Chromosome::fitnessValue, Collectors.counting()));
+
+      log.info("{} iteration population stats: {}", i, m);
+
+      m.keySet().stream()
+          .max(Comparator.comparingInt(f -> f))
+          .ifPresent(max -> log.info("{} iteration population max fitness: {}", i, max));
     };
   }
 
