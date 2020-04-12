@@ -3,17 +3,15 @@ package com.waytoodanny.timetable.service.generation.genetics.impl;
 import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
-import com.waytoodanny.timetable.domain.university.Rooms;
+import com.waytoodanny.timetable.domain.university.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.InitialPopulation;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
-import com.waytoodanny.timetable.service.generation.genetics.entity.*;
+import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
+import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import lombok.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.*;
+import java.util.Random;
 
 @Value
 @Component
@@ -22,37 +20,32 @@ public class RandomizedInitialPopulation implements InitialPopulation {
   ScheduleConstraint scheduleConstraint;
   UniversityProperties universityProperties;
   GeneticsProperties geneticsConfiguration;
+  Random random;
 
   @Override
-  public Population from(InputData input) {
-    var chromosomes = Stream.generate(() -> randomChromosome(input))
-        .map(c -> c.setFitnessFunction(scheduleConstraint.fitness(c, FitnessFunction.INITIAL)))
-        .limit(geneticsConfiguration.getPopulationSize())
-        .collect(toList());
-
-    return new Population(chromosomes);
+  public Population from(InputData data) {
+    Population.PopulationBuilder populationBld = Population.builder();
+    for (int i = 0; i < geneticsConfiguration.getPopulationSize(); i++) {
+      populationBld.chromosome(generatedChromosome(data));
+    }
+    return populationBld.build();
   }
 
-  private Chromosome randomChromosome(InputData input) {
-    Rooms rooms = input.getRooms();
-    int timeSlotsPerWeek = universityProperties.timeSlotsPerWeek();
-
-    List<Gene> genes = input.classesToScheduleForWeek().stream()
-        .collect(collectingAndThen(
-            toMap(
-                tClass -> randomTimeSlot(timeSlotsPerWeek),
-                tClass -> Gene.builder()
-                    .settledClass(SettledClass.withAnySuitableRoom(tClass, rooms)).build(),
-                Gene::merge),
-            map -> map.entrySet().stream()
-                .map(e -> e.getValue().timeSlot(e.getKey()))
-                .collect(toList())));
-
-    return new Chromosome(genes);
+  private Chromosome generatedChromosome(InputData data) {
+    var chr = new Chromosome(data.getRooms(), universityProperties.weekTimeSlots());
+    data.classesToScheduleForWeek().forEach(cl -> scheduleClass(cl, chr));
+    return chr;
   }
 
-  //TODO
+  private void scheduleClass(TeachingClass cl, Chromosome chr) {
+    boolean done;
+    do {
+      int randomSlot = randomTimeSlot(universityProperties.timeSlotsPerWeek());
+      done = chr.scheduleClass(cl, randomSlot);
+    } while (!done);
+  }
+
   private int randomTimeSlot(int totalSlots) {
-    return (int) (Math.random() * totalSlots);
+    return random.nextInt(totalSlots) + 1;
   }
 }

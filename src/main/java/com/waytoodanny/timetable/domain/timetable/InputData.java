@@ -1,6 +1,6 @@
 package com.waytoodanny.timetable.domain.timetable;
 
-import com.waytoodanny.timetable.domain.university.Rooms;
+import com.waytoodanny.timetable.domain.university.AvailableRooms;
 import com.waytoodanny.timetable.domain.university.TeachingClass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class InputData {
   @Getter
   private final Set<TeachingClass> teachingClasses;
   @Getter
-  private final Rooms rooms;
+  private final AvailableRooms rooms;
 
   private List<TeachingClass> singleWeekClasses;
 

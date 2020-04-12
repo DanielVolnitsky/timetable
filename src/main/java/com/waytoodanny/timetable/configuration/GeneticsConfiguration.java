@@ -8,7 +8,6 @@ import com.waytoodanny.timetable.service.generation.genetics.NextGenParents;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.HardConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.SoftConstraint;
-import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import com.waytoodanny.timetable.service.generation.genetics.impl.GeneticsTimetableGenerator;
@@ -19,12 +18,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
 import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Configuration
 @EnableConfigurationProperties(GeneticsProperties.class)
@@ -72,28 +68,28 @@ public class GeneticsConfiguration {
   @Bean
   public Consumer<Population> logInitialPopulationHook() {
     return p -> {
-      Map<Integer, Long> m = p.stream()
-          .collect(Collectors.groupingBy(Chromosome::fitnessValue, Collectors.counting()));
-
-      log.info("Initial population stats: " + m);
-
-      m.keySet().stream()
-          .max(Comparator.comparingInt(f -> f))
-          .ifPresent(max -> log.info("Initial population max fitness: " + max));
+//      Map<Integer, Long> m = p.stream()
+//          .collect(Collectors.groupingBy(Chromosome::fitnessValue, Collectors.counting()));
+//
+//      log.info("Initial population stats: " + m);
+//
+//      m.keySet().stream()
+//          .max(Comparator.comparingInt(f -> f))
+//          .ifPresent(max -> log.info("Initial population max fitness: " + max));
     };
   }
 
   @Bean
   public BiConsumer<Integer, Population> logIterationResultsHook() {
     return (i, p) -> {
-      Map<Integer, Long> m = p.stream()
-          .collect(Collectors.groupingBy(Chromosome::fitnessValue, Collectors.counting()));
-
-      log.info("{} iteration population stats: {}", i, m);
-
-      m.keySet().stream()
-          .max(Comparator.comparingInt(f -> f))
-          .ifPresent(max -> log.info("{} iteration population max fitness: {}", i, max));
+//      Map<Integer, Long> m = p.stream()
+//          .collect(Collectors.groupingBy(Chromosome::fitnessValue, Collectors.counting()));
+//
+//      log.info("{} iteration population stats: {}", i, m);
+//
+//      m.keySet().stream()
+//          .max(Comparator.comparingInt(f -> f))
+//          .ifPresent(max -> log.info("{} iteration population max fitness: {}", i, max));
     };
   }
 

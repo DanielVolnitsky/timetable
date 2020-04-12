@@ -28,7 +28,7 @@ public class Application implements CommandLineRunner {
 
   @Override
   public void run(String... args) {
-    var rooms = Rooms.of(
+    var rooms = AvailableRooms.of(
         new Room("1", 20),
         new Room("2", 20));
 

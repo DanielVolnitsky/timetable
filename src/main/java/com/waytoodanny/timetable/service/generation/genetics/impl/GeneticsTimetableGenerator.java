@@ -7,12 +7,10 @@ import com.waytoodanny.timetable.service.generation.genetics.Crossover;
 import com.waytoodanny.timetable.service.generation.genetics.InitialPopulation;
 import com.waytoodanny.timetable.service.generation.genetics.Mutation;
 import com.waytoodanny.timetable.service.generation.genetics.NextGenParents;
-import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -51,15 +49,15 @@ public class GeneticsTimetableGenerator implements TimetableGenerator {
     Population initialPopulation = this.initialPopulation.from(input);
     onInitialPopulationGenerated.accept(initialPopulation);
 
-    Population result = initialPopulation;
-    int iteration = 1;
-    while (result.highestFitnessValue() < 700 && iteration++ < 10000) {
-      Collection<Parents> nextGenParents = this.nextGenParents.apply(initialPopulation);
-      //TODO add elite
-      result = mutation.compose(crossover).apply(nextGenParents);
-
-      onIterationPassed.accept(iteration, result);
-    }
+//    Population result = initialPopulation;
+//    int iteration = 1;
+//    while (result.highestFitnessValue() < 700 && iteration++ < 10000) {
+//      Collection<Parents> nextGenParents = this.nextGenParents.apply(initialPopulation);
+//      //TODO add elite
+//      result = mutation.compose(crossover).apply(nextGenParents);
+//
+//      onIterationPassed.accept(iteration, result);
+//    }
     return null;
   }
 }

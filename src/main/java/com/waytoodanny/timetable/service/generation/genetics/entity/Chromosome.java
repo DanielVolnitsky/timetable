@@ -1,30 +1,36 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import com.waytoodanny.timetable.domain.university.AvailableRooms;
+import com.waytoodanny.timetable.domain.university.TeachingClass;
+import lombok.NonNull;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-@RequiredArgsConstructor
-@EqualsAndHashCode
-@ToString
-public class Chromosome implements Iterable<Gene> {
+public class Chromosome {
+  private final Map<Integer, List<SettledClass>> scheduledClasses = new TreeMap<>();
+  private final Map<Integer, AvailableRooms> timeslotRooms = new HashMap<>();
 
-  @Getter
-  @Singular
-  private final List<Gene> genes;
-
-  @Setter
-  @Accessors(chain = true)
-  private FitnessFunction fitnessFunction;
-
-  @Override
-  public Iterator<Gene> iterator() {
-    return genes.iterator();
+  public Chromosome(@NonNull AvailableRooms rooms,
+                    @NonNull Collection<Integer> timeSlotsPerWeek) {
+    timeSlotsPerWeek.stream()
+        .sorted()
+        .forEach(t -> timeslotRooms.put(t, rooms.copy()));
   }
 
-  public int fitnessValue() {
-    return fitnessFunction.getValue();
+  public boolean scheduleClass(TeachingClass tClass, int timeslot) {
+    AvailableRooms rooms = timeslotRooms.get(timeslot);
+    if (rooms.isEmpty()) {
+      return false;
+    }
+    return rooms.withdrawBestSuitableFor(tClass.roomRequirements())
+        .map(r -> scheduledClasses.merge(timeslot, List.of(new SettledClass(r, tClass)), this::mergeLists))
+        .isPresent();
+  }
+
+  private List<SettledClass> mergeLists(List<SettledClass> l1, List<SettledClass> l2) {
+    List<SettledClass> r = new ArrayList<>();
+    r.addAll(l1);
+    r.addAll(l2);
+    return r;
   }
 }
