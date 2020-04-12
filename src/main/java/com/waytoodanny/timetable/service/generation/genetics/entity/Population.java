@@ -1,9 +1,11 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity;
 
+import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
 import lombok.Builder;
 import lombok.Singular;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Set of chromosomes which are made up of group of genes which satisfies the
@@ -13,7 +15,11 @@ import java.util.List;
 public class Population {
 
   @Singular
-  List<Chromosome> chromosomes;
+  List<EvaluatedChromosome> chromosomes;
+
+  public Stream<EvaluatedChromosome> stream() {
+    return chromosomes.stream();
+  }
 
 //
 //  public Chromosome get(int index) {
@@ -22,10 +28,7 @@ public class Population {
 //
 //  public int size() {
 //    return chromosomes.length;
-//  }
-//
-//  public Stream<Chromosome> stream() {
-//    return Arrays.stream(chromosomes);
+
 //  }
 //
 //  public int highestFitnessValue() {

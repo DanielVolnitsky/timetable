@@ -2,7 +2,7 @@ package com.waytoodanny.timetable.service.generation.genetics.constraint.soft;
 
 import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.TimeSlots;
-import com.waytoodanny.timetable.domain.university.StudentGroup;
+import com.waytoodanny.timetable.domain.university.Teacher;
 import com.waytoodanny.timetable.domain.university.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.SoftConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
@@ -21,40 +21,40 @@ import static java.util.stream.Collectors.toSet;
 
 @Value
 @Component
-public class NoGapsForStudentGroup implements SoftConstraint {
+public class NoGapsForTeacher implements SoftConstraint {
 
   UniversityProperties universityProperties;
   TimeSlots timeSlots;
 
   @Override
   public FitnessFunction fitness(Chromosome chromosome, FitnessFunction initial) {
-    Set<StudentGroup> allGroups = allStudentGroups(chromosome);
-    int weightForSingleGroup = weightForSingleGroup(allGroups.size());
+    Set<Teacher> allTeachers = allTeachers(chromosome);
+    int weightForSingleTeacher = weightForSingleTeacher(allTeachers.size());
 
-    return allGroups.stream()
+    return allTeachers.stream()
         .map(group -> daysWithoutGap(group, chromosome))
-        .map(daysWithoutGap -> fitnessValueForNoGapDays(weightForSingleGroup, daysWithoutGap))
+        .map(daysWithoutGap -> fitnessValueForNoGapDays(weightForSingleTeacher, daysWithoutGap))
         .reduce(Integer::sum)
         .map(initial::plus)
         .orElse(initial);
   }
 
-  private Set<StudentGroup> allStudentGroups(Chromosome chromosome) {
+  private Set<Teacher> allTeachers(Chromosome chromosome) {
     return chromosome.getScheduledClasses()
         .values().stream()
         .flatMap(Collection::stream)
         .map(SettledClass::getTeachingClass)
-        .map(TeachingClass::getGroup)
+        .map(TeachingClass::getTeacher)
         .collect(toSet());
   }
 
-  private int daysWithoutGap(StudentGroup sg, Chromosome chromosome) {
+  private int daysWithoutGap(Teacher sg, Chromosome chromosome) {
     int result = universityProperties.getDaysPerWeek();
 
-    List<Integer> groupSlots = studentGroupTimeSlots(sg, chromosome);
-    for (int i = 0; i < groupSlots.size() - 1; i++) {
-      Integer curr = groupSlots.get(i);
-      Integer next = groupSlots.get(i + 1);
+    List<Integer> slots = teacherTimeSlots(sg, chromosome);
+    for (int i = 0; i < slots.size() - 1; i++) {
+      Integer curr = slots.get(i);
+      Integer next = slots.get(i + 1);
       if (timeSlots.relateToSameDay(curr, next) && isGapBetween(curr, next)) {
         result -= 1;
       }
@@ -63,16 +63,16 @@ public class NoGapsForStudentGroup implements SoftConstraint {
     return result;
   }
 
-  private List<Integer> studentGroupTimeSlots(StudentGroup sg, Chromosome chromosome) {
+  private List<Integer> teacherTimeSlots(Teacher teacher, Chromosome chromosome) {
     return chromosome.getScheduledClasses()
         .entrySet().stream()
         .map(e -> new Tuple2<>(
             e.getKey(),
             e.getValue().stream()
                 .map(SettledClass::getTeachingClass)
-                .map(TeachingClass::getGroup)
+                .map(TeachingClass::getTeacher)
                 .collect(toSet()))
-        ).filter(t -> t._2.contains(sg))
+        ).filter(t -> t._2.contains(teacher))
         .map(t -> t._1)
         .sorted()
         .collect(toList());
@@ -86,8 +86,8 @@ public class NoGapsForStudentGroup implements SoftConstraint {
     return weightForSingleGroup / daysCount;
   }
 
-  private int weightForSingleGroup(int groupsCount) {
-    return this.weight() / groupsCount;
+  private int weightForSingleTeacher(int teacherCount) {
+    return this.weight() / teacherCount;
   }
 
   private boolean isGapBetween(Integer curr, Integer next) {

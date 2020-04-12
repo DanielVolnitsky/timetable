@@ -1,5 +1,6 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity;
 
+import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.Chromosome;
 import lombok.Value;
 
 import java.util.Objects;

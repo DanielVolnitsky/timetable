@@ -2,14 +2,14 @@ server:
   port: 8081
 
 university:
-  academicHoursPerDay: 2
-  daysPerWeek: 2
+  academicHoursPerDay: 3
+  daysPerWeek: 5
 
 timetable:
   generation:
     algorithm:
       genetics:
-        populationSize: 10
+        populationSize: 100
         crossover-rate: 0.9
         tournament-selection-size: 5
         elite-chromosomes-number: 1

@@ -1,12 +1,15 @@
-package com.waytoodanny.timetable.service.generation.genetics.entity;
+package com.waytoodanny.timetable.service.generation.genetics.entity.chromosome;
 
 import com.waytoodanny.timetable.domain.university.AvailableRooms;
 import com.waytoodanny.timetable.domain.university.TeachingClass;
+import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.*;
 
 public class Chromosome {
+  @Getter
   private final Map<Integer, List<SettledClass>> scheduledClasses = new TreeMap<>();
   private final Map<Integer, AvailableRooms> timeslotRooms = new HashMap<>();
 

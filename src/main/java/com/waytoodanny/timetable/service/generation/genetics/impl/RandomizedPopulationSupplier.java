@@ -4,29 +4,33 @@ import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
 import com.waytoodanny.timetable.domain.university.TeachingClass;
-import com.waytoodanny.timetable.service.generation.genetics.InitialPopulation;
+import com.waytoodanny.timetable.service.generation.genetics.PopulationSupplier;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
-import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
+import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.Chromosome;
+import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
 import lombok.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Random;
 
 @Value
 @Component
-public class RandomizedInitialPopulation implements InitialPopulation {
+public class RandomizedPopulationSupplier implements PopulationSupplier {
 
-  ScheduleConstraint scheduleConstraint;
+  Collection<ScheduleConstraint> scheduleConstraints;
   UniversityProperties universityProperties;
   GeneticsProperties geneticsConfiguration;
   Random random;
 
   @Override
-  public Population from(InputData data) {
+  public Population apply(InputData data) {
     Population.PopulationBuilder populationBld = Population.builder();
     for (int i = 0; i < geneticsConfiguration.getPopulationSize(); i++) {
-      populationBld.chromosome(generatedChromosome(data));
+      populationBld.chromosome(
+          new EvaluatedChromosome(
+              generatedChromosome(data), scheduleConstraints));
     }
     return populationBld.build();
   }

@@ -4,6 +4,6 @@ import lombok.Value;
 
 @Value
 public class StudentGroup {
-  private String name;
-  private int studentsNumber;
+  String name;
+  int studentsNumber;
 }

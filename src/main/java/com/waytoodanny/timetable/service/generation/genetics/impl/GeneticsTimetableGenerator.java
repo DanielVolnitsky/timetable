@@ -4,9 +4,9 @@ import com.waytoodanny.timetable.domain.timetable.InputData;
 import com.waytoodanny.timetable.domain.timetable.Timetable;
 import com.waytoodanny.timetable.service.generation.TimetableGenerator;
 import com.waytoodanny.timetable.service.generation.genetics.Crossover;
-import com.waytoodanny.timetable.service.generation.genetics.InitialPopulation;
 import com.waytoodanny.timetable.service.generation.genetics.Mutation;
 import com.waytoodanny.timetable.service.generation.genetics.NextGenParents;
+import com.waytoodanny.timetable.service.generation.genetics.PopulationSupplier;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class GeneticsTimetableGenerator implements TimetableGenerator {
 
-  private final InitialPopulation initialPopulation;
+  private final PopulationSupplier populationSupplier;
   private final NextGenParents nextGenParents;
   private final Crossover crossover;
   private final Mutation mutation;
@@ -46,7 +46,7 @@ public class GeneticsTimetableGenerator implements TimetableGenerator {
 
   @Override
   public Timetable timetable(InputData input) {
-    Population initialPopulation = this.initialPopulation.from(input);
+    Population initialPopulation = this.populationSupplier.apply(input);
     onInitialPopulationGenerated.accept(initialPopulation);
 
 //    Population result = initialPopulation;
