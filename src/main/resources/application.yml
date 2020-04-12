@@ -2,8 +2,8 @@ server:
   port: 8081
 
 university:
-  academicHoursPerDay: 3
-  daysPerWeek: 1
+  academicHoursPerDay: 2
+  daysPerWeek: 2
 
 timetable:
   generation:

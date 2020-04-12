@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RandomizedInitialPopulationTest {
 
   GeneticsProperties geneticsProperties = new GeneticsProperties()
-      .populationSize(3);
+      .setPopulationSize(3);
 
   UniversityProperties universityProperties = new UniversityProperties()
       .setAcademicHoursPerDay(3)
@@ -68,7 +68,7 @@ class RandomizedInitialPopulationTest {
 
     Chromosome[] resultChromosomes = resultPopulation.getChromosomes();
     assertThat(resultChromosomes).isNotNull();
-    assertThat(resultChromosomes.length).isEqualTo(geneticsProperties.populationSize());
+    assertThat(resultChromosomes.length).isEqualTo(geneticsProperties.getPopulationSize());
     Arrays.stream(resultChromosomes).forEach(c -> {
       assertThatChromosomeHasCorrectGenesCount(c, rooms);
       assertThatEachRoomIsAppropriateForAssignedClass(c);

@@ -1,10 +1,6 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.Iterator;
@@ -16,6 +12,7 @@ import java.util.List;
 public class Chromosome implements Iterable<Gene> {
 
   @Getter
+  @Singular
   private final List<Gene> genes;
 
   @Setter

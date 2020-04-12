@@ -3,6 +3,7 @@ package com.waytoodanny.timetable.service.generation.genetics.entity;
 import lombok.Value;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.stream.Stream;
@@ -15,6 +16,10 @@ import java.util.stream.Stream;
 public class Population implements Iterable<Chromosome> {
 
   Chromosome[] chromosomes;
+
+  public Population(Collection<Chromosome> chromosomes) {
+    this.chromosomes = chromosomes.toArray(Chromosome[]::new);
+  }
 
   public Chromosome get(int index) {
     return chromosomes[index];

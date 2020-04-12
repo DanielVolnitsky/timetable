@@ -1,16 +1,7 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity;
 
-import com.waytoodanny.timetable.domain.university.Room;
-import com.waytoodanny.timetable.domain.university.Rooms;
-import com.waytoodanny.timetable.domain.university.StudentGroup;
-import com.waytoodanny.timetable.domain.university.Teacher;
-import com.waytoodanny.timetable.domain.university.TeachingClass;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Singular;
-import lombok.ToString;
+import com.waytoodanny.timetable.domain.university.*;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.HashSet;
@@ -46,6 +37,21 @@ public class Gene {
     other.settledClasses.forEach(builder::settledClass);
 
     return builder.build();
+  }
+
+  public void swapClasses(Gene other) {
+    List<SettledClass> thisClasses = this.settledClasses;
+    this.settledClasses = other.settledClasses;
+    other.settledClasses = thisClasses;
+
+    this.evictCache();
+    other.evictCache();
+  }
+
+  private void evictCache() {
+    usedRooms = null;
+    teachersInvolved = null;
+    studentGroupsInvolved = null;
   }
 
   public Rooms usedRooms() {

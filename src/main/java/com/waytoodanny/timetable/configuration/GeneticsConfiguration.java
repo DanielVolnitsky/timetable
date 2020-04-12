@@ -4,13 +4,13 @@ import com.waytoodanny.timetable.service.generation.TimetableGenerator;
 import com.waytoodanny.timetable.service.generation.genetics.Crossover;
 import com.waytoodanny.timetable.service.generation.genetics.InitialPopulation;
 import com.waytoodanny.timetable.service.generation.genetics.Mutation;
+import com.waytoodanny.timetable.service.generation.genetics.NextGenParents;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.HardConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.SoftConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
-import com.waytoodanny.timetable.service.generation.genetics.factory.NextGenerationParentsProviderFactory;
 import com.waytoodanny.timetable.service.generation.genetics.impl.GeneticsTimetableGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -57,13 +57,13 @@ public class GeneticsConfiguration {
 
   @Bean
   public TimetableGenerator timetableGenerator(InitialPopulation pp,
-                                               NextGenerationParentsProviderFactory pf,
+                                               NextGenParents ngp,
                                                Crossover crossover,
                                                Mutation mutation,
                                                Collection<Consumer<Population>> initPopulationHooks,
                                                Collection<BiConsumer<Integer, Population>> iterationHooks) {
 
-    var gen = new GeneticsTimetableGenerator(pp, pf, crossover, mutation);
+    var gen = new GeneticsTimetableGenerator(pp, ngp, crossover, mutation);
     initPopulationHooks.forEach(gen::onInitialPopulationGenerated);
     iterationHooks.forEach(gen::onIterationPassed);
     return gen;

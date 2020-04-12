@@ -25,10 +25,10 @@ public class RandomizedInitialPopulation implements InitialPopulation {
 
   @Override
   public Population from(InputData input) {
-    Chromosome[] chromosomes = Stream.generate(() -> randomChromosome(input))
+    var chromosomes = Stream.generate(() -> randomChromosome(input))
         .map(c -> c.setFitnessFunction(scheduleConstraint.fitness(c, FitnessFunction.INITIAL)))
-        .limit(geneticsConfiguration.populationSize())
-        .toArray(Chromosome[]::new);
+        .limit(geneticsConfiguration.getPopulationSize())
+        .collect(toList());
 
     return new Population(chromosomes);
   }
