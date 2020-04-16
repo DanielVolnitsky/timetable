@@ -1,14 +1,18 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity;
 
-import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.Chromosome;
+import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
 import lombok.Value;
 
 import java.util.Objects;
 
 @Value
 public class Parents {
-  Chromosome firstParent;
-  Chromosome secondParent;
+  EvaluatedChromosome firstParent;
+  EvaluatedChromosome secondParent;
+
+  public int overallFitness() {
+    return firstParent.fitnessValue() + secondParent.fitnessValue();
+  }
 
   @Override
   public boolean equals(Object o) {

@@ -1,18 +1,16 @@
 package com.waytoodanny.timetable.service.generation.genetics.impl.parentsprovider;
 
 import com.waytoodanny.timetable.configuration.GeneticsProperties;
-import com.waytoodanny.timetable.service.generation.genetics.NextGenParents;
+import com.waytoodanny.timetable.service.generation.genetics.NextGenParentsSupplier;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Random;
 
 @RequiredArgsConstructor
-@Component
-public class TournamentSelection implements NextGenParents {
+public class TournamentSelection implements NextGenParentsSupplier {
 
   private final GeneticsProperties geneticsProperties;
   private final Random random;
@@ -36,14 +34,7 @@ public class TournamentSelection implements NextGenParents {
 //    return new Parents(parent1, parent2);
 //  }
 //
-//  private HashSet<Chromosome> selectionCandidates(Population population) {
-//    int size = population.size();
-//    var candidates = new HashSet<Chromosome>();
-//    do {
-//      candidates.add(population.get(random.nextInt(size)));
-//    } while (candidates.size() < geneticsProperties.getTournamentSelectionSize());
-//    return candidates;
-//  }
+//  d
 //
 //  private Chromosome bestOf(Set<Chromosome> candidates) {
 //    assert !candidates.isEmpty();

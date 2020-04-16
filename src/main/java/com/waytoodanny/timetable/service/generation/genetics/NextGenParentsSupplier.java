@@ -6,6 +6,6 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import java.util.Collection;
 import java.util.function.Function;
 
-public interface NextGenParents extends Function<Population, Collection<Parents>> {
+public interface NextGenParentsSupplier extends Function<Population, Collection<Parents>> {
 
 }

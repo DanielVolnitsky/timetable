@@ -4,6 +4,9 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.E
 import lombok.Builder;
 import lombok.Singular;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -21,25 +24,20 @@ public class Population {
     return chromosomes.stream();
   }
 
-//
-//  public Chromosome get(int index) {
-//    return chromosomes.iterator();
-//  }
-//
-//  public int size() {
-//    return chromosomes.length;
+  public int highestFitnessValue() {
+    return stream()
+        .max(Comparator.comparingInt(EvaluatedChromosome::fitnessValue))
+        .map(EvaluatedChromosome::fitnessValue)
+        .orElse(0);
+  }
 
-//  }
-//
-//  public int highestFitnessValue() {
-//    return stream()
-//        .max(Comparator.comparingInt(Chromosome::fitnessValue))
-//        .map(Chromosome::fitnessValue)
-//        .orElse(0);
-//  }
-//
-//  @Override
-//  public Iterator<Chromosome> iterator() {
-//    return Arrays.asList(chromosomes).iterator();
-//  }
+  public int size() {
+    return chromosomes.size();
+  }
+
+  public Population addAll(Collection<EvaluatedChromosome> chromosomes) {
+    var c = new ArrayList<>(chromosomes);
+    c.addAll(chromosomes);
+    return new Population(c);
+  }
 }

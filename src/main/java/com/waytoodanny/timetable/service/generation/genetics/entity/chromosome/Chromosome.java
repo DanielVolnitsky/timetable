@@ -3,11 +3,13 @@ package com.waytoodanny.timetable.service.generation.genetics.entity.chromosome;
 import com.waytoodanny.timetable.domain.university.AvailableRooms;
 import com.waytoodanny.timetable.domain.university.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.*;
 
+@EqualsAndHashCode
 public class Chromosome {
   @Getter
   private final Map<Integer, List<SettledClass>> scheduledClasses = new TreeMap<>();

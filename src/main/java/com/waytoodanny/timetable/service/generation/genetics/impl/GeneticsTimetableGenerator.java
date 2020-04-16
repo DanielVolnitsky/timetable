@@ -5,14 +5,21 @@ import com.waytoodanny.timetable.domain.timetable.Timetable;
 import com.waytoodanny.timetable.service.generation.TimetableGenerator;
 import com.waytoodanny.timetable.service.generation.genetics.Crossover;
 import com.waytoodanny.timetable.service.generation.genetics.Mutation;
-import com.waytoodanny.timetable.service.generation.genetics.NextGenParents;
+import com.waytoodanny.timetable.service.generation.genetics.NextGenParentsSupplier;
 import com.waytoodanny.timetable.service.generation.genetics.PopulationSupplier;
+import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
+import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * 1. Initialize starting population.
@@ -24,7 +31,7 @@ import java.util.function.Consumer;
 public class GeneticsTimetableGenerator implements TimetableGenerator {
 
   private final PopulationSupplier populationSupplier;
-  private final NextGenParents nextGenParents;
+  private final NextGenParentsSupplier nextGenParentsSupplier;
   private final Crossover crossover;
   private final Mutation mutation;
 
@@ -49,15 +56,23 @@ public class GeneticsTimetableGenerator implements TimetableGenerator {
     Population initialPopulation = this.populationSupplier.apply(input);
     onInitialPopulationGenerated.accept(initialPopulation);
 
-//    Population result = initialPopulation;
-//    int iteration = 1;
-//    while (result.highestFitnessValue() < 700 && iteration++ < 10000) {
-//      Collection<Parents> nextGenParents = this.nextGenParents.apply(initialPopulation);
-//      //TODO add elite
-//      result = mutation.compose(crossover).apply(nextGenParents);
-//
-//      onIterationPassed.accept(iteration, result);
-//    }
+    Population nextGen = initialPopulation;
+    int iteration = 1;
+    while (nextGen.highestFitnessValue() < 700 && iteration++ < 10000) {
+      Collection<Parents> parents = nextGenParentsSupplier.apply(initialPopulation);
+
+      nextGen = mutation.compose(crossover).apply(parents);
+      nextGen = nextGen.addAll(eliteChromosomes(initialPopulation));
+
+      onIterationPassed.accept(iteration, nextGen);
+    }
     return null;
+  }
+
+  private List<EvaluatedChromosome> eliteChromosomes(Population initialPopulation) {
+    return initialPopulation.stream()
+        .sorted(Comparator.comparingInt(EvaluatedChromosome::fitnessValue))
+        .limit(3)
+        .collect(toList());
   }
 }

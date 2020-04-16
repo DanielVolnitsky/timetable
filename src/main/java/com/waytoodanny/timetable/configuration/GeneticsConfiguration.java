@@ -3,7 +3,7 @@ package com.waytoodanny.timetable.configuration;
 import com.waytoodanny.timetable.service.generation.TimetableGenerator;
 import com.waytoodanny.timetable.service.generation.genetics.Crossover;
 import com.waytoodanny.timetable.service.generation.genetics.Mutation;
-import com.waytoodanny.timetable.service.generation.genetics.NextGenParents;
+import com.waytoodanny.timetable.service.generation.genetics.NextGenParentsSupplier;
 import com.waytoodanny.timetable.service.generation.genetics.PopulationSupplier;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
@@ -26,7 +26,7 @@ public class GeneticsConfiguration {
 
   @Bean
   public TimetableGenerator timetableGenerator(PopulationSupplier pp,
-                                               NextGenParents ngp,
+                                               NextGenParentsSupplier ngp,
                                                Crossover crossover,
                                                Mutation mutation,
                                                Collection<Consumer<Population>> initPopulationHooks,
@@ -52,8 +52,8 @@ public class GeneticsConfiguration {
 
       Map<Integer, List<EvaluatedChromosome>> c = p.stream()
           .collect(groupingBy(EvaluatedChromosome::fitnessValue, toList()));
-      List<EvaluatedChromosome> ch = c.get(700);
-      System.out.println();
+
+      log.info("Acceptable count: " + p.stream().filter(EvaluatedChromosome::isAcceptable).count());
     };
   }
 
