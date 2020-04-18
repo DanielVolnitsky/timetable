@@ -5,6 +5,7 @@ import com.waytoodanny.timetable.service.generation.genetics.constraint.Schedule
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @EqualsAndHashCode(of = "chromosome")
+@ToString(of = {"fitnessFunction"})
 public class EvaluatedChromosome {
 
   @Getter

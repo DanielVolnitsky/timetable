@@ -6,12 +6,14 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
 @EqualsAndHashCode
+@ToString(of = "scheduledClasses")
 public class Chromosome {
   @Getter
   private final Map<Integer, List<SettledClass>> scheduledClasses = new TreeMap<>();
@@ -37,11 +39,12 @@ public class Chromosome {
   public void scheduleClassRandomly(TeachingClass tClass) {
     timeslotRooms.entrySet().stream()
         .filter(e -> e.getValue()
-            .withdrawBestSuitableFor(tClass.roomRequirements())
+            .getBestSuitableFor(tClass.roomRequirements())
             .isPresent())
         .findAny()
+        .map(Map.Entry::getKey)
         .ifPresentOrElse(
-            e -> scheduleClass(tClass, e.getKey()),
+            timeslot -> scheduleClass(tClass, timeslot),
             () -> {
               throw new RuntimeException("Failed to schedule class randomly");
             }

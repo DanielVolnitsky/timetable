@@ -11,18 +11,15 @@ import com.waytoodanny.timetable.service.generation.genetics.PopulationSupplier;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
+import com.waytoodanny.timetable.service.generation.genetics.event.AlgorithmIteration;
 import com.waytoodanny.timetable.service.generation.genetics.event.CrossoverApplied;
 import com.waytoodanny.timetable.service.generation.genetics.event.ParentsSelected;
-import com.waytoodanny.timetable.service.generation.genetics.event.PopulationGenerated;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * 1. Initialize starting population.
@@ -43,29 +40,35 @@ public class GeneticsTimetableGenerator implements TimetableGenerator {
   @Override
   public Timetable timetable(InputData input) {
     Population initialPopulation = this.populationSupplier.apply(input);
-    eventPublisher.publish(new PopulationGenerated(initialPopulation));
+    eventPublisher.publish(new AlgorithmIteration(1, initialPopulation));
 
     Population nextGen = initialPopulation;
     int iteration = 1;
-    while (!nextGen.hasSolution() && iteration++ < 2) {
+    while (!nextGen.hasSolution() /*&& iteration < 2*/) {
       Collection<Parents> parents = nextGenParentsSupplier.apply(initialPopulation);
       eventPublisher.publish(new ParentsSelected(parents));
 
       Population crossoverResult = crossover.apply(parents, input);
       eventPublisher.publish(new CrossoverApplied(crossoverResult));
 
+      List<EvaluatedChromosome> eliteChromosomes = eliteChromosomes(nextGen);
       nextGen = mutation.apply(crossoverResult);
-      nextGen = nextGen.addAll(eliteChromosomes(initialPopulation));
+      nextGen = nextGen.addAll(eliteChromosomes);
 
-//      eventPublisher.publish(new AlgorithmIteration(iteration, nextGen));
+      eventPublisher.publish(new AlgorithmIteration(iteration, nextGen));
+      iteration++;
     }
     return null;
   }
 
-  private List<EvaluatedChromosome> eliteChromosomes(Population initialPopulation) {
-    return initialPopulation.stream()
-        .sorted(Comparator.comparingInt(EvaluatedChromosome::fitnessValue))
-        .limit(3)
-        .collect(toList());
+  private List<EvaluatedChromosome> eliteChromosomes(Population p) {
+    return p.bestChromosomes();
   }
+
+//  private List<EvaluatedChromosome> eliteChromosomes(Population p) {
+//    return p.stream()
+//        .sorted(Comparator.comparingInt(EvaluatedChromosome::fitnessValue).reversed())
+//        .limit(3)
+//        .collect(toList());
+//  }
 }

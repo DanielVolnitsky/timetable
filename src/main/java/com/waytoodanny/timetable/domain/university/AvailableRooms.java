@@ -26,10 +26,6 @@ public class AvailableRooms {
     return rooms.isEmpty();
   }
 
-  public Optional<Room> suitableFor(Predicate<Room> p) {
-    return rooms.stream().filter(p).findAny();
-  }
-
   public Optional<Room> withdrawBestSuitableFor(Predicate<Room> p) {
     return rooms.stream()
         .filter(p)
@@ -38,5 +34,11 @@ public class AvailableRooms {
           rooms.remove(r);
           return r;
         });
+  }
+
+  public Optional<Room> getBestSuitableFor(Predicate<Room> p) {
+    return rooms.stream()
+        .filter(p)
+        .min(Comparator.comparingInt(Room::getCapacity));
   }
 }

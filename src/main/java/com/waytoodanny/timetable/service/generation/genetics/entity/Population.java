@@ -4,10 +4,8 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.E
 import lombok.Builder;
 import lombok.Singular;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -35,13 +33,22 @@ public class Population {
         .orElse(0);
   }
 
+  //TODO
+  public List<EvaluatedChromosome> bestChromosomes() {
+    Map<Integer, List<EvaluatedChromosome>> c = stream()
+        .collect(Collectors.groupingBy(EvaluatedChromosome::fitnessValue));
+
+    return c.get(
+        c.keySet().stream().max(Comparator.comparingInt(e -> e)).orElse(0));
+  }
+
   public int size() {
     return chromosomes.size();
   }
 
   public Population addAll(Collection<EvaluatedChromosome> chromosomes) {
     var c = new ArrayList<>(chromosomes);
-    c.addAll(chromosomes);
+    c.addAll(this.chromosomes);
     return new Population(c);
   }
 }
