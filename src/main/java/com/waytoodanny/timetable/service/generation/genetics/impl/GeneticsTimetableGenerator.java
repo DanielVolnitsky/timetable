@@ -11,6 +11,7 @@ import com.waytoodanny.timetable.service.generation.genetics.PopulationSupplier;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
+import com.waytoodanny.timetable.service.generation.genetics.event.CrossoverApplied;
 import com.waytoodanny.timetable.service.generation.genetics.event.ParentsSelected;
 import com.waytoodanny.timetable.service.generation.genetics.event.PopulationGenerated;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +51,12 @@ public class GeneticsTimetableGenerator implements TimetableGenerator {
       Collection<Parents> parents = nextGenParentsSupplier.apply(initialPopulation);
       eventPublisher.publish(new ParentsSelected(parents));
 
-//      nextGen = mutation.compose(crossover).apply(parents);
-//      nextGen = nextGen.addAll(eliteChromosomes(initialPopulation));
-//
+      Population crossoverResult = crossover.apply(parents, input);
+      eventPublisher.publish(new CrossoverApplied(crossoverResult));
+
+      nextGen = mutation.apply(crossoverResult);
+      nextGen = nextGen.addAll(eliteChromosomes(initialPopulation));
+
 //      eventPublisher.publish(new AlgorithmIteration(iteration, nextGen));
     }
     return null;

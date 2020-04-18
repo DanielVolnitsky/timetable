@@ -11,6 +11,4 @@ import lombok.ToString;
 @ToString
 public class Teacher {
   private final String name;
-  private final String surname;
-  private final String secondName;
 }

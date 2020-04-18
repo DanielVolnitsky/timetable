@@ -4,6 +4,7 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
 import com.waytoodanny.timetable.service.generation.genetics.event.AlgorithmIteration;
+import com.waytoodanny.timetable.service.generation.genetics.event.CrossoverApplied;
 import com.waytoodanny.timetable.service.generation.genetics.event.ParentsSelected;
 import com.waytoodanny.timetable.service.generation.genetics.event.PopulationGenerated;
 import lombok.extern.slf4j.Slf4j;
@@ -26,18 +27,7 @@ public class GeneticAlgorithmLifecycleListener {
 
   @EventListener
   public void handlePopulationGenerated(PopulationGenerated event) {
-    Population p = event.getPopulation();
-
-    Map<Integer, Long> groupedByFitness = p.stream()
-        .collect(groupingBy(EvaluatedChromosome::fitnessValue, TreeMap::new, counting()));
-
-    log.info("Initial population stats: " + groupedByFitness);
-
-    groupedByFitness.keySet().stream()
-        .max(Comparator.comparingInt(f -> f))
-        .ifPresent(max -> log.info("Initial population max fitness: " + max));
-
-    log.info("Acceptable count: " + p.stream().filter(EvaluatedChromosome::isAcceptable).count());
+    logPopulationStatistics(event.getPopulation());
   }
 
   @EventListener
@@ -58,6 +48,11 @@ public class GeneticAlgorithmLifecycleListener {
   }
 
   @EventListener
+  public void handleCrossoverApplied(CrossoverApplied event) {
+    logPopulationStatistics(event.getPopulation());
+  }
+
+  @EventListener
   public void handleAlgorithmIteration(AlgorithmIteration event) {
     Map<Integer, Long> groupedByFitness = event.getPopulation().stream()
         .collect(groupingBy(EvaluatedChromosome::fitnessValue, Collectors.counting()));
@@ -68,5 +63,21 @@ public class GeneticAlgorithmLifecycleListener {
     groupedByFitness.keySet().stream()
         .max(Comparator.comparingInt(f -> f))
         .ifPresent(max -> log.info("{} iteration population max fitness: {}", i, max));
+  }
+
+  private void logPopulationStatistics(Population p) {
+    Map<Integer, Long> groupedByFitness = p.stream()
+        .collect(groupingBy(
+            EvaluatedChromosome::fitnessValue,
+            () -> new TreeMap<>(Comparator.reverseOrder()),
+            counting()));
+
+    log.info("Population stats: " + groupedByFitness);
+
+    groupedByFitness.keySet().stream()
+        .max(Comparator.comparingInt(f -> f))
+        .ifPresent(max -> log.info("Population max fitness: " + max));
+
+    log.info("Acceptable count: " + p.stream().filter(EvaluatedChromosome::isAcceptable).count());
   }
 }

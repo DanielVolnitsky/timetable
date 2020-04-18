@@ -4,9 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toList;
 
 @Getter
 @Builder
@@ -19,7 +21,11 @@ public class TeachingClass {
   private final int classesPerWeek;
 
   public List<TeachingClass> singleWeekClasses() {
-    return Collections.nCopies(classesPerWeek, this);
+    return IntStream.range(0, classesPerWeek).mapToObj(i -> copy()).collect(toList());
+  }
+
+  private TeachingClass copy() {
+    return new TeachingClass(subject, teacher, group, classesNumber, classesPerWeek);
   }
 
   public Predicate<Room> roomRequirements() {

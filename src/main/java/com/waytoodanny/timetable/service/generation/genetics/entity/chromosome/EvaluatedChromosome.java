@@ -14,6 +14,7 @@ import java.util.Objects;
 @EqualsAndHashCode(of = "chromosome")
 public class EvaluatedChromosome {
 
+  @Getter
   private final Chromosome chromosome;
   private final Collection<ScheduleConstraint> constraints;
   @Getter

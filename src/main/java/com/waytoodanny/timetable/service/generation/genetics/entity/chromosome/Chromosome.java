@@ -9,6 +9,8 @@ import lombok.NonNull;
 
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
+
 @EqualsAndHashCode
 public class Chromosome {
   @Getter
@@ -30,6 +32,31 @@ public class Chromosome {
     return rooms.withdrawBestSuitableFor(tClass.roomRequirements())
         .map(r -> scheduledClasses.merge(timeslot, List.of(new SettledClass(r, tClass)), this::mergeLists))
         .isPresent();
+  }
+
+  public void scheduleClassRandomly(TeachingClass tClass) {
+    timeslotRooms.entrySet().stream()
+        .filter(e -> e.getValue()
+            .withdrawBestSuitableFor(tClass.roomRequirements())
+            .isPresent())
+        .findAny()
+        .ifPresentOrElse(
+            e -> scheduleClass(tClass, e.getKey()),
+            () -> {
+              throw new RuntimeException("Failed to schedule class randomly");
+            }
+        );
+  }
+
+  //TODO
+  public int timeslotForClass(TeachingClass c) {
+    return scheduledClasses.entrySet().stream()
+        .filter(e -> e.getValue().stream()
+            .map(SettledClass::getTeachingClass)
+            .collect(toList())
+            .contains(c))
+        .map(Map.Entry::getKey)
+        .findAny().orElse(0);
   }
 
   private List<SettledClass> mergeLists(List<SettledClass> l1, List<SettledClass> l2) {

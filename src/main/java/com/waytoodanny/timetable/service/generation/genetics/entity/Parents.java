@@ -1,5 +1,6 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity;
 
+import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
 import lombok.Value;
 
@@ -28,5 +29,10 @@ public class Parents {
   @Override
   public int hashCode() {
     return Objects.hash(first, second);
+  }
+
+  //TODO
+  public Chromosome opposite(Chromosome c) {
+    return first.getChromosome().equals(c) ? second.getChromosome() : first.getChromosome();
   }
 }
