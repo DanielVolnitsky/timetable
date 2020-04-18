@@ -30,11 +30,8 @@ public class WheelOfFortune implements NextGenParentsSupplier {
         groupedByFitness.keySet().stream().reduce(Integer::sum).orElse(0);
 
     Map<Integer, List<EvaluatedChromosome>> collect = groupedByFitness.entrySet().stream()
-        .collect(toMap(e -> {
-              int i = (int) Math.floor((double) e.getKey() / overallFitness * 100);
-              System.out.println(i + ": " + e.getKey());
-              return i;
-            }, Map.Entry::getValue,
+        .collect(toMap(e -> (int) Math.floor((double) e.getKey() / overallFitness * 100),
+            Map.Entry::getValue,
             (l1, l2) -> {
               var r = new ArrayList<>(l1);
               r.addAll(l2);

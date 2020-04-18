@@ -7,11 +7,11 @@ import java.util.Objects;
 
 @Value
 public class Parents {
-  EvaluatedChromosome firstParent;
-  EvaluatedChromosome secondParent;
+  EvaluatedChromosome first;
+  EvaluatedChromosome second;
 
   public int overallFitness() {
-    return firstParent.fitnessValue() + secondParent.fitnessValue();
+    return first.fitnessValue() + second.fitnessValue();
   }
 
   @Override
@@ -19,14 +19,14 @@ public class Parents {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Parents parents = (Parents) o;
-    return (Objects.equals(firstParent, parents.firstParent) &&
-        Objects.equals(secondParent, parents.secondParent))
-        || (Objects.equals(firstParent, parents.secondParent) &&
-        Objects.equals(secondParent, parents.firstParent));
+    return (Objects.equals(first, parents.first) &&
+        Objects.equals(second, parents.second))
+        || (Objects.equals(first, parents.second) &&
+        Objects.equals(second, parents.first));
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(firstParent, secondParent);
+    return Objects.hash(first, second);
   }
 }

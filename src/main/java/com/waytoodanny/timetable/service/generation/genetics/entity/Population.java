@@ -24,6 +24,10 @@ public class Population {
     return chromosomes.stream();
   }
 
+  public boolean hasSolution() {
+    return stream().anyMatch(EvaluatedChromosome::isAcceptable);
+  }
+
   public int highestFitnessValue() {
     return stream()
         .max(Comparator.comparingInt(EvaluatedChromosome::fitnessValue))
