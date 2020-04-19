@@ -6,14 +6,17 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-public class TournamentSelection implements NextGenParentsSupplier {
+@Component
+public class GroupedTournamentSelection implements NextGenParentsSupplier {
 
   private final GeneticsProperties geneticsProperties;
   private final Random random;
@@ -26,29 +29,33 @@ public class TournamentSelection implements NextGenParentsSupplier {
   }
 
   private Parents parents(Population population) {
+    Map<Integer, List<EvaluatedChromosome>> groupedByFitness =
+        population.stream().collect(groupingBy(EvaluatedChromosome::fitnessValue));
+
+    List<Integer> fitnessValues = new ArrayList<>(groupedByFitness.keySet());
+    int selectionSize =
+        Math.min(fitnessValues.size(), geneticsProperties.getTournamentSelectionSize());
+
     EvaluatedChromosome parent1;
     EvaluatedChromosome parent2;
     do {
-      parent1 = bestOf(selectionCandidates(population));
-      parent2 = bestOf(selectionCandidates(population));
+      parent1 = randomCandidate(groupedByFitness,
+          candidateFitness(fitnessValues, selectionSize));
+
+      parent2 = randomCandidate(groupedByFitness,
+          candidateFitness(fitnessValues, selectionSize));
     } while (parent1 == parent2);
 
     return new Parents(parent1, parent2);
   }
 
-  private Set<EvaluatedChromosome> selectionCandidates(Population pop) {
-    var result = new HashSet<EvaluatedChromosome>();
-    int size = pop.size();
-    do {
-      result.add(pop.get(random.nextInt(size)));
-    } while (result.size() < geneticsProperties.getTournamentSelectionSize());
-
-    return result;
+  private Integer candidateFitness(List<Integer> fitnessValues, int selectionSize) {
+    return fitnessValues.get(random.nextInt(selectionSize));
   }
 
-  private EvaluatedChromosome bestOf(Set<EvaluatedChromosome> candidates) {
-    return candidates.stream()
-        .max(Comparator.comparingInt(EvaluatedChromosome::fitnessValue))
-        .orElseThrow(() -> new IllegalArgumentException("No candidates for parenting present"));
+  private EvaluatedChromosome randomCandidate(Map<Integer, List<EvaluatedChromosome>> groupedByFitness,
+                                              Integer fitnessValue) {
+    List<EvaluatedChromosome> chs = groupedByFitness.get(fitnessValue);
+    return chs.get(random.nextInt(chs.size()));
   }
 }

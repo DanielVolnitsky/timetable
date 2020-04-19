@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.toList;
 
 @Getter
 @Builder
-@ToString
+@ToString(of = {"teacher", "group", "subject"})
 public class TeachingClass {
   private final Subject subject;
   private final Teacher teacher;

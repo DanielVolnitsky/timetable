@@ -11,6 +11,6 @@ timetable:
       genetics:
         populationSize: 50
         crossover-rate: 0.8
-        tournament-selection-size: 2
+        tournament-selection-size: 5
         elite-chromosomes-number: 2
         mutation-rate: 0.5

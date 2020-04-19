@@ -4,5 +4,5 @@ import lombok.Value;
 
 @Value
 public class Subject {
-  private final String name;
+  String name;
 }
