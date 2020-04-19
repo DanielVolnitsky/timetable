@@ -41,7 +41,6 @@ public class Application implements CommandLineRunner {
 
     var group1 = new StudentGroup("SG1", 11);
     var group2 = new StudentGroup("SG2", 10);
-    var group3 = new StudentGroup("SG3", 10);
 
     var class1 = TeachingClass.builder()
         .teacher(teacher1).subject(subject1).group(group1).classesPerWeek(4)
@@ -53,7 +52,7 @@ public class Application implements CommandLineRunner {
         .teacher(teacher1).subject(subject3).group(group1).classesPerWeek(4)
         .build();
     var class4 = TeachingClass.builder()
-        .teacher(teacher1).subject(subject3).group(group2).classesPerWeek(4)
+        .teacher(teacher2).subject(subject3).group(group2).classesPerWeek(4)
         .build();
     var class5 = TeachingClass.builder()
         .teacher(teacher2).subject(subject2).group(group1).classesPerWeek(4)
@@ -62,7 +61,14 @@ public class Application implements CommandLineRunner {
         .teacher(teacher2).subject(subject2).group(group2).classesPerWeek(4)
         .build();
 
-    var input = new InputData(Set.of(class1, class2, class3, class4, class5, class6), rooms);
+    var input = new InputData(Set.of(
+        class1,
+        class2,
+        class3,
+        class4,
+        class5,
+        class6
+    ), rooms);
 
     Timetable timetable = timetableGenerator.timetable(input);
   }

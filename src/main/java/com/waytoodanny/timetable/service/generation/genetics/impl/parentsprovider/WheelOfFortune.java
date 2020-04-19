@@ -6,7 +6,6 @@ import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -15,7 +14,6 @@ import static java.util.stream.Collectors.*;
 
 //TODO optimize
 @RequiredArgsConstructor
-@Component
 public class WheelOfFortune implements NextGenParentsSupplier {
 
   private final Random random;

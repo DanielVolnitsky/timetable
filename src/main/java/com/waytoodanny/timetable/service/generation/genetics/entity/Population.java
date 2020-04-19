@@ -1,6 +1,7 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity;
 
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Singular;
 
@@ -13,6 +14,7 @@ import java.util.stream.Stream;
  * given hard and soft constraints like number of periods required, timings, classrooms etc
  */
 @Builder
+@AllArgsConstructor
 public class Population {
 
   @Singular
@@ -26,13 +28,6 @@ public class Population {
     return stream().anyMatch(EvaluatedChromosome::isAcceptable);
   }
 
-  public int highestFitnessValue() {
-    return stream()
-        .max(Comparator.comparingInt(EvaluatedChromosome::fitnessValue))
-        .map(EvaluatedChromosome::fitnessValue)
-        .orElse(0);
-  }
-
   //TODO
   public List<EvaluatedChromosome> bestChromosomes() {
     Map<Integer, List<EvaluatedChromosome>> c = stream()
@@ -44,6 +39,10 @@ public class Population {
 
   public int size() {
     return chromosomes.size();
+  }
+
+  public EvaluatedChromosome get(int index) {
+    return chromosomes.get(index);
   }
 
   public Population addAll(Collection<EvaluatedChromosome> chromosomes) {

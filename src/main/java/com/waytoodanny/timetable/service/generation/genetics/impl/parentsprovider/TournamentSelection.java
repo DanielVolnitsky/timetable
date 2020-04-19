@@ -4,12 +4,17 @@ import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.service.generation.genetics.NextGenParentsSupplier;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
+import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
+@Component
 public class TournamentSelection implements NextGenParentsSupplier {
 
   private final GeneticsProperties geneticsProperties;
@@ -17,30 +22,35 @@ public class TournamentSelection implements NextGenParentsSupplier {
 
   @Override
   public Collection<Parents> apply(Population population) {
-    return null;
-//    return IntStream.rangeClosed(1, geneticsProperties.getPopulationSize())
-//        .mapToObj(i -> parents(population))
-//        .collect(toList());
+    return IntStream.range(0, geneticsProperties.getPopulationSize())
+        .mapToObj(i -> parents(population))
+        .collect(toList());
   }
-//
-//  private Parents parents(Population population) {
-//    Chromosome parent1;
-//    Chromosome parent2;
-//    do {
-//      parent1 = bestOf(selectionCandidates(population));
-//      parent2 = bestOf(selectionCandidates(population));
-//    } while (parent1 == parent2);
-//
-//    return new Parents(parent1, parent2);
-//  }
-//
-//  d
-//
-//  private Chromosome bestOf(Set<Chromosome> candidates) {
-//    assert !candidates.isEmpty();
-//
-//    return candidates.stream()
-//        .max(comparingInt(Chromosome::fitnessValue))
-//        .orElseThrow(() -> new IllegalArgumentException("No candidates for parenting present"));
-//  }
+
+  private Parents parents(Population population) {
+    EvaluatedChromosome parent1;
+    EvaluatedChromosome parent2;
+    do {
+      parent1 = bestOf(selectionCandidates(population));
+      parent2 = bestOf(selectionCandidates(population));
+    } while (parent1 == parent2);
+
+    return new Parents(parent1, parent2);
+  }
+
+  private Set<EvaluatedChromosome> selectionCandidates(Population pop) {
+    var result = new HashSet<EvaluatedChromosome>();
+    int size = pop.size();
+    do {
+      result.add(pop.get(random.nextInt(size)));
+    } while (result.size() < geneticsProperties.getTournamentSelectionSize());
+
+    return result;
+  }
+
+  private EvaluatedChromosome bestOf(Set<EvaluatedChromosome> candidates) {
+    return candidates.stream()
+        .max(Comparator.comparingInt(EvaluatedChromosome::fitnessValue))
+        .orElseThrow(() -> new IllegalArgumentException("No candidates for parenting present"));
+  }
 }

@@ -1,5 +1,6 @@
 package com.waytoodanny.timetable.service.generation.genetics.impl;
 
+import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
 import com.waytoodanny.timetable.domain.timetable.Timetable;
 import com.waytoodanny.timetable.service.event.EventPublisher;
@@ -19,7 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * 1. Initialize starting population.
@@ -36,6 +40,7 @@ public class GeneticsTimetableGenerator implements TimetableGenerator {
   private final Crossover crossover;
   private final Mutation mutation;
   private final EventPublisher eventPublisher;
+  private final GeneticsProperties geneticsProperties;
 
   @Override
   public Timetable timetable(InputData input) {
@@ -44,15 +49,15 @@ public class GeneticsTimetableGenerator implements TimetableGenerator {
 
     Population nextGen = initialPopulation;
     int iteration = 1;
-    while (!nextGen.hasSolution() /*&& iteration < 2*/) {
-      Collection<Parents> parents = nextGenParentsSupplier.apply(initialPopulation);
+    while (!nextGen.hasSolution()) {
+      Collection<Parents> parents = nextGenParentsSupplier.apply(nextGen);
       eventPublisher.publish(new ParentsSelected(parents));
 
       Population crossoverResult = crossover.apply(parents, input);
       eventPublisher.publish(new CrossoverApplied(crossoverResult));
 
       List<EvaluatedChromosome> eliteChromosomes = eliteChromosomes(nextGen);
-      nextGen = mutation.apply(crossoverResult);
+      nextGen = mutation.apply(crossoverResult, input);
       nextGen = nextGen.addAll(eliteChromosomes);
 
       eventPublisher.publish(new AlgorithmIteration(iteration, nextGen));
@@ -62,13 +67,9 @@ public class GeneticsTimetableGenerator implements TimetableGenerator {
   }
 
   private List<EvaluatedChromosome> eliteChromosomes(Population p) {
-    return p.bestChromosomes();
+    return p.stream()
+        .sorted(Comparator.comparingInt(EvaluatedChromosome::fitnessValue).reversed())
+        .limit(geneticsProperties.getEliteChromosomesNumber())
+        .collect(toList());
   }
-
-//  private List<EvaluatedChromosome> eliteChromosomes(Population p) {
-//    return p.stream()
-//        .sorted(Comparator.comparingInt(EvaluatedChromosome::fitnessValue).reversed())
-//        .limit(3)
-//        .collect(toList());
-//  }
 }

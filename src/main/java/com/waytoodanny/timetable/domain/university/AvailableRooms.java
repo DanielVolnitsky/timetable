@@ -26,6 +26,11 @@ public class AvailableRooms {
     return rooms.isEmpty();
   }
 
+  public AvailableRooms merge(AvailableRooms rooms) {
+    this.rooms.addAll(rooms.rooms);
+    return this;
+  }
+
   public Optional<Room> withdrawBestSuitableFor(Predicate<Room> p) {
     return rooms.stream()
         .filter(p)

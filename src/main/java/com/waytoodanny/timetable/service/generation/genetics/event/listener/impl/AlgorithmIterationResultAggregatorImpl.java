@@ -15,7 +15,7 @@ import static java.util.Collections.singletonList;
 public class AlgorithmIterationResultAggregatorImpl
     implements AlgorithmIterationResultAggregator {
 
-  private TreeSet<EvaluatedChromosome> best =
+  private final TreeSet<EvaluatedChromosome> best =
       new TreeSet<>(Comparator.comparingInt(EvaluatedChromosome::fitnessValue));
 
   @Override
