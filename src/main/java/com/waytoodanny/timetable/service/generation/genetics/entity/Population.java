@@ -37,6 +37,13 @@ public class Population {
         c.keySet().stream().max(Comparator.comparingInt(e -> e)).orElse(0));
   }
 
+  public int highestFitnessValue() {
+    return stream()
+        .max(Comparator.comparingInt(EvaluatedChromosome::fitnessValue))
+        .map(EvaluatedChromosome::fitnessValue)
+        .orElse(0);
+  }
+
   public int size() {
     return chromosomes.size();
   }

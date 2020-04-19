@@ -1,6 +1,8 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity.chromosome;
 
 import com.waytoodanny.timetable.domain.university.AvailableRooms;
+import com.waytoodanny.timetable.domain.university.StudentGroup;
+import com.waytoodanny.timetable.domain.university.Teacher;
 import com.waytoodanny.timetable.domain.university.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass;
 import lombok.EqualsAndHashCode;
@@ -40,34 +42,34 @@ public class Chromosome {
         .map(r -> scheduledClasses.merge(timeslot, new ArrayList<>(List.of(new SettledClass(r, tClass))), this::mergeLists))
         .isPresent();
   }
-//
-//  private boolean canScheduleClass(TeachingClass tClass, int timeslot) {
-//    Teacher teacher = tClass.getTeacher();
-//    StudentGroup group = tClass.getGroup();
-//
-//    return Optional.ofNullable(scheduledClasses.get(timeslot))
-//        .map(classes -> classes.stream()
-//            .map(SettledClass::getTeachingClass)
-//            .noneMatch(tc -> tc.getGroup().equals(group) || tc.getTeacher().equals(teacher)))
-//        .orElse(true);
-//  }
 
-  public void scheduleClassRandomly(TeachingClass tClass) {
-    timeslotRooms.entrySet().stream()
+  private boolean canScheduleClass(TeachingClass tClass, int timeslot) {
+    Teacher teacher = tClass.getTeacher();
+    StudentGroup group = tClass.getGroup();
+
+    return Optional.ofNullable(scheduledClasses.get(timeslot))
+        .map(classes -> classes.stream()
+            .map(SettledClass::getTeachingClass)
+            .noneMatch(tc -> tc.getGroup().equals(group) || tc.getTeacher().equals(teacher)))
+        .orElse(true);
+  }
+
+  public boolean scheduleClassRandomly(TeachingClass tClass) {
+    return timeslotRooms.entrySet()
+        .stream()
+        //TODO
+        .parallel()
         .filter(e -> e.getValue()
             .getBestSuitableFor(tClass.roomRequirements())
             .isPresent())
+        .filter(e -> canScheduleClass(tClass, e.getKey()))
         .findAny()
         .map(Map.Entry::getKey)
-        .ifPresentOrElse(
-            timeslot -> scheduleClass(tClass, timeslot),
-            () -> {
-              throw new RuntimeException("Failed to schedule class randomly");
-            }
-        );
+        .map(timeslot -> scheduleClass(tClass, timeslot))
+        .orElse(false);
   }
 
-  //TODO
+  //TODO decide where parallelization is needed or consequent class scheduling is appropriate decision
   public int timeslotForClass(TeachingClass c) {
     return scheduledClasses.entrySet().stream()
         .filter(e -> e.getValue().stream()

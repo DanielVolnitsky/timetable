@@ -9,7 +9,7 @@ timetable:
   generation:
     algorithm:
       genetics:
-        populationSize: 50
+        populationSize: 2
         crossover-rate: 0.8
         tournament-selection-size: 5
         elite-chromosomes-number: 2

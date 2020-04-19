@@ -3,7 +3,6 @@ package com.waytoodanny.timetable.service.generation.genetics.impl;
 import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
-import com.waytoodanny.timetable.domain.university.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.PopulationSupplier;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
@@ -36,20 +35,12 @@ public class RandomizedPopulationSupplier implements PopulationSupplier {
   }
 
   private Chromosome generatedChromosome(InputData data) {
-    var chr = new Chromosome(data.getRooms(), universityProperties.weekTimeSlots());
-    data.classesToScheduleForWeek().forEach(cl -> scheduleClass(cl, chr));
-    return chr;
-  }
+    var chromosome = new Chromosome(data.getRooms(), universityProperties.weekTimeSlots());
 
-  private void scheduleClass(TeachingClass cl, Chromosome chr) {
-    boolean done;
-    do {
-      int randomSlot = randomTimeSlot(universityProperties.timeSlotsPerWeek());
-      done = chr.scheduleClass(cl, randomSlot);
-    } while (!done);
-  }
+    boolean fullyGenerated = data.classesToScheduleForWeek().stream()
+        .map(chromosome::scheduleClassRandomly)
+        .noneMatch(p -> p.equals(false));
 
-  private int randomTimeSlot(int totalSlots) {
-    return random.nextInt(totalSlots) + 1;
+    return fullyGenerated ? chromosome : generatedChromosome(data);
   }
 }
