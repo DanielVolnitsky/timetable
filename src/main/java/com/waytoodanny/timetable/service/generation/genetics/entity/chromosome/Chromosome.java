@@ -26,6 +26,17 @@ public class Chromosome {
                 .forEach(t -> timeslotRooms.put(t, rooms.copy()));
     }
 
+    private Chromosome(Map<Integer, List<SettledClass>> scheduledClasses,
+                       Map<Integer, AvailableRooms> timeslotRooms) {
+        scheduledClasses.entrySet()
+                .forEach(e -> this.scheduledClasses.put(e.getKey(), new ArrayList<>(e.getValue())));
+        this.timeslotRooms.putAll(timeslotRooms);
+    }
+
+    public Chromosome copy() {
+        return new Chromosome(scheduledClasses, timeslotRooms);
+    }
+
     public boolean scheduleClass(TeachingClass tClass, int timeslot) {
 //    if(!canScheduleClass(tClass, timeslot)){
 //      return false;
@@ -80,7 +91,8 @@ public class Chromosome {
                         .collect(toList())
                         .contains(teachingClass))
                 .map(Map.Entry::getKey)
-                .findAny().orElse(0);
+                .findAny()
+                .orElseThrow();
     }
 
     private List<SettledClass> mergeLists(List<SettledClass> l1, List<SettledClass> l2) {
@@ -91,11 +103,10 @@ public class Chromosome {
     }
 
     //TODO
-    public void reschedule(TeachingClass c1, TeachingClass c2) {
+    public boolean reschedule(TeachingClass c1, TeachingClass c2) {
         removeFromSchedule(c1);
         removeFromSchedule(c2);
-        scheduleClassRandomly(c1);
-        scheduleClassRandomly(c2);
+        return scheduleClassRandomly(c1) && scheduleClassRandomly(c2);
     }
 
     //TODO

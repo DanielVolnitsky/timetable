@@ -3,7 +3,6 @@ package com.waytoodanny.timetable.service.generation.genetics.impl;
 import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
-import com.waytoodanny.timetable.domain.university.teachingclass.CommonTeachingClass;
 import com.waytoodanny.timetable.domain.university.teachingclass.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.Crossover;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
@@ -36,6 +35,7 @@ public class CrossoverImpl implements Crossover {
     return result.build();
   }
 
+  //TODO refactor
   private Chromosome crossover(Parents parents, InputData data) {
     var p1 = parents.getFirst().getChromosome();
     var p2 = parents.getSecond().getChromosome();
@@ -52,7 +52,11 @@ public class CrossoverImpl implements Crossover {
         scheduled = result.scheduleClass(teachClass, classTimeslot2);
 
         if (!scheduled) {
-          result.scheduleClassRandomly(teachClass);
+          scheduled = result.scheduleClassRandomly(teachClass);
+
+          if (!scheduled) {
+            return crossover(parents, data);
+          }
         }
       }
     }
