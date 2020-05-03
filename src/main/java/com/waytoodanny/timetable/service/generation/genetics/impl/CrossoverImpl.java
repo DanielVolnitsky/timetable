@@ -3,7 +3,8 @@ package com.waytoodanny.timetable.service.generation.genetics.impl;
 import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.configuration.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
-import com.waytoodanny.timetable.domain.university.TeachingClass;
+import com.waytoodanny.timetable.domain.university.teachingclass.CommonTeachingClass;
+import com.waytoodanny.timetable.domain.university.teachingclass.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.Crossover;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
@@ -40,18 +41,18 @@ public class CrossoverImpl implements Crossover {
     var p2 = parents.getSecond().getChromosome();
 
     var result = new Chromosome(data.getRooms(), universityProperties.weekTimeSlots());
-    for (TeachingClass c : data.classesToScheduleForWeek()) {
+    for (TeachingClass teachClass : data.classesToScheduleForWeek()) {
       Chromosome parentForClass = select(p1, p2);
-      int classTimeslot = parentForClass.timeslotForClass(c);
-      boolean scheduled = result.scheduleClass(c, classTimeslot);
+      int classTimeslot = parentForClass.timeslotForClass(teachClass);
+      boolean scheduled = result.scheduleClass(teachClass, classTimeslot);
 
       if (!scheduled) {
         Chromosome otherParent = parents.opposite(parentForClass);
-        int classTimeslot2 = otherParent.timeslotForClass(c);
-        scheduled = result.scheduleClass(c, classTimeslot2);
+        int classTimeslot2 = otherParent.timeslotForClass(teachClass);
+        scheduled = result.scheduleClass(teachClass, classTimeslot2);
 
         if (!scheduled) {
-          result.scheduleClassRandomly(c);
+          result.scheduleClassRandomly(teachClass);
         }
       }
     }

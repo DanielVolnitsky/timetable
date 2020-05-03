@@ -2,7 +2,8 @@ package com.waytoodanny.timetable.service.generation.genetics.impl;
 
 import com.waytoodanny.timetable.configuration.GeneticsProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
-import com.waytoodanny.timetable.domain.university.TeachingClass;
+import com.waytoodanny.timetable.domain.university.teachingclass.CommonTeachingClass;
+import com.waytoodanny.timetable.domain.university.teachingclass.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.Mutation;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
@@ -33,13 +34,13 @@ public class MutationImpl implements Mutation {
             .collect(toList()));
   }
 
-  private EvaluatedChromosome mutate(EvaluatedChromosome evalCh, InputData data) {
+  private EvaluatedChromosome mutate(EvaluatedChromosome evaluatedChromosome, InputData data) {
     if (Math.random() > geneticsProperties.getMutationRate()) {
-      return evalCh;
+      return evaluatedChromosome;
     }
 
     List<TeachingClass> classes = data.classesToScheduleForWeek();
-    Chromosome chromosome = evalCh.getChromosome();
+    Chromosome chromosome = evaluatedChromosome.getChromosome();
 
     TeachingClass randomClass1;
     TeachingClass randomClass2;

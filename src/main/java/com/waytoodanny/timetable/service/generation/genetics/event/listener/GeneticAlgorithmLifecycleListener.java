@@ -1,8 +1,11 @@
-package com.waytoodanny.timetable.service.generation.genetics.event;
+package com.waytoodanny.timetable.service.generation.genetics.event.listener;
 
 import com.waytoodanny.timetable.service.generation.genetics.entity.Parents;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
+import com.waytoodanny.timetable.service.generation.genetics.event.AlgorithmIteration;
+import com.waytoodanny.timetable.service.generation.genetics.event.CrossoverApplied;
+import com.waytoodanny.timetable.service.generation.genetics.event.ParentsSelected;
 import com.waytoodanny.timetable.service.generation.genetics.event.listener.AlgorithmIterationResultAggregator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
