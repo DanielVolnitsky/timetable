@@ -27,7 +27,7 @@ public class InputData {
             return singleWeekClasses;
         }
         singleWeekClasses = teachingClasses.stream()
-                .flatMap(c -> c.singleWeekClasses().stream())
+                .flatMap(c -> c.classCopiesForWeeklyScheduling().stream())
                 .collect(toList());
         return singleWeekClasses;
     }

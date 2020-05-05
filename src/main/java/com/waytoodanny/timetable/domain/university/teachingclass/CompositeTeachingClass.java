@@ -1,5 +1,6 @@
 package com.waytoodanny.timetable.domain.university.teachingclass;
 
+import com.waytoodanny.timetable.domain.university.ClassType;
 import com.waytoodanny.timetable.domain.university.Room;
 import com.waytoodanny.timetable.domain.university.StudentGroup;
 import com.waytoodanny.timetable.domain.university.Subject;
@@ -24,12 +25,13 @@ public class CompositeTeachingClass implements TeachingClass {
     private final Set<Teacher> teachers;
     @Singular
     private final Set<StudentGroup> groups;
+    private final ClassType type;
 
     private final int classesNumber;
     private final int classesPerWeek;
 
     @Override
-    public List<CompositeTeachingClass> singleWeekClasses() {
+    public List<CompositeTeachingClass> classCopiesForWeeklyScheduling() {
         return IntStream.range(0, classesPerWeek)
                 .mapToObj(i -> copy())
                 .collect(toList());
@@ -71,6 +73,6 @@ public class CompositeTeachingClass implements TeachingClass {
 
     private CompositeTeachingClass copy() {
         return new CompositeTeachingClass(
-                subject, teachers, groups, classesNumber, classesPerWeek);
+                subject, teachers, groups, type, classesNumber, classesPerWeek);
     }
 }

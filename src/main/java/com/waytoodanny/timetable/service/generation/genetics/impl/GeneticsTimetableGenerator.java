@@ -63,6 +63,7 @@ public class GeneticsTimetableGenerator implements TimetableGenerator {
       eventPublisher.publish(new AlgorithmIteration(iteration, nextGen));
       iteration++;
     }
+    //TODO convert to timetable
     return null;
   }
 

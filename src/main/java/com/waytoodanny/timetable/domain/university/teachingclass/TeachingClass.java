@@ -10,8 +10,7 @@ import java.util.function.Predicate;
 
 public interface TeachingClass {
 
-    //TODO copiesForWeek
-    List<? extends TeachingClass> singleWeekClasses();
+    List<? extends TeachingClass> classCopiesForWeeklyScheduling();
 
     Predicate<Room> roomRequirements();
 
