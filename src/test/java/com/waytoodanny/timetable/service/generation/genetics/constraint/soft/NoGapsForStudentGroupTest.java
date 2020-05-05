@@ -1,7 +1,7 @@
 //package com.waytoodanny.timetable.service.generation.genetics.constraint.soft;
 //
-//import com.waytoodanny.timetable.configuration.UniversityProperties;
-//import com.waytoodanny.timetable.domain.timetable.TimeSlots;
+//import com.waytoodanny.timetable.configuration.properties.UniversityProperties;
+//import com.waytoodanny.timetable.service.generation.genetics.entity.timetable.TimeSlots;
 //import com.waytoodanny.timetable.domain.university.Room;
 //import com.waytoodanny.timetable.domain.university.StudentGroup;
 //import com.waytoodanny.timetable.domain.university.TeachingClass;

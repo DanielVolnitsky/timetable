@@ -1,7 +1,7 @@
 package com.waytoodanny.timetable.domain.timetable;
 
 import com.waytoodanny.timetable.domain.university.AvailableRooms;
-import com.waytoodanny.timetable.domain.university.teachingclass.TeachingClass;
+import com.waytoodanny.timetable.service.generation.genetics.entity.teachingclass.TeachingClass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

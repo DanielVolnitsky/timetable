@@ -1,6 +1,7 @@
 package com.waytoodanny.timetable;
 
-import com.waytoodanny.timetable.configuration.UniversityProperties;
+import com.waytoodanny.timetable.configuration.properties.GeneticsProperties;
+import com.waytoodanny.timetable.configuration.properties.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
 import com.waytoodanny.timetable.domain.timetable.Timetable;
 import com.waytoodanny.timetable.domain.university.AvailableRooms;
@@ -9,9 +10,9 @@ import com.waytoodanny.timetable.domain.university.Room;
 import com.waytoodanny.timetable.domain.university.StudentGroup;
 import com.waytoodanny.timetable.domain.university.Subject;
 import com.waytoodanny.timetable.domain.university.Teacher;
-import com.waytoodanny.timetable.domain.university.teachingclass.CommonTeachingClass;
-import com.waytoodanny.timetable.domain.university.teachingclass.CompositeTeachingClass;
 import com.waytoodanny.timetable.service.generation.TimetableGenerator;
+import com.waytoodanny.timetable.service.generation.genetics.entity.teachingclass.CommonTeachingClass;
+import com.waytoodanny.timetable.service.generation.genetics.entity.teachingclass.CompositeTeachingClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,7 +23,8 @@ import java.util.Set;
 
 @SpringBootApplication
 @EnableConfigurationProperties({
-    UniversityProperties.class
+    UniversityProperties.class,
+    GeneticsProperties.class
 })
 public class Application implements CommandLineRunner {
 

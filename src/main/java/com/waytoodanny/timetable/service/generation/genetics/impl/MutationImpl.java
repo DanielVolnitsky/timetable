@@ -1,13 +1,13 @@
 package com.waytoodanny.timetable.service.generation.genetics.impl;
 
-import com.waytoodanny.timetable.configuration.GeneticsProperties;
+import com.waytoodanny.timetable.configuration.properties.GeneticsProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
-import com.waytoodanny.timetable.domain.university.teachingclass.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.Mutation;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.Population;
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.Chromosome;
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.EvaluatedChromosome;
+import com.waytoodanny.timetable.service.generation.genetics.entity.teachingclass.TeachingClass;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

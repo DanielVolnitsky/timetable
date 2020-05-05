@@ -1,4 +1,4 @@
-package com.waytoodanny.timetable.configuration;
+package com.waytoodanny.timetable.configuration.properties;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

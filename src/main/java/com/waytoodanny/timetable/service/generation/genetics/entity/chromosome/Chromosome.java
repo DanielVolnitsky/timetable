@@ -1,14 +1,19 @@
 package com.waytoodanny.timetable.service.generation.genetics.entity.chromosome;
 
 import com.waytoodanny.timetable.domain.university.AvailableRooms;
-import com.waytoodanny.timetable.domain.university.teachingclass.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass;
+import com.waytoodanny.timetable.service.generation.genetics.entity.teachingclass.TeachingClass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static java.util.stream.Collectors.toList;
 
@@ -22,8 +27,8 @@ public class Chromosome {
     public Chromosome(@NonNull AvailableRooms rooms,
                       @NonNull Collection<Integer> timeSlotsPerWeek) {
         timeSlotsPerWeek.stream()
-                .sorted()
-                .forEach(t -> timeslotRooms.put(t, rooms.copy()));
+            .sorted()
+            .forEach(t -> timeslotRooms.put(t, rooms.prototype()));
     }
 
     private Chromosome(Map<Integer, List<SettledClass>> scheduledClasses,
@@ -74,7 +79,7 @@ public class Chromosome {
                 //TODO
                 .parallel()
                 .filter(e -> e.getValue()
-                        .getBestSuitableFor(tClass.roomRequirements())
+                    .findBestSuitableFor(tClass.roomRequirements())
                         .isPresent())
                 .filter(e -> canScheduleClass(tClass, e.getKey()))
                 .findAny()

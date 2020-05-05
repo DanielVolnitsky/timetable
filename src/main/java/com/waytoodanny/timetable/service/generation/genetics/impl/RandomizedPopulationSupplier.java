@@ -1,7 +1,7 @@
 package com.waytoodanny.timetable.service.generation.genetics.impl;
 
-import com.waytoodanny.timetable.configuration.GeneticsProperties;
-import com.waytoodanny.timetable.configuration.UniversityProperties;
+import com.waytoodanny.timetable.configuration.properties.GeneticsProperties;
+import com.waytoodanny.timetable.configuration.properties.UniversityProperties;
 import com.waytoodanny.timetable.domain.timetable.InputData;
 import com.waytoodanny.timetable.service.generation.genetics.PopulationSupplier;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;

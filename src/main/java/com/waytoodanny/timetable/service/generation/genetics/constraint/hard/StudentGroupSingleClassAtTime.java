@@ -1,11 +1,11 @@
 package com.waytoodanny.timetable.service.generation.genetics.constraint.hard;
 
 import com.waytoodanny.timetable.domain.university.StudentGroup;
-import com.waytoodanny.timetable.domain.university.teachingclass.TeachingClass;
 import com.waytoodanny.timetable.service.generation.genetics.constraint.HardConstraint;
 import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 import com.waytoodanny.timetable.service.generation.genetics.entity.SettledClass;
 import com.waytoodanny.timetable.service.generation.genetics.entity.chromosome.Chromosome;
+import com.waytoodanny.timetable.service.generation.genetics.entity.teachingclass.TeachingClass;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;

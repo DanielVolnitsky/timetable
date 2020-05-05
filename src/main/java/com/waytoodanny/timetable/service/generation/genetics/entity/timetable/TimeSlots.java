@@ -1,6 +1,6 @@
-package com.waytoodanny.timetable.domain.timetable;
+package com.waytoodanny.timetable.service.generation.genetics.entity.timetable;
 
-import com.waytoodanny.timetable.configuration.UniversityProperties;
+import com.waytoodanny.timetable.configuration.properties.UniversityProperties;
 import lombok.Value;
 import org.springframework.stereotype.Component;
 

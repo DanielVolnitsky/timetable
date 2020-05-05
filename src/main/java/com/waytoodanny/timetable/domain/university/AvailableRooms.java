@@ -1,21 +1,52 @@
 package com.waytoodanny.timetable.domain.university;
 
-import java.util.*;
+import com.waytoodanny.timetable.util.Merging;
+import com.waytoodanny.timetable.util.Prototyped;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
-public class AvailableRooms {
-  private final List<Room> rooms;
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class AvailableRooms
+    implements Prototyped<AvailableRooms>, Merging<AvailableRooms> {
 
-  private AvailableRooms(List<Room> rooms) {
-    this.rooms = rooms;
-  }
+  private final List<Room> rooms;
 
   public static AvailableRooms of(Room... rooms) {
     return new AvailableRooms(Arrays.asList(rooms));
   }
 
-  public AvailableRooms copy() {
+  public Optional<Room> findBestSuitableFor(Predicate<Room> requirements) {
+    return rooms.stream()
+        .filter(requirements)
+        .min(Comparator.comparingInt(Room::getCapacity));
+  }
+
+  public Optional<Room> withdrawBestSuitableFor(Predicate<Room> requirements) {
+    return rooms.stream()
+        .filter(requirements)
+        .min(Comparator.comparingInt(Room::getCapacity))
+        .map(r -> {
+          rooms.remove(r);
+          return r;
+        });
+  }
+
+  @Override
+  public AvailableRooms prototype() {
     return new AvailableRooms(new ArrayList<>(this.rooms));
+  }
+
+  @Override
+  public AvailableRooms merge(AvailableRooms other) {
+    this.rooms.addAll(other.rooms);
+    return this;
   }
 
   public int size() {
@@ -24,26 +55,5 @@ public class AvailableRooms {
 
   public boolean isEmpty() {
     return rooms.isEmpty();
-  }
-
-  public AvailableRooms merge(AvailableRooms rooms) {
-    this.rooms.addAll(rooms.rooms);
-    return this;
-  }
-
-  public Optional<Room> withdrawBestSuitableFor(Predicate<Room> p) {
-    return rooms.stream()
-        .filter(p)
-        .min(Comparator.comparingInt(Room::getCapacity))
-        .map(r -> {
-          rooms.remove(r);
-          return r;
-        });
-  }
-
-  public Optional<Room> getBestSuitableFor(Predicate<Room> p) {
-    return rooms.stream()
-        .filter(p)
-        .min(Comparator.comparingInt(Room::getCapacity));
   }
 }
