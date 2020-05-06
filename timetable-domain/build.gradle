@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.waytoodanny'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+ext {
+    lombok = '1.18.12'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    compileOnly "org.projectlombok:lombok:${lombok}"
+    annotationProcessor "org.projectlombok:lombok:${lombok}"
+    testCompileOnly "org.projectlombok:lombok:${lombok}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombok}"
+}
+
+task cleanBuildDir(type: Delete) {
+    delete "${projectDir}/out"
+}
+tasks.clean.dependsOn(cleanBuildDir)

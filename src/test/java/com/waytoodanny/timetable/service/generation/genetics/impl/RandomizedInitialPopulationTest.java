@@ -1,9 +1,9 @@
 //package com.waytoodanny.timetable.service.generation.genetics.impl;
 //
-//import com.waytoodanny.timetable.configuration.properties.GeneticsProperties;
-//import com.waytoodanny.timetable.configuration.properties.UniversityProperties;
-//import com.waytoodanny.timetable.domain.timetable.InputData;
-//import com.waytoodanny.timetable.domain.university.*;
+//import com.waytoodanny.GeneticsProperties;
+//import com.waytoodanny.UniversityProperties;
+//import domain.timetable.InputData;
+//import domain.university.*;
 //import com.waytoodanny.timetable.service.generation.genetics.constraint.ScheduleConstraint;
 //import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 //import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;

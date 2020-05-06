@@ -1,31 +1,20 @@
 package com.waytoodanny.timetable;
 
-import com.waytoodanny.timetable.configuration.properties.GeneticsProperties;
-import com.waytoodanny.timetable.configuration.properties.UniversityProperties;
-import com.waytoodanny.timetable.domain.timetable.InputData;
-import com.waytoodanny.timetable.domain.timetable.Timetable;
-import com.waytoodanny.timetable.domain.university.AvailableRooms;
-import com.waytoodanny.timetable.domain.university.ClassType;
-import com.waytoodanny.timetable.domain.university.Room;
-import com.waytoodanny.timetable.domain.university.StudentGroup;
-import com.waytoodanny.timetable.domain.university.Subject;
-import com.waytoodanny.timetable.domain.university.Teacher;
-import com.waytoodanny.timetable.service.generation.TimetableGenerator;
-import com.waytoodanny.timetable.service.generation.genetics.entity.teachingclass.CommonTeachingClass;
-import com.waytoodanny.timetable.service.generation.genetics.entity.teachingclass.CompositeTeachingClass;
+import com.waytoodanny.domain.university.AvailableRooms;
+import com.waytoodanny.domain.university.ClassType;
+import com.waytoodanny.domain.university.Room;
+import com.waytoodanny.domain.university.StudentGroup;
+import com.waytoodanny.domain.university.Subject;
+import com.waytoodanny.domain.university.Teacher;
+import com.waytoodanny.domain.university.TeachingClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.util.Set;
 
 @SpringBootApplication
-@EnableConfigurationProperties({
-    UniversityProperties.class,
-    GeneticsProperties.class
-})
 public class Application implements CommandLineRunner {
 
   @Autowired
@@ -51,31 +40,31 @@ public class Application implements CommandLineRunner {
     var group1 = new StudentGroup("SG1", 11);
     var group2 = new StudentGroup("SG2", 10);
 
-    var class1 = CommonTeachingClass.builder()
+    var class1 = TeachingClass.builder()
         .teacher(teacher1).subject(subject1).group(group1).classesPerWeek(4)
         .type(ClassType.LECTURE)
         .build();
-    var class2 = CommonTeachingClass.builder()
+    var class2 = TeachingClass.builder()
         .teacher(teacher1).subject(subject1).group(group2).classesPerWeek(4)
         .type(ClassType.LECTURE)
         .build();
-    var class3 = CommonTeachingClass.builder()
+    var class3 = TeachingClass.builder()
         .teacher(teacher1).subject(subject3).group(group1).classesPerWeek(4)
         .type(ClassType.PRACTICE)
         .build();
-    var class4 = CommonTeachingClass.builder()
+    var class4 = TeachingClass.builder()
         .teacher(teacher2).subject(subject3).group(group2).classesPerWeek(4)
         .type(ClassType.LECTURE)
         .build();
-    var class5 = CommonTeachingClass.builder()
+    var class5 = TeachingClass.builder()
         .teacher(teacher2).subject(subject2).group(group1).classesPerWeek(4)
         .type(ClassType.PRACTICE)
         .build();
-    var class6 = CommonTeachingClass.builder()
+    var class6 = TeachingClass.builder()
         .teacher(teacher2).subject(subject2).group(group2).classesPerWeek(4)
         .type(ClassType.PRACTICE)
         .build();
-    var compositeClass1 = CompositeTeachingClass.builder()
+    var compositeClass1 = TeachingClass.builder()
         .teacher(teacher2).teacher(teacher1)
         .subject(subject2)
         .group(group2)
@@ -90,8 +79,7 @@ public class Application implements CommandLineRunner {
         class4,
         class5,
         class6,
-        compositeClass1
-    ), rooms);
+        compositeClass1), rooms);
 
     Timetable timetable = timetableGenerator.timetable(input);
   }

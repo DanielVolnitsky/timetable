@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.waytoodanny'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation project(':timetable-domain')
+
+    compileOnly "org.projectlombok:lombok:${lombok}"
+    annotationProcessor "org.projectlombok:lombok:${lombok}"
+    testCompileOnly "org.projectlombok:lombok:${lombok}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombok}"
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task cleanBuildDir(type: Delete) {
+    delete "${projectDir}/out"
+}
+tasks.clean.dependsOn(cleanBuildDir)

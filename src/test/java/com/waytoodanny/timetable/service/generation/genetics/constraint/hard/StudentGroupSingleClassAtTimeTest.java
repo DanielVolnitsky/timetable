@@ -1,8 +1,8 @@
 //package com.waytoodanny.timetable.service.generation.genetics.constraint.hard;
 //
-//import com.waytoodanny.timetable.domain.university.Room;
-//import com.waytoodanny.timetable.domain.university.StudentGroup;
-//import com.waytoodanny.timetable.domain.university.TeachingClass;
+//import domain.university.Room;
+//import domain.university.StudentGroup;
+//import domain.university.TeachingClass;
 //import com.waytoodanny.timetable.service.generation.genetics.entity.Chromosome;
 //import com.waytoodanny.timetable.service.generation.genetics.entity.FitnessFunction;
 //import com.waytoodanny.timetable.service.generation.genetics.entity.Gene;
