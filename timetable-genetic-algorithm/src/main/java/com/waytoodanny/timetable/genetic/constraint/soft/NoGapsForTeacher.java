@@ -43,7 +43,7 @@ public class NoGapsForTeacher implements SoftConstraint {
     return chromosome.getScheduledClasses()
         .values().stream()
         .flatMap(Collection::stream)
-        .map(SettledClass::getTeachingClass)
+        .map(SettledClass::getGeneticTeachingClass)
         .map(GeneticTeachingClass::involvedTeachers)
         .flatMap(Collection::stream)
         .collect(toSet());
@@ -70,7 +70,7 @@ public class NoGapsForTeacher implements SoftConstraint {
         .map(e -> new Tuple2<>(
             e.getKey(),
             e.getValue().stream()
-                .map(SettledClass::getTeachingClass)
+                .map(SettledClass::getGeneticTeachingClass)
                 .map(GeneticTeachingClass::involvedTeachers)
                 .flatMap(Collection::stream)
                 .collect(toSet()))

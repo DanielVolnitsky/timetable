@@ -29,7 +29,7 @@ public class TeacherSingleClassAtTime implements HardConstraint {
 
   private boolean noClashes(List<SettledClass> classes) {
     List<Teacher> teachers = classes.stream()
-        .map(SettledClass::getTeachingClass)
+        .map(SettledClass::getGeneticTeachingClass)
         .map(GeneticTeachingClass::involvedTeachers)
         .flatMap(Collection::stream)
         .collect(Collectors.toList());

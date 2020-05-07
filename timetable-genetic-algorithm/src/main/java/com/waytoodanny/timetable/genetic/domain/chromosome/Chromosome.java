@@ -2,7 +2,9 @@ package com.waytoodanny.timetable.genetic.domain.chromosome;
 
 import com.waytoodanny.timetable.genetic.domain.GeneticTeachingClass;
 import com.waytoodanny.timetable.genetic.domain.SettledClass;
+import com.waytoodanny.timetable.genetic.domain.TimeslotClasses;
 import com.waytoodanny.timetable.genetic.domain.university.AvailableRooms;
+import com.waytoodanny.util.Prototyped;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -19,7 +21,7 @@ import static java.util.stream.Collectors.toList;
 
 @EqualsAndHashCode
 @ToString(of = "scheduledClasses")
-public class Chromosome {
+public class Chromosome implements Prototyped<Chromosome> {
   @Getter
   private final Map<Integer, List<SettledClass>> scheduledClasses = new TreeMap<>();
   private final Map<Integer, AvailableRooms> timeslotRooms = new HashMap<>();
@@ -36,10 +38,6 @@ public class Chromosome {
     scheduledClasses.entrySet()
         .forEach(e -> this.scheduledClasses.put(e.getKey(), new ArrayList<>(e.getValue())));
     this.timeslotRooms.putAll(timeslotRooms);
-  }
-
-  public Chromosome copy() {
-    return new Chromosome(scheduledClasses, timeslotRooms);
   }
 
   public boolean scheduleClass(GeneticTeachingClass tClass, int timeslot) {
@@ -61,13 +59,19 @@ public class Chromosome {
         .isPresent();
   }
 
+  public List<TimeslotClasses> timeslotClasses() {
+    return scheduledClasses.entrySet().stream()
+        .map(e -> new TimeslotClasses(e.getKey(), e.getValue()))
+        .collect(toList());
+  }
+
   private boolean canScheduleClass(GeneticTeachingClass candidateClass, int timeslot) {
     List<SettledClass> timeslotClasses = scheduledClasses.get(timeslot);
     if (timeslotClasses == null) {
       return true;
     }
     return timeslotClasses.stream()
-        .map(SettledClass::getTeachingClass)
+        .map(SettledClass::getGeneticTeachingClass)
         .noneMatch(scheduledClass ->
             scheduledClass.hasCommonStudentGroups(candidateClass)
                 || scheduledClass.hasCommonTeachers(candidateClass));
@@ -92,7 +96,7 @@ public class Chromosome {
   public int timeslotForClass(GeneticTeachingClass teachingClass) {
     return scheduledClasses.entrySet().stream()
         .filter(e -> e.getValue().stream()
-            .map(SettledClass::getTeachingClass)
+            .map(SettledClass::getGeneticTeachingClass)
             .collect(toList())
             .contains(teachingClass))
         .map(Map.Entry::getKey)
@@ -118,11 +122,11 @@ public class Chromosome {
   private void removeFromSchedule(GeneticTeachingClass c) {
     scheduledClasses.entrySet()
         .stream()
-        .filter(e -> e.getValue().stream().anyMatch(cl -> cl.getTeachingClass() == c))
+        .filter(e -> e.getValue().stream().anyMatch(cl -> cl.getGeneticTeachingClass() == c))
         .findFirst()
         .ifPresentOrElse(e ->
                 e.getValue().stream()
-                    .filter(v -> v.getTeachingClass() == c)
+                    .filter(v -> v.getGeneticTeachingClass() == c)
                     .findFirst()
                     .ifPresentOrElse(sc -> {
                           e.getValue().remove(sc);
@@ -134,5 +138,10 @@ public class Chromosome {
             () -> {
               throw new RuntimeException("Failed to remove class");
             });
+  }
+
+  @Override
+  public Chromosome prototype() {
+    return new Chromosome(scheduledClasses, timeslotRooms);
   }
 }

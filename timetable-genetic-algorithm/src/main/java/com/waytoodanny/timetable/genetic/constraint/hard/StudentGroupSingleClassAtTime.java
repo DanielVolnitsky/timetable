@@ -31,7 +31,7 @@ public class StudentGroupSingleClassAtTime implements HardConstraint {
 
   private boolean noClashes(List<SettledClass> classes) {
     List<StudentGroup> groups = classes.stream()
-        .map(SettledClass::getTeachingClass)
+        .map(SettledClass::getGeneticTeachingClass)
         .map(GeneticTeachingClass::involvedStudentGroups)
         .flatMap(Collection::stream)
         .collect(Collectors.toList());

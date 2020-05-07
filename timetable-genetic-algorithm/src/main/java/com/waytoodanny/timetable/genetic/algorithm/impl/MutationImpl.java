@@ -48,7 +48,7 @@ public class MutationImpl implements Mutation {
     Chromosome chromosomeCopy;
     boolean successfullyMutated;
     do {
-      chromosomeCopy = evaluatedChromosome.getChromosome().copy();
+      chromosomeCopy = evaluatedChromosome.getChromosome().prototype();
 
       GeneticTeachingClass randomClass1;
       GeneticTeachingClass randomClass2;

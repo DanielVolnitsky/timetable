@@ -4,6 +4,13 @@ server:
 university:
   academicHoursPerDay: 3
   daysPerWeek: 5
+  academicWeeksPerYear: 42
+  #  TODO
+  academicYearStartDate:
+  holidays:
+    winterHolidays:
+      from:
+      to:
 
 timetable:
   generation:

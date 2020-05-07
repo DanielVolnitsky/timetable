@@ -10,8 +10,9 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * Set of chromosomes which are made up of group of genes which satisfies the
@@ -32,13 +33,19 @@ public class Population {
     return stream().anyMatch(EvaluatedChromosome::isAcceptable);
   }
 
-  //TODO
   public List<EvaluatedChromosome> bestChromosomes() {
-    Map<Integer, List<EvaluatedChromosome>> c = stream()
-        .collect(Collectors.groupingBy(EvaluatedChromosome::fitnessValue));
+    Map<Integer, List<EvaluatedChromosome>> groupedByFitness = stream()
+        .collect(groupingBy(EvaluatedChromosome::fitnessValue));
 
-    return c.get(
-        c.keySet().stream().max(Comparator.comparingInt(e -> e)).orElse(0));
+    Integer highestFitness = groupedByFitness.keySet().stream()
+        .max(Comparator.comparingInt(e -> e))
+        .orElseThrow();
+
+    return groupedByFitness.get(highestFitness);
+  }
+
+  public EvaluatedChromosome bestChromosome() {
+    return bestChromosomes().get(0);
   }
 
   public int highestFitnessValue() {

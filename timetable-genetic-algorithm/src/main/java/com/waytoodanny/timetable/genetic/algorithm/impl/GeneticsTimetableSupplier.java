@@ -8,6 +8,7 @@ import com.waytoodanny.timetable.genetic.algorithm.Crossover;
 import com.waytoodanny.timetable.genetic.algorithm.InitialPopulationSupplier;
 import com.waytoodanny.timetable.genetic.algorithm.Mutation;
 import com.waytoodanny.timetable.genetic.algorithm.NextGenParentsSupplier;
+import com.waytoodanny.timetable.genetic.algorithm.PopulationTimetableConverter;
 import com.waytoodanny.timetable.genetic.domain.GeneticInputData;
 import com.waytoodanny.timetable.genetic.domain.Parents;
 import com.waytoodanny.timetable.genetic.domain.Population;
@@ -42,6 +43,7 @@ public class GeneticsTimetableSupplier implements TimetableSupplier {
   private final Mutation mutation;
   private final GeneticsProperties geneticsProperties;
   private final EventPublisher eventPublisher;
+  private final PopulationTimetableConverter timetableConverter;
 
   @Override
   public Timetable timetable(InputData input) {
@@ -52,9 +54,9 @@ public class GeneticsTimetableSupplier implements TimetableSupplier {
 
     Population nextGen = initialPopulation;
     int iteration = 1;
-    //TODO
-//    while (!nextGen.hasSolution()) {
-    while (nextGen.highestFitnessValue() != 1000) {
+
+    while (!nextGen.hasSolution()) {
+//    while (nextGen.highestFitnessValue() != 1000) {
       Collection<Parents> parents = nextGenParentsSupplier.apply(nextGen);
       eventPublisher.publish(new ParentsSelected(parents));
 
@@ -68,8 +70,8 @@ public class GeneticsTimetableSupplier implements TimetableSupplier {
       eventPublisher.publish(new AlgorithmIteration(iteration, nextGen));
       iteration++;
     }
-    //TODO convert to timetable
-    return null;
+
+    return timetableConverter.convert(nextGen.bestChromosome());
   }
 
   private List<EvaluatedChromosome> eliteChromosomes(Population p) {
