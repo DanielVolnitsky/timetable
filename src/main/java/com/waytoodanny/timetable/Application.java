@@ -1,12 +1,12 @@
 package com.waytoodanny.timetable;
 
-import com.waytoodanny.domain.university.AvailableRooms;
-import com.waytoodanny.domain.university.ClassType;
-import com.waytoodanny.domain.university.Room;
-import com.waytoodanny.domain.university.StudentGroup;
-import com.waytoodanny.domain.university.Subject;
-import com.waytoodanny.domain.university.Teacher;
-import com.waytoodanny.domain.university.TeachingClass;
+import com.waytoodanny.timetable.genetic.domain.university.AvailableRooms;
+import com.waytoodanny.timetable.genetic.domain.university.ClassType;
+import com.waytoodanny.timetable.genetic.domain.university.Room;
+import com.waytoodanny.timetable.genetic.domain.university.StudentGroup;
+import com.waytoodanny.timetable.genetic.domain.university.Subject;
+import com.waytoodanny.timetable.genetic.domain.university.Teacher;
+import com.waytoodanny.timetable.genetic.domain.university.TeachingClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,7 +18,7 @@ import java.util.Set;
 public class Application implements CommandLineRunner {
 
   @Autowired
-  private TimetableGenerator timetableGenerator;
+  private TimetableSupplier timetableSupplier;
 
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
@@ -81,6 +81,6 @@ public class Application implements CommandLineRunner {
         class6,
         compositeClass1), rooms);
 
-    Timetable timetable = timetableGenerator.timetable(input);
+    Timetable timetable = timetableSupplier.timetable(input);
   }
 }

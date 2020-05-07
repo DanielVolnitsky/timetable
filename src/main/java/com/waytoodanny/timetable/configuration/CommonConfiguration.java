@@ -1,7 +1,7 @@
 package com.waytoodanny.timetable.configuration;
 
 import com.waytoodanny.UniversityProperties;
-import com.waytoodanny.event.EventPublisher;
+import com.waytoodanny.timetable.genetic.event.EventPublisher;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;

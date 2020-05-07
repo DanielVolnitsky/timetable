@@ -1,6 +1,6 @@
 //package com.waytoodanny.timetable.service.generation.genetics.impl;
 //
-//import com.waytoodanny.GeneticsProperties;
+//import com.waytoodanny.timetable.genetic.GeneticsProperties;
 //import com.waytoodanny.UniversityProperties;
 //import domain.timetable.InputData;
 //import domain.university.*;
