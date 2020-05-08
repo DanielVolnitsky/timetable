@@ -4,6 +4,8 @@ import com.waytoodanny.UniversityProperties;
 import lombok.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
+
 @Value
 @Component
 public class TimeSlots {
@@ -21,5 +23,14 @@ public class TimeSlots {
     int hpd = universityProperties.getAcademicHoursPerDay();
     int pairNumber = timeslotNumber % hpd;
     return pairNumber == 0 ? hpd : pairNumber;
+  }
+
+  public LocalTime correspondentStartTime(int timeslot) {
+    int timeIdx = pairNumber(timeslot) - 1;
+    return universityProperties.getClassStartTimes().get(timeIdx);
+  }
+
+  public LocalTime correspondentEndTime(int timeslot) {
+    return correspondentStartTime(timeslot).plus(universityProperties.getClassDuration());
   }
 }

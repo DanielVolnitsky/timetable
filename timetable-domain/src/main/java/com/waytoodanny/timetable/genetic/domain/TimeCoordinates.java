@@ -4,14 +4,14 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Builder
 @EqualsAndHashCode
 public class TimeCoordinates {
-  WeekCoordinates weekCoordinates;
+  int weekNumber;
   Weekday day;
-  LocalDateTime start;
-  LocalDateTime end;
+  LocalTime start;
+  LocalTime end;
 }

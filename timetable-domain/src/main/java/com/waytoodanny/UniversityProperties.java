@@ -3,7 +3,10 @@ package com.waytoodanny;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -16,6 +19,8 @@ public class UniversityProperties {
   private int daysPerWeek;
   private int academicWeeksPerYear;
   private LocalDate academicYearStartDate;
+  private Duration classDuration;
+  private List<LocalTime> classStartTimes;
 
   public int timeSlotsPerWeek() {
     return academicHoursPerDay * daysPerWeek;

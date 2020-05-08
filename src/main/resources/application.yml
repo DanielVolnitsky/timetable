@@ -4,13 +4,12 @@ server:
 university:
   academicHoursPerDay: 3
   daysPerWeek: 5
-  academicWeeksPerYear: 42
-  #  TODO
-  academicYearStartDate:
-  holidays:
-    winterHolidays:
-      from:
-      to:
+  academicWeeksPerYear: 21
+  classDuration: PT60M
+  classStartTimes: >
+    09:00,
+    10:00,
+    11:00
 
 timetable:
   generation:

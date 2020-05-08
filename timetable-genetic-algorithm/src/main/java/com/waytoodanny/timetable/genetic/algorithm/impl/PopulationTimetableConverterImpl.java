@@ -7,7 +7,6 @@ import com.waytoodanny.timetable.genetic.algorithm.PopulationTimetableConverter;
 import com.waytoodanny.timetable.genetic.domain.TimeCoordinates;
 import com.waytoodanny.timetable.genetic.domain.TimeSlots;
 import com.waytoodanny.timetable.genetic.domain.TimeslotClasses;
-import com.waytoodanny.timetable.genetic.domain.WeekCoordinates;
 import com.waytoodanny.timetable.genetic.domain.Weekday;
 import com.waytoodanny.timetable.genetic.domain.WeekdayClasses;
 import com.waytoodanny.timetable.genetic.domain.chromosome.Chromosome;
@@ -59,13 +58,10 @@ public class PopulationTimetableConverterImpl implements PopulationTimetableConv
                         .pairNumber(timeSlots.pairNumber(timeslotClass.getTimeslot()))
                         .room(settledClass.getRoom())
                         .timeCoordinates(TimeCoordinates.builder()
+                            .weekNumber(e.getKey())
                             .day(dayClass.getDay())
-                            //TODO
-                            .start(null)
-                            //TODO
-                            .end(null)
-                            //TODO
-                            .weekCoordinates(WeekCoordinates.ofNumber(e.getKey(), null))
+                            .start(timeSlots.correspondentStartTime(timeslotClass.getTimeslot()))
+                            .end(timeSlots.correspondentEndTime(timeslotClass.getTimeslot()))
                             .build())
                         .build())
                     .collect(toList()))
