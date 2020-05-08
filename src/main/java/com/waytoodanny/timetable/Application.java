@@ -19,6 +19,9 @@ public class Application implements CommandLineRunner {
 
   @Autowired
   private TimetableSupplier timetableSupplier;
+  @Autowired
+  private TimetableConverter<String> timetableConverter;
+
 
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
@@ -82,5 +85,7 @@ public class Application implements CommandLineRunner {
         compositeClass1), rooms);
 
     Timetable timetable = timetableSupplier.timetable(input);
+    String json = timetableConverter.convert(timetable);
+    System.out.println();
   }
 }

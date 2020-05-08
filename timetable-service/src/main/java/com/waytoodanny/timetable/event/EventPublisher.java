@@ -1,4 +1,4 @@
-package com.waytoodanny.timetable.genetic.event;
+package com.waytoodanny.timetable.event;
 
 public interface EventPublisher {
   <T extends TimetableLifecycleEvent> void publish(T event);

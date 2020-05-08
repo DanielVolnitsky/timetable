@@ -4,7 +4,7 @@ server:
 university:
   academicHoursPerDay: 3
   daysPerWeek: 5
-  academicWeeksPerYear: 21
+  academicWeeksPerYear: 2
   classDuration: PT60M
   classStartTimes: >
     09:00,
