@@ -4,11 +4,13 @@ import com.waytoodanny.util.Prototyped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
+import lombok.ToString;
 
 import java.util.Set;
 
 @Builder
 @Getter
+@ToString(exclude = {"classesNumber", "classesPerWeek"})
 public class TeachingClass implements Prototyped<TeachingClass> {
 
   private final Subject subject;
