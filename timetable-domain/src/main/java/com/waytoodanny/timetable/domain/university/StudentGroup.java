@@ -8,4 +8,5 @@ import lombok.Value;
 public class StudentGroup {
   String name;
   int studentsNumber;
+  int shift;
 }

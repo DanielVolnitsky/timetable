@@ -42,7 +42,7 @@ public class NoGapsForStudentGroup implements SoftConstraint {
   private Set<StudentGroup> allStudentGroups(Chromosome chromosome) {
     return chromosome.getScheduledClasses()
         .values().stream()
-        .flatMap(Collection::stream)
+        .flatMap(Chromosome.ScheduledClasses::stream)
         .map(SettledClass::getGeneticTeachingClass)
         .map(GeneticTeachingClass::involvedStudentGroups)
         .flatMap(Collection::stream)

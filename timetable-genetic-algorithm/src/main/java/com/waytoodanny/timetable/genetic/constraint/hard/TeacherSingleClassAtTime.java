@@ -20,6 +20,7 @@ public class TeacherSingleClassAtTime implements HardConstraint {
   public FitnessFunction fitness(Chromosome chromosome, FitnessFunction initial) {
     return chromosome.getScheduledClasses()
         .values().stream()
+        .map(Chromosome.ScheduledClasses::getClasses)
         .map(this::noClashes)
         .filter(noClashes -> !noClashes)
         .findAny()

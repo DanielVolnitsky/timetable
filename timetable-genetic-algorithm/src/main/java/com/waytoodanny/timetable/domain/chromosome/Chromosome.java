@@ -5,12 +5,21 @@ import com.waytoodanny.timetable.domain.SettledClass;
 import com.waytoodanny.timetable.domain.TimeslotClasses;
 import com.waytoodanny.timetable.domain.university.AvailableRooms;
 import com.waytoodanny.util.Prototyped;
+import io.vavr.Tuple2;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
+import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -18,7 +27,7 @@ import static java.util.stream.Collectors.toList;
 @ToString(of = "scheduledClasses")
 public class Chromosome implements Prototyped<Chromosome> {
   @Getter
-  private final Map<Integer, List<SettledClass>> scheduledClasses = new TreeMap<>();
+  private final Map<Integer, ScheduledClasses> scheduledClasses = new TreeMap<>();
   private final Map<Integer, AvailableRooms> timeslotRooms = new HashMap<>();
 
   public Chromosome(@NonNull AvailableRooms rooms,
@@ -28,10 +37,9 @@ public class Chromosome implements Prototyped<Chromosome> {
         .forEach(t -> timeslotRooms.put(t, rooms.prototype()));
   }
 
-  private Chromosome(Map<Integer, List<SettledClass>> scheduledClasses,
+  private Chromosome(Map<Integer, ScheduledClasses> scheduledClasses,
                      Map<Integer, AvailableRooms> timeslotRooms) {
-    scheduledClasses.entrySet()
-        .forEach(e -> this.scheduledClasses.put(e.getKey(), new ArrayList<>(e.getValue())));
+    scheduledClasses.forEach((key, value) -> this.scheduledClasses.put(key, value.prototype()));
     this.timeslotRooms.putAll(timeslotRooms);
   }
 
@@ -49,27 +57,28 @@ public class Chromosome implements Prototyped<Chromosome> {
         .map(r ->
             scheduledClasses.merge(
                 timeslot,
-                new ArrayList<>(List.of(new SettledClass(r, tClass))),
-                this::mergeLists))
+                new ScheduledClasses(List.of(new SettledClass(r, tClass))),
+                ScheduledClasses::merge))
         .isPresent();
   }
 
   public List<TimeslotClasses> timeslotClasses() {
     return scheduledClasses.entrySet().stream()
-        .map(e -> new TimeslotClasses(e.getKey(), e.getValue()))
+        .map(e -> new TimeslotClasses(e.getKey(), e.getValue().classes))
         .collect(toList());
   }
 
   private boolean canScheduleClass(GeneticTeachingClass candidateClass, int timeslot) {
-    List<SettledClass> timeslotClasses = scheduledClasses.get(timeslot);
+    ScheduledClasses timeslotClasses = scheduledClasses.get(timeslot);
     if (timeslotClasses == null) {
       return true;
     }
     return timeslotClasses.stream()
         .map(SettledClass::getGeneticTeachingClass)
-        .noneMatch(scheduledClass ->
-            scheduledClass.hasCommonStudentGroups(candidateClass)
-                || scheduledClass.hasCommonTeachers(candidateClass));
+        .noneMatch(
+            scheduledClass ->
+                scheduledClass.hasCommonStudentGroups(candidateClass)
+                    || scheduledClass.hasCommonTeachers(candidateClass));
   }
 
   public boolean scheduleClassRandomly(GeneticTeachingClass tClass) {
@@ -99,14 +108,6 @@ public class Chromosome implements Prototyped<Chromosome> {
         .orElseThrow();
   }
 
-  private List<SettledClass> mergeLists(List<SettledClass> l1, List<SettledClass> l2) {
-    List<SettledClass> r = new ArrayList<>();
-    r.addAll(l1);
-    r.addAll(l2);
-    return r;
-  }
-
-  //TODO
   public boolean reschedule(GeneticTeachingClass c1, GeneticTeachingClass c2) {
     removeFromSchedule(c1);
     removeFromSchedule(c2);
@@ -114,29 +115,71 @@ public class Chromosome implements Prototyped<Chromosome> {
   }
 
   //TODO
-  private void removeFromSchedule(GeneticTeachingClass c) {
-    scheduledClasses.entrySet()
+  private void removeFromSchedule(GeneticTeachingClass classToRemove) {
+    Tuple2<Integer, ScheduledClasses> classesForSlot = scheduledClasses.entrySet()
         .stream()
-        .filter(e -> e.getValue().stream().anyMatch(cl -> cl.getGeneticTeachingClass() == c))
+        .filter(e -> e.getValue().containsClass(classToRemove))
         .findFirst()
-        .ifPresentOrElse(e ->
-                e.getValue().stream()
-                    .filter(v -> v.getGeneticTeachingClass() == c)
-                    .findFirst()
-                    .ifPresentOrElse(sc -> {
-                          e.getValue().remove(sc);
-                          timeslotRooms.merge(e.getKey(), AvailableRooms.of(sc.getRoom()), AvailableRooms::merge);
-                        },
-                        () -> {
-                          throw new RuntimeException("Failed to remove class");
-                        }),
-            () -> {
-              throw new RuntimeException("Failed to remove class");
-            });
+        .map(e -> new Tuple2<>(e.getKey(), e.getValue()))
+        .orElseThrow(() ->
+            new RuntimeException("No settled class contained requested teaching class"));
+
+    ScheduledClasses classes = classesForSlot._2();
+    SettledClass settledToRemove = classes.instanceWithTeachingClass(classToRemove);
+    classes.remove(settledToRemove);
+    timeslotRooms.merge(
+        classesForSlot._1(),
+        AvailableRooms.of(settledToRemove.getRoom()),
+        AvailableRooms::merge);
+
   }
 
   @Override
   public Chromosome prototype() {
     return new Chromosome(scheduledClasses, timeslotRooms);
+  }
+
+  @AllArgsConstructor
+  public static class ScheduledClasses implements Prototyped<ScheduledClasses> {
+
+    //TODO
+    @Getter
+    private final List<SettledClass> classes;
+
+    private ScheduledClasses merge(ScheduledClasses other) {
+      var merged = new ArrayList<SettledClass>();
+      merged.addAll(this.classes);
+      merged.addAll(other.classes);
+      return new ScheduledClasses(merged);
+    }
+
+    private boolean containsClass(GeneticTeachingClass toCheck) {
+      return classes.stream().anyMatch(cl -> cl.getGeneticTeachingClass() == toCheck);
+    }
+
+    private boolean isEmpty() {
+      return CollectionUtils.isEmpty(classes);
+    }
+
+    private SettledClass instanceWithTeachingClass(GeneticTeachingClass gtc) {
+      return stream()
+          .filter(cl -> cl.getGeneticTeachingClass() == gtc)
+          .findFirst()
+          .orElseThrow(() -> new IllegalArgumentException("Requested class had to be scheduled, but was not"));
+    }
+
+    private void remove(SettledClass toRemove) {
+      classes.remove(toRemove);
+    }
+
+    //TODO
+    public Stream<SettledClass> stream() {
+      return classes.stream();
+    }
+
+    @Override
+    public ScheduledClasses prototype() {
+      return new ScheduledClasses(new ArrayList<>(this.classes));
+    }
   }
 }

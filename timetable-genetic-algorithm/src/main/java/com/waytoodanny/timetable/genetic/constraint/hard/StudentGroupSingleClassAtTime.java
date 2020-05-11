@@ -21,7 +21,9 @@ public class StudentGroupSingleClassAtTime implements HardConstraint {
 
   @Override
   public FitnessFunction fitness(Chromosome chromosome, FitnessFunction initial) {
-    return chromosome.getScheduledClasses().values().stream()
+    return chromosome.getScheduledClasses()
+        .values().stream()
+        .map(Chromosome.ScheduledClasses::getClasses)
         .map(this::noClashes)
         .filter(noClashes -> !noClashes)
         .findAny()

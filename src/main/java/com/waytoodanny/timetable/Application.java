@@ -1,6 +1,12 @@
 package com.waytoodanny.timetable;
 
-import com.waytoodanny.timetable.domain.university.*;
+import com.waytoodanny.timetable.domain.university.AvailableRooms;
+import com.waytoodanny.timetable.domain.university.ClassType;
+import com.waytoodanny.timetable.domain.university.Room;
+import com.waytoodanny.timetable.domain.university.StudentGroup;
+import com.waytoodanny.timetable.domain.university.Subject;
+import com.waytoodanny.timetable.domain.university.Teacher;
+import com.waytoodanny.timetable.domain.university.TeachingClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,7 +21,6 @@ public class Application implements CommandLineRunner {
   private TimetableSupplier timetableSupplier;
   @Autowired
   private TimetableConverter<String> timetableConverter;
-
 
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
@@ -34,8 +39,8 @@ public class Application implements CommandLineRunner {
     var teacher1 = Teacher.builder().name("T1").build();
     var teacher2 = Teacher.builder().name("T2").build();
 
-    var group1 = new StudentGroup("SG1", 11);
-    var group2 = new StudentGroup("SG2", 10);
+    var group1 = new StudentGroup("SG1", 1, 1);
+    var group2 = new StudentGroup("SG2", 10, 1);
 
     var class1 = TeachingClass.builder()
         .teacher(teacher1).subject(subject1).group(group1).classesPerWeek(4)
