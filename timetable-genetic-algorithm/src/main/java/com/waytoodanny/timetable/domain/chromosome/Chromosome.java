@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -64,12 +65,6 @@ public class Chromosome implements Prototyped<Chromosome> {
         .isPresent();
   }
 
-  public List<TimeslotClasses> timeslotClasses() {
-    return scheduledClasses.entrySet().stream()
-        .map(e -> new TimeslotClasses(e.getKey(), e.getValue().classes))
-        .collect(toList());
-  }
-
   public boolean scheduleClassRandomly(GeneticTeachingClass tClass) {
     List<Integer> possibleTimeslots = timeslotRooms.appropriateForScheduling(tClass);
     if (possibleTimeslots.isEmpty()) {
@@ -92,6 +87,22 @@ public class Chromosome implements Prototyped<Chromosome> {
         .orElseThrow();
   }
 
+  public boolean reschedule(GeneticTeachingClass c1, GeneticTeachingClass c2) {
+    removeFromSchedule(c1);
+    removeFromSchedule(c2);
+    return scheduleClassRandomly(c1) && scheduleClassRandomly(c2);
+  }
+
+  public Collection<ScheduledClasses> scheduledClasses() {
+    return scheduledClasses.values();
+  }
+
+  public List<TimeslotClasses> timeslotClasses() {
+    return scheduledClasses.entrySet().stream()
+        .map(e -> new TimeslotClasses(e.getKey(), e.getValue().classes))
+        .collect(toList());
+  }
+
   private boolean isPossibleToSchedule(GeneticTeachingClass candidateClass, int timeslot) {
     ScheduledClasses timeslotClasses = scheduledClasses.get(timeslot);
     if (timeslotClasses == null) {
@@ -105,12 +116,6 @@ public class Chromosome implements Prototyped<Chromosome> {
                     || scheduledClass.hasCommonTeachers(candidateClass));
   }
 
-
-  public boolean reschedule(GeneticTeachingClass c1, GeneticTeachingClass c2) {
-    removeFromSchedule(c1);
-    removeFromSchedule(c2);
-    return scheduleClassRandomly(c1) && scheduleClassRandomly(c2);
-  }
 
   private void removeFromSchedule(GeneticTeachingClass classToRemove) {
     Tuple2<Integer, ScheduledClasses> classesForSlot = scheduledClasses.entrySet()
@@ -133,6 +138,10 @@ public class Chromosome implements Prototyped<Chromosome> {
     //TODO
     @Getter
     private final List<SettledClass> classes;
+
+    public boolean match(Predicate<List<SettledClass>> predicate) {
+      return predicate.test(classes);
+    }
 
     private ScheduledClasses merge(ScheduledClasses other) {
       var merged = new ArrayList<SettledClass>();

@@ -15,14 +15,11 @@ public class SingleClassInRoomAtTime implements HardConstraint {
 
   @Override
   public FitnessFunction fitness(Chromosome chromosome, FitnessFunction initial) {
-    return chromosome.getScheduledClasses()
-        .values().stream()
-        .map(Chromosome.ScheduledClasses::getClasses)
-        .map(this::noClashes)
-        .filter(noClashes -> !noClashes)
-        .findAny()
-        .map(clashes -> initial)
-        .orElseGet(() -> initial.plus(this.weight()));
+    boolean allMatch = chromosome.scheduledClasses()
+        .stream()
+        .allMatch(scheduledClasses -> scheduledClasses.match(this::noClashes));
+
+    return allMatch ? initial.plus(this.weight()) : initial;
   }
 
   private boolean noClashes(List<SettledClass> classes) {
