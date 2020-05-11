@@ -1,8 +1,8 @@
-package com.waytoodanny.timetable.genetic.domain.chromosome;
+package com.waytoodanny.timetable.domain.chromosome;
 
+import com.waytoodanny.timetable.domain.FitnessFunction;
 import com.waytoodanny.timetable.genetic.constraint.HardConstraint;
 import com.waytoodanny.timetable.genetic.constraint.ScheduleConstraint;
-import com.waytoodanny.timetable.genetic.domain.FitnessFunction;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

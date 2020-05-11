@@ -2,10 +2,10 @@ package com.waytoodanny.timetable.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.waytoodanny.timetable.TimetableConverter;
-import com.waytoodanny.timetable.genetic.domain.Weekday;
-import com.waytoodanny.timetable.genetic.domain.university.ClassType;
-import com.waytoodanny.timetable.genetic.domain.university.Subject;
-import com.waytoodanny.timetable.genetic.domain.university.Teacher;
+import com.waytoodanny.timetable.domain.Weekday;
+import com.waytoodanny.timetable.domain.university.ClassType;
+import com.waytoodanny.timetable.domain.university.Subject;
+import com.waytoodanny.timetable.domain.university.Teacher;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -67,7 +67,7 @@ public class TimetableToJsonConverter implements TimetableConverter<String> {
         private final ClassType type;
 
         public static TeachingClass
-        fromDomain(com.waytoodanny.timetable.genetic.domain.university.TeachingClass domain) {
+        fromDomain(com.waytoodanny.timetable.domain.university.TeachingClass domain) {
             return new TeachingClass(
                     domain.getSubject(),
                     domain.getTeachers(),
@@ -84,7 +84,7 @@ public class TimetableToJsonConverter implements TimetableConverter<String> {
         private final LocalTime end;
 
         public static TimeCoordinates
-        fromDomain(com.waytoodanny.timetable.genetic.domain.TimeCoordinates domain) {
+        fromDomain(com.waytoodanny.timetable.domain.TimeCoordinates domain) {
             return new TimeCoordinates(
                     domain.getWeekNumber(),
                     domain.getDay(),
@@ -98,7 +98,7 @@ public class TimetableToJsonConverter implements TimetableConverter<String> {
         private final String name;
 
         public static StudentGroup
-        fromDomain(com.waytoodanny.timetable.genetic.domain.university.StudentGroup domain) {
+        fromDomain(com.waytoodanny.timetable.domain.university.StudentGroup domain) {
             return new StudentGroup(domain.getName());
         }
     }
@@ -108,7 +108,7 @@ public class TimetableToJsonConverter implements TimetableConverter<String> {
         private final String name;
 
         public static Room
-        fromDomain(com.waytoodanny.timetable.genetic.domain.university.Room domain) {
+        fromDomain(com.waytoodanny.timetable.domain.university.Room domain) {
             return new Room(domain.getName());
         }
     }

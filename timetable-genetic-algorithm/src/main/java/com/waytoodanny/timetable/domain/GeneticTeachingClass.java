@@ -1,9 +1,9 @@
-package com.waytoodanny.timetable.genetic.domain;
+package com.waytoodanny.timetable.domain;
 
-import com.waytoodanny.timetable.genetic.domain.university.Room;
-import com.waytoodanny.timetable.genetic.domain.university.StudentGroup;
-import com.waytoodanny.timetable.genetic.domain.university.Teacher;
-import com.waytoodanny.timetable.genetic.domain.university.TeachingClass;
+import com.waytoodanny.timetable.domain.university.Room;
+import com.waytoodanny.timetable.domain.university.StudentGroup;
+import com.waytoodanny.timetable.domain.university.Teacher;
+import com.waytoodanny.timetable.domain.university.TeachingClass;
 import lombok.ToString;
 import lombok.Value;
 

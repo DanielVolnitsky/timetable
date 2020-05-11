@@ -1,7 +1,7 @@
-package com.waytoodanny.timetable.genetic.domain;
+package com.waytoodanny.timetable.domain;
 
-import com.waytoodanny.timetable.genetic.domain.chromosome.Chromosome;
-import com.waytoodanny.timetable.genetic.domain.chromosome.EvaluatedChromosome;
+import com.waytoodanny.timetable.domain.chromosome.Chromosome;
+import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
 import lombok.Value;
 
 import java.util.Objects;

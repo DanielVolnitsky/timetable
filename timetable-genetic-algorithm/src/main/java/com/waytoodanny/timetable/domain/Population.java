@@ -1,15 +1,11 @@
-package com.waytoodanny.timetable.genetic.domain;
+package com.waytoodanny.timetable.domain;
 
-import com.waytoodanny.timetable.genetic.domain.chromosome.EvaluatedChromosome;
+import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Singular;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;

@@ -1,7 +1,7 @@
 package com.waytoodanny.timetable.event.processing;
 
-import com.waytoodanny.timetable.genetic.domain.Population;
-import com.waytoodanny.timetable.genetic.domain.chromosome.EvaluatedChromosome;
+import com.waytoodanny.timetable.domain.Population;
+import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;

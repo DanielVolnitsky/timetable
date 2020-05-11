@@ -1,22 +1,16 @@
 package com.waytoodanny.timetable.genetic.algorithm.impl.parentsprovider;
 
+import com.waytoodanny.timetable.domain.Parents;
+import com.waytoodanny.timetable.domain.Population;
+import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
 import com.waytoodanny.timetable.genetic.GeneticsProperties;
 import com.waytoodanny.timetable.genetic.algorithm.NextGenParentsSupplier;
-import com.waytoodanny.timetable.genetic.domain.Parents;
-import com.waytoodanny.timetable.genetic.domain.Population;
-import com.waytoodanny.timetable.genetic.domain.chromosome.EvaluatedChromosome;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.IntStream;
 
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 
 //TODO optimize
 @RequiredArgsConstructor

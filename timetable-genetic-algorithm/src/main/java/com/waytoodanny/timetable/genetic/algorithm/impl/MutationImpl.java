@@ -1,13 +1,13 @@
 package com.waytoodanny.timetable.genetic.algorithm.impl;
 
+import com.waytoodanny.timetable.domain.GeneticInputData;
+import com.waytoodanny.timetable.domain.GeneticTeachingClass;
+import com.waytoodanny.timetable.domain.Population;
+import com.waytoodanny.timetable.domain.chromosome.Chromosome;
+import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
 import com.waytoodanny.timetable.genetic.GeneticsProperties;
 import com.waytoodanny.timetable.genetic.algorithm.Mutation;
 import com.waytoodanny.timetable.genetic.constraint.ScheduleConstraint;
-import com.waytoodanny.timetable.genetic.domain.GeneticInputData;
-import com.waytoodanny.timetable.genetic.domain.GeneticTeachingClass;
-import com.waytoodanny.timetable.genetic.domain.Population;
-import com.waytoodanny.timetable.genetic.domain.chromosome.Chromosome;
-import com.waytoodanny.timetable.genetic.domain.chromosome.EvaluatedChromosome;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,12 +1,12 @@
 package com.waytoodanny.timetable.event.listener;
 
+import com.waytoodanny.timetable.domain.Parents;
+import com.waytoodanny.timetable.domain.Population;
+import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
 import com.waytoodanny.timetable.event.AlgorithmIteration;
 import com.waytoodanny.timetable.event.CrossoverApplied;
 import com.waytoodanny.timetable.event.ParentsSelected;
 import com.waytoodanny.timetable.event.processing.AlgorithmIterationResultAggregator;
-import com.waytoodanny.timetable.genetic.domain.Parents;
-import com.waytoodanny.timetable.genetic.domain.Population;
-import com.waytoodanny.timetable.genetic.domain.chromosome.EvaluatedChromosome;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextClosedEvent;

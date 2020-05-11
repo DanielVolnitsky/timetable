@@ -1,13 +1,13 @@
 package com.waytoodanny.timetable.genetic.constraint.soft;
 
 import com.waytoodanny.UniversityProperties;
+import com.waytoodanny.timetable.domain.FitnessFunction;
+import com.waytoodanny.timetable.domain.GeneticTeachingClass;
+import com.waytoodanny.timetable.domain.SettledClass;
+import com.waytoodanny.timetable.domain.TimeSlots;
+import com.waytoodanny.timetable.domain.chromosome.Chromosome;
+import com.waytoodanny.timetable.domain.university.StudentGroup;
 import com.waytoodanny.timetable.genetic.constraint.SoftConstraint;
-import com.waytoodanny.timetable.genetic.domain.FitnessFunction;
-import com.waytoodanny.timetable.genetic.domain.GeneticTeachingClass;
-import com.waytoodanny.timetable.genetic.domain.SettledClass;
-import com.waytoodanny.timetable.genetic.domain.TimeSlots;
-import com.waytoodanny.timetable.genetic.domain.chromosome.Chromosome;
-import com.waytoodanny.timetable.genetic.domain.university.StudentGroup;
 import io.vavr.Tuple2;
 import lombok.Value;
 import org.springframework.stereotype.Component;

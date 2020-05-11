@@ -1,15 +1,11 @@
-package com.waytoodanny.timetable.genetic.domain.university;
+package com.waytoodanny.timetable.domain.university;
 
 import com.waytoodanny.util.Merging;
 import com.waytoodanny.util.Prototyped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

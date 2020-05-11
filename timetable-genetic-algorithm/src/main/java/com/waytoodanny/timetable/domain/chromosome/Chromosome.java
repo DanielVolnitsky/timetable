@@ -1,21 +1,16 @@
-package com.waytoodanny.timetable.genetic.domain.chromosome;
+package com.waytoodanny.timetable.domain.chromosome;
 
-import com.waytoodanny.timetable.genetic.domain.GeneticTeachingClass;
-import com.waytoodanny.timetable.genetic.domain.SettledClass;
-import com.waytoodanny.timetable.genetic.domain.TimeslotClasses;
-import com.waytoodanny.timetable.genetic.domain.university.AvailableRooms;
+import com.waytoodanny.timetable.domain.GeneticTeachingClass;
+import com.waytoodanny.timetable.domain.SettledClass;
+import com.waytoodanny.timetable.domain.TimeslotClasses;
+import com.waytoodanny.timetable.domain.university.AvailableRooms;
 import com.waytoodanny.util.Prototyped;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 

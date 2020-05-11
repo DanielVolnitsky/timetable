@@ -1,4 +1,4 @@
-package com.waytoodanny.timetable.genetic.domain.university;
+package com.waytoodanny.timetable.domain.university;
 
 import lombok.Value;
 

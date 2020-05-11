@@ -1,9 +1,9 @@
 package com.waytoodanny.timetable.genetic.constraint.hard;
 
+import com.waytoodanny.timetable.domain.FitnessFunction;
+import com.waytoodanny.timetable.domain.SettledClass;
+import com.waytoodanny.timetable.domain.chromosome.Chromosome;
 import com.waytoodanny.timetable.genetic.constraint.HardConstraint;
-import com.waytoodanny.timetable.genetic.domain.FitnessFunction;
-import com.waytoodanny.timetable.genetic.domain.SettledClass;
-import com.waytoodanny.timetable.genetic.domain.chromosome.Chromosome;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;

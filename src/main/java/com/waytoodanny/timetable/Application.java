@@ -1,12 +1,6 @@
 package com.waytoodanny.timetable;
 
-import com.waytoodanny.timetable.genetic.domain.university.AvailableRooms;
-import com.waytoodanny.timetable.genetic.domain.university.ClassType;
-import com.waytoodanny.timetable.genetic.domain.university.Room;
-import com.waytoodanny.timetable.genetic.domain.university.StudentGroup;
-import com.waytoodanny.timetable.genetic.domain.university.Subject;
-import com.waytoodanny.timetable.genetic.domain.university.Teacher;
-import com.waytoodanny.timetable.genetic.domain.university.TeachingClass;
+import com.waytoodanny.timetable.domain.university.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
