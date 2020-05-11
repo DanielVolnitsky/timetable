@@ -4,14 +4,16 @@ import com.waytoodanny.timetable.domain.GeneticTeachingClass;
 import com.waytoodanny.timetable.domain.SettledClass;
 import com.waytoodanny.timetable.domain.TimeslotClasses;
 import com.waytoodanny.timetable.domain.university.AvailableRooms;
+import com.waytoodanny.timetable.domain.university.Room;
 import com.waytoodanny.util.Prototyped;
 import io.vavr.Tuple2;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,27 +30,27 @@ import static java.util.stream.Collectors.toList;
 public class Chromosome implements Prototyped<Chromosome> {
   @Getter
   private final Map<Integer, ScheduledClasses> scheduledClasses = new TreeMap<>();
-  private final Map<Integer, AvailableRooms> timeslotRooms = new HashMap<>();
+  private final TimeslotRooms timeslotRooms;
 
   public Chromosome(@NonNull AvailableRooms rooms,
                     @NonNull Collection<Integer> timeSlotsPerWeek) {
-    timeSlotsPerWeek.stream()
-        .sorted()
-        .forEach(t -> timeslotRooms.put(t, rooms.prototype()));
+    this.timeslotRooms = new TimeslotRooms(timeSlotsPerWeek, rooms);
   }
 
   private Chromosome(Map<Integer, ScheduledClasses> scheduledClasses,
-                     Map<Integer, AvailableRooms> timeslotRooms) {
+                     TimeslotRooms timeslotRooms) {
     scheduledClasses.forEach((key, value) -> this.scheduledClasses.put(key, value.prototype()));
-    this.timeslotRooms.putAll(timeslotRooms);
+    this.timeslotRooms = timeslotRooms.prototype();
   }
 
-  public boolean scheduleClass(GeneticTeachingClass tClass, int timeslot) {
-//    if(!canScheduleClass(tClass, timeslot)){
-//      return false;
-//    }
+  @Override
+  public Chromosome prototype() {
+    return new Chromosome(scheduledClasses, timeslotRooms);
+  }
 
-    AvailableRooms rooms = timeslotRooms.get(timeslot);
+  //TODO check if possible to schedule?
+  public boolean scheduleClass(GeneticTeachingClass tClass, int timeslot) {
+    AvailableRooms rooms = timeslotRooms.timeslotRooms(timeslot);
     if (rooms.isEmpty()) {
       return false;
     }
@@ -68,7 +70,29 @@ public class Chromosome implements Prototyped<Chromosome> {
         .collect(toList());
   }
 
-  private boolean canScheduleClass(GeneticTeachingClass candidateClass, int timeslot) {
+  public boolean scheduleClassRandomly(GeneticTeachingClass tClass) {
+    List<Integer> possibleTimeslots = timeslotRooms.appropriateForScheduling(tClass);
+    if (possibleTimeslots.isEmpty()) {
+      return false;
+    }
+
+    int randomSlotIdx = (int) (Math.random() * possibleTimeslots.size());
+    Integer randomSlot = possibleTimeslots.get(randomSlotIdx);
+    return scheduleClass(tClass, randomSlot);
+  }
+
+  public int timeslotForClass(GeneticTeachingClass teachingClass) {
+    return scheduledClasses.entrySet().stream()
+        .filter(e -> e.getValue().stream()
+            .map(SettledClass::getGeneticTeachingClass)
+            .collect(toList())
+            .contains(teachingClass))
+        .map(Map.Entry::getKey)
+        .findAny()
+        .orElseThrow();
+  }
+
+  private boolean isPossibleToSchedule(GeneticTeachingClass candidateClass, int timeslot) {
     ScheduledClasses timeslotClasses = scheduledClasses.get(timeslot);
     if (timeslotClasses == null) {
       return true;
@@ -81,32 +105,6 @@ public class Chromosome implements Prototyped<Chromosome> {
                     || scheduledClass.hasCommonTeachers(candidateClass));
   }
 
-  public boolean scheduleClassRandomly(GeneticTeachingClass tClass) {
-    return timeslotRooms.entrySet()
-        .stream()
-        //TODO
-        .parallel()
-        .filter(e -> e.getValue()
-            .findBestSuitableFor(tClass.roomRequirements())
-            .isPresent())
-        .filter(e -> canScheduleClass(tClass, e.getKey()))
-        .findAny()
-        .map(Map.Entry::getKey)
-        .map(timeslot -> scheduleClass(tClass, timeslot))
-        .orElse(false);
-  }
-
-  //TODO decide where parallelization is needed or consequent class scheduling is appropriate decision
-  public int timeslotForClass(GeneticTeachingClass teachingClass) {
-    return scheduledClasses.entrySet().stream()
-        .filter(e -> e.getValue().stream()
-            .map(SettledClass::getGeneticTeachingClass)
-            .collect(toList())
-            .contains(teachingClass))
-        .map(Map.Entry::getKey)
-        .findAny()
-        .orElseThrow();
-  }
 
   public boolean reschedule(GeneticTeachingClass c1, GeneticTeachingClass c2) {
     removeFromSchedule(c1);
@@ -114,7 +112,6 @@ public class Chromosome implements Prototyped<Chromosome> {
     return scheduleClassRandomly(c1) && scheduleClassRandomly(c2);
   }
 
-  //TODO
   private void removeFromSchedule(GeneticTeachingClass classToRemove) {
     Tuple2<Integer, ScheduledClasses> classesForSlot = scheduledClasses.entrySet()
         .stream()
@@ -127,16 +124,7 @@ public class Chromosome implements Prototyped<Chromosome> {
     ScheduledClasses classes = classesForSlot._2();
     SettledClass settledToRemove = classes.instanceWithTeachingClass(classToRemove);
     classes.remove(settledToRemove);
-    timeslotRooms.merge(
-        classesForSlot._1(),
-        AvailableRooms.of(settledToRemove.getRoom()),
-        AvailableRooms::merge);
-
-  }
-
-  @Override
-  public Chromosome prototype() {
-    return new Chromosome(scheduledClasses, timeslotRooms);
+    timeslotRooms.add(classesForSlot._1, settledToRemove.getRoom());
   }
 
   @AllArgsConstructor
@@ -155,10 +143,6 @@ public class Chromosome implements Prototyped<Chromosome> {
 
     private boolean containsClass(GeneticTeachingClass toCheck) {
       return classes.stream().anyMatch(cl -> cl.getGeneticTeachingClass() == toCheck);
-    }
-
-    private boolean isEmpty() {
-      return CollectionUtils.isEmpty(classes);
     }
 
     private SettledClass instanceWithTeachingClass(GeneticTeachingClass gtc) {
@@ -180,6 +164,44 @@ public class Chromosome implements Prototyped<Chromosome> {
     @Override
     public ScheduledClasses prototype() {
       return new ScheduledClasses(new ArrayList<>(this.classes));
+    }
+  }
+
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  public class TimeslotRooms implements Prototyped<TimeslotRooms> {
+    private final Map<Integer, AvailableRooms> timeslotRooms = new HashMap<>();
+
+    public TimeslotRooms(Collection<Integer> timeSlotsPerWeek,
+                         AvailableRooms rooms) {
+      timeSlotsPerWeek.stream()
+          .sorted()
+          .forEach(t -> timeslotRooms.put(t, rooms.prototype()));
+    }
+
+    private List<Integer> appropriateForScheduling(GeneticTeachingClass tClass) {
+      return timeslotRooms.entrySet()
+          .stream()
+          .filter(e -> e.getValue()
+              .findBestSuitableFor(tClass.roomRequirements())
+              .isPresent())
+          .filter(e -> isPossibleToSchedule(tClass, e.getKey()))
+          .map(Map.Entry::getKey)
+          .collect(toList());
+    }
+
+    @Override
+    public TimeslotRooms prototype() {
+      TimeslotRooms prototype = new TimeslotRooms();
+      prototype.timeslotRooms.putAll(timeslotRooms);
+      return prototype;
+    }
+
+    public AvailableRooms timeslotRooms(int timeslot) {
+      return timeslotRooms.get(timeslot);
+    }
+
+    public void add(Integer slot, Room room) {
+      timeslotRooms.merge(slot, AvailableRooms.of(room), AvailableRooms::merge);
     }
   }
 }
