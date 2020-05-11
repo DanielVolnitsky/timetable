@@ -12,7 +12,12 @@ import com.waytoodanny.timetable.event.CrossoverApplied;
 import com.waytoodanny.timetable.event.EventPublisher;
 import com.waytoodanny.timetable.event.ParentsSelected;
 import com.waytoodanny.timetable.genetic.GeneticsProperties;
-import com.waytoodanny.timetable.genetic.algorithm.*;
+import com.waytoodanny.timetable.genetic.algorithm.Crossover;
+import com.waytoodanny.timetable.genetic.algorithm.InitialPopulationSupplier;
+import com.waytoodanny.timetable.genetic.algorithm.Mutation;
+import com.waytoodanny.timetable.genetic.algorithm.NextGenParentsSupplier;
+import com.waytoodanny.timetable.genetic.algorithm.PopulationTimetableConverter;
+import com.waytoodanny.timetable.genetic.algorithm.TimetablePostProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -39,6 +44,7 @@ public class GeneticsTimetableSupplier implements TimetableSupplier {
   private final Mutation mutation;
   private final GeneticsProperties geneticsProperties;
   private final EventPublisher eventPublisher;
+  private final TimetablePostProcessor timetablePostProcessor;
   private final PopulationTimetableConverter timetableConverter;
 
   @Override
@@ -67,7 +73,8 @@ public class GeneticsTimetableSupplier implements TimetableSupplier {
       iteration++;
     }
 
-    return timetableConverter.convert(nextGen.bestChromosome());
+    EvaluatedChromosome result = timetablePostProcessor.apply(nextGen.bestChromosome());
+    return timetableConverter.convert(result);
   }
 
   private List<EvaluatedChromosome> eliteChromosomes(Population p) {
