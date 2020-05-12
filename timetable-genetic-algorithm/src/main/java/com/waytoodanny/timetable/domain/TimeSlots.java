@@ -13,14 +13,14 @@ public class TimeSlots {
   UniversityProperties universityProperties;
 
   public boolean relateToSameDay(int s1, int s2) {
-    int hpd = universityProperties.getAcademicHoursPerDay();
+    int hpd = universityProperties.academicHoursPerDay();
     return Double.compare(
         Math.ceil((double) s1 / hpd),
         Math.ceil((double) s2 / hpd)) == 0;
   }
 
   public int pairNumber(int timeslotNumber) {
-    int hpd = universityProperties.getAcademicHoursPerDay();
+    int hpd = universityProperties.academicHoursPerDay();
     int pairNumber = timeslotNumber % hpd;
     return pairNumber == 0 ? hpd : pairNumber;
   }

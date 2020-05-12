@@ -6,6 +6,7 @@ import com.waytoodanny.timetable.domain.GeneticTeachingClass;
 import com.waytoodanny.timetable.domain.Parents;
 import com.waytoodanny.timetable.domain.Population;
 import com.waytoodanny.timetable.domain.chromosome.Chromosome;
+import com.waytoodanny.timetable.domain.chromosome.ChromosomeFactory;
 import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
 import com.waytoodanny.timetable.genetic.GeneticsProperties;
 import com.waytoodanny.timetable.genetic.algorithm.Crossover;
@@ -20,6 +21,7 @@ import java.util.Random;
 @Component
 public class CrossoverImpl implements Crossover {
 
+  private final ChromosomeFactory chromosomeFactory;
   private final Collection<ScheduleConstraint> constraints;
   private final UniversityProperties universityProperties;
   private final GeneticsProperties geneticsProperties;
@@ -40,7 +42,9 @@ public class CrossoverImpl implements Crossover {
     var p1 = parents.getFirst().getChromosome();
     var p2 = parents.getSecond().getChromosome();
 
-    var result = new Chromosome(data.getInputData().getRooms(), universityProperties.weekTimeSlots());
+    var result = chromosomeFactory.chromosome(
+        data.getInputData().getRooms(), universityProperties.weekTimeSlots());
+
     for (GeneticTeachingClass teachClass : data.classesToScheduleForWeek()) {
       Chromosome parentForClass = select(p1, p2);
       int classTimeslot = parentForClass.timeslotForClass(teachClass);

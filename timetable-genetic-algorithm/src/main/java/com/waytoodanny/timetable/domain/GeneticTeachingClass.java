@@ -38,6 +38,10 @@ public class GeneticTeachingClass {
     return this.involvedStudentGroups().stream().anyMatch(otherGroups::contains);
   }
 
+  public int shift() {
+    return teachingClass.shift();
+  }
+
   //TODO cache
   private Integer studentsOverall() {
     return teachingClass.getGroups().stream()

@@ -23,6 +23,13 @@ public class TeachingClass implements Prototyped<TeachingClass> {
   private final int classesNumber;
   private final int classesPerWeek;
 
+  public int shift() {
+    return groups.stream()
+        .map(StudentGroup::getShift)
+        .findFirst()
+        .orElseThrow();
+  }
+
   @Override
   public TeachingClass prototype() {
     return new TeachingClass(

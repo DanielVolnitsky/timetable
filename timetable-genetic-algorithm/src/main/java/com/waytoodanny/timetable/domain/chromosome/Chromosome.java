@@ -2,6 +2,7 @@ package com.waytoodanny.timetable.domain.chromosome;
 
 import com.waytoodanny.timetable.domain.GeneticTeachingClass;
 import com.waytoodanny.timetable.domain.SettledClass;
+import com.waytoodanny.timetable.domain.Shifts;
 import com.waytoodanny.timetable.domain.TimeslotClasses;
 import com.waytoodanny.timetable.domain.university.AvailableRooms;
 import com.waytoodanny.timetable.domain.university.Room;
@@ -33,20 +34,26 @@ public class Chromosome implements Prototyped<Chromosome> {
   private final Map<Integer, ScheduledClasses> scheduledClasses = new TreeMap<>();
   private final TimeslotRooms timeslotRooms;
 
+  private final Shifts shifts;
+
   public Chromosome(@NonNull AvailableRooms rooms,
-                    @NonNull Collection<Integer> timeSlotsPerWeek) {
+                    @NonNull Collection<Integer> timeSlotsPerWeek,
+                    Shifts shifts) {
     this.timeslotRooms = new TimeslotRooms(timeSlotsPerWeek, rooms);
+    this.shifts = shifts;
   }
 
   private Chromosome(Map<Integer, ScheduledClasses> scheduledClasses,
-                     TimeslotRooms timeslotRooms) {
+                     TimeslotRooms timeslotRooms,
+                     Shifts shifts) {
     scheduledClasses.forEach((key, value) -> this.scheduledClasses.put(key, value.prototype()));
     this.timeslotRooms = timeslotRooms.prototype();
+    this.shifts = shifts;
   }
 
   @Override
   public Chromosome prototype() {
-    return new Chromosome(scheduledClasses, timeslotRooms);
+    return new Chromosome(scheduledClasses, timeslotRooms, shifts);
   }
 
   //TODO check if possible to schedule?
@@ -190,6 +197,7 @@ public class Chromosome implements Prototyped<Chromosome> {
     private List<Integer> appropriateForScheduling(GeneticTeachingClass tClass) {
       return timeslotRooms.entrySet()
           .stream()
+          .filter(e -> tClass.shift() == shifts.timeslotShift(e.getKey()))
           .filter(e -> e.getValue()
               .findBestSuitableFor(tClass.roomRequirements())
               .isPresent())

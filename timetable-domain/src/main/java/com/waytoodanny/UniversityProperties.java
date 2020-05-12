@@ -15,15 +15,19 @@ import static java.util.stream.Collectors.toSet;
 @Data
 @Accessors(chain = true)
 public class UniversityProperties {
-  private int academicHoursPerDay;
   private int daysPerWeek;
-  private int academicWeeksPerYear;
+  private int academicWeeks;
   private LocalDate academicYearStartDate;
   private Duration classDuration;
   private List<LocalTime> classStartTimes;
+  private int secondShiftStartTimeslot;
 
   public int timeSlotsPerWeek() {
-    return academicHoursPerDay * daysPerWeek;
+    return academicHoursPerDay() * daysPerWeek;
+  }
+
+  public int academicHoursPerDay() {
+    return classStartTimes.size();
   }
 
   public Set<Integer> weekTimeSlots() {

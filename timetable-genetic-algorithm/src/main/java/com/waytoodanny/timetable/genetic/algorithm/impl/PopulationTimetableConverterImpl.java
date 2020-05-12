@@ -3,7 +3,11 @@ package com.waytoodanny.timetable.genetic.algorithm.impl;
 import com.waytoodanny.UniversityProperties;
 import com.waytoodanny.timetable.TeachingSlot;
 import com.waytoodanny.timetable.Timetable;
-import com.waytoodanny.timetable.domain.*;
+import com.waytoodanny.timetable.domain.TimeCoordinates;
+import com.waytoodanny.timetable.domain.TimeSlots;
+import com.waytoodanny.timetable.domain.TimeslotClasses;
+import com.waytoodanny.timetable.domain.Weekday;
+import com.waytoodanny.timetable.domain.WeekdayClasses;
 import com.waytoodanny.timetable.domain.chromosome.Chromosome;
 import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
 import com.waytoodanny.timetable.genetic.algorithm.PopulationTimetableConverter;
@@ -11,7 +15,14 @@ import io.vavr.collection.Iterator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.IntStream;
 
 import static java.util.Collections.singletonList;
@@ -34,7 +45,7 @@ public class PopulationTimetableConverterImpl implements PopulationTimetableConv
     Chromosome chromosome = candidate.getChromosome();
 
     Map<Integer, List<WeekdayClasses>> byWeek = new TreeMap<>();
-    IntStream.rangeClosed(1, universityProperties.getAcademicWeeksPerYear())
+    IntStream.rangeClosed(1, universityProperties.getAcademicWeeks())
         .forEachOrdered(weekNo -> byWeek.put(weekNo, weekdayClasses(chromosome)));
 
     //TODO :)
@@ -95,7 +106,7 @@ public class PopulationTimetableConverterImpl implements PopulationTimetableConv
     Iterator<io.vavr.collection.Stream<Integer>> grouped =
         io.vavr.collection.Stream.from(1, 1)
             .take(slotsPerWeek)
-            .grouped(universityProperties.getAcademicHoursPerDay());
+            .grouped(universityProperties.academicHoursPerDay());
 
     Arrays.stream(Weekday.values())
         .forEach(wd -> grouped.next().forEach(slot -> weekdaySlots.put(slot, wd)));

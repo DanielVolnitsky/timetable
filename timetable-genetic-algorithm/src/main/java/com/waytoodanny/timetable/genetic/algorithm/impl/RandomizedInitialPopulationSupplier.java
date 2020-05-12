@@ -4,6 +4,7 @@ import com.waytoodanny.UniversityProperties;
 import com.waytoodanny.timetable.domain.GeneticInputData;
 import com.waytoodanny.timetable.domain.Population;
 import com.waytoodanny.timetable.domain.chromosome.Chromosome;
+import com.waytoodanny.timetable.domain.chromosome.ChromosomeFactory;
 import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
 import com.waytoodanny.timetable.genetic.GeneticsProperties;
 import com.waytoodanny.timetable.genetic.algorithm.InitialPopulationSupplier;
@@ -18,6 +19,7 @@ import java.util.Random;
 @Component
 public class RandomizedInitialPopulationSupplier implements InitialPopulationSupplier {
 
+  ChromosomeFactory chromosomeFactory;
   Collection<ScheduleConstraint> scheduleConstraints;
   UniversityProperties universityProperties;
   GeneticsProperties geneticsConfiguration;
@@ -25,17 +27,18 @@ public class RandomizedInitialPopulationSupplier implements InitialPopulationSup
 
   @Override
   public Population apply(GeneticInputData data) {
-    Population.PopulationBuilder populationBld = Population.builder();
+    Population.PopulationBuilder builder = Population.builder();
     for (int i = 0; i < geneticsConfiguration.getPopulationSize(); i++) {
-      populationBld.chromosome(
+      builder.chromosome(
           new EvaluatedChromosome(
               generatedChromosome(data), scheduleConstraints));
     }
-    return populationBld.build();
+    return builder.build();
   }
 
   private Chromosome generatedChromosome(GeneticInputData data) {
-    var chromosome = new Chromosome(data.getInputData().getRooms(), universityProperties.weekTimeSlots());
+    var chromosome = chromosomeFactory.chromosome(
+        data.getInputData().getRooms(), universityProperties.weekTimeSlots());
 
     boolean fullyGenerated = data.classesToScheduleForWeek().stream()
         .map(chromosome::scheduleClassRandomly)
