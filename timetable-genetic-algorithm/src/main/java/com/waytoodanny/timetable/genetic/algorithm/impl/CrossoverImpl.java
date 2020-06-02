@@ -8,7 +8,7 @@ import com.waytoodanny.timetable.domain.Population;
 import com.waytoodanny.timetable.domain.chromosome.Chromosome;
 import com.waytoodanny.timetable.domain.chromosome.ChromosomeFactory;
 import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
-import com.waytoodanny.timetable.genetic.GeneticsProperties;
+import com.waytoodanny.timetable.genetic.GeneticProperties;
 import com.waytoodanny.timetable.genetic.algorithm.Crossover;
 import com.waytoodanny.timetable.genetic.constraint.ScheduleConstraint;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ public class CrossoverImpl implements Crossover {
   private final ChromosomeFactory chromosomeFactory;
   private final Collection<ScheduleConstraint> constraints;
   private final UniversityProperties universityProperties;
-  private final GeneticsProperties geneticsProperties;
+  private final GeneticProperties geneticProperties;
   private final Random random;
 
   @Override

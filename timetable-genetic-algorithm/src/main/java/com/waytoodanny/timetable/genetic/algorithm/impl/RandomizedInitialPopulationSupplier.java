@@ -6,7 +6,7 @@ import com.waytoodanny.timetable.domain.Population;
 import com.waytoodanny.timetable.domain.chromosome.Chromosome;
 import com.waytoodanny.timetable.domain.chromosome.ChromosomeFactory;
 import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
-import com.waytoodanny.timetable.genetic.GeneticsProperties;
+import com.waytoodanny.timetable.genetic.GeneticProperties;
 import com.waytoodanny.timetable.genetic.algorithm.InitialPopulationSupplier;
 import com.waytoodanny.timetable.genetic.constraint.ScheduleConstraint;
 import lombok.Value;
@@ -22,7 +22,7 @@ public class RandomizedInitialPopulationSupplier implements InitialPopulationSup
   ChromosomeFactory chromosomeFactory;
   Collection<ScheduleConstraint> scheduleConstraints;
   UniversityProperties universityProperties;
-  GeneticsProperties geneticsConfiguration;
+  GeneticProperties geneticsConfiguration;
   Random random;
 
   @Override

@@ -50,12 +50,12 @@ public class TimetableToJsonConverter implements TimetableConverter<String> {
         private final int pairNumber;
         private final TimeCoordinates timeCoordinates;
 
-        public static TeachingSlot fromDomain(com.waytoodanny.timetable.TeachingSlot domain) {
+        public static TeachingSlot fromDomain(com.waytoodanny.timetable.domain.TeachingSlot domain) {
             return new TeachingSlot(
-                    TeachingClass.fromDomain(domain.getTeachingClass()),
-                    Room.fromDomain(domain.getRoom()),
-                    domain.getPairNumber(),
-                    TimeCoordinates.fromDomain(domain.getTimeCoordinates()));
+                TeachingClass.fromDomain(domain.getTeachingClass()),
+                Room.fromDomain(domain.getRoom()),
+                domain.getPairNumber(),
+                TimeCoordinates.fromDomain(domain.getTimeCoordinates()));
         }
     }
 

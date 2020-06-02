@@ -1,5 +1,6 @@
 package com.waytoodanny.timetable;
 
+import com.waytoodanny.timetable.domain.TeachingSlot;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

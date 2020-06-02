@@ -1,8 +1,8 @@
 package com.waytoodanny.timetable.genetic.algorithm.impl;
 
 import com.waytoodanny.UniversityProperties;
-import com.waytoodanny.timetable.TeachingSlot;
 import com.waytoodanny.timetable.Timetable;
+import com.waytoodanny.timetable.domain.TeachingSlot;
 import com.waytoodanny.timetable.domain.TimeCoordinates;
 import com.waytoodanny.timetable.domain.TimeSlots;
 import com.waytoodanny.timetable.domain.TimeslotClasses;

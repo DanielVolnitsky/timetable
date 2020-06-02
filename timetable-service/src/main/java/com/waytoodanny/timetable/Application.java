@@ -18,7 +18,7 @@ import java.util.Set;
 public class Application implements CommandLineRunner {
 
   @Autowired
-  private TimetableSupplier timetableSupplier;
+  private TimetableAlgorithm timetableAlgorithm;
   @Autowired
   private TimetableConverter<String> timetableConverter;
 
@@ -83,7 +83,7 @@ public class Application implements CommandLineRunner {
         class6,
         compositeClass1), rooms);
 
-    Timetable timetable = timetableSupplier.timetable(input);
+    Timetable timetable = timetableAlgorithm.timetable(input);
     String json = timetableConverter.convert(timetable);
     System.out.println();
   }

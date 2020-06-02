@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Random;
 
 @Configuration
-@EnableConfigurationProperties(GeneticsProperties.class)
+@EnableConfigurationProperties(GeneticProperties.class)
 @ComponentScan
 public class GeneticConfiguration {
 

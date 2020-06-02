@@ -5,7 +5,7 @@ import com.waytoodanny.timetable.domain.GeneticTeachingClass;
 import com.waytoodanny.timetable.domain.Population;
 import com.waytoodanny.timetable.domain.chromosome.Chromosome;
 import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
-import com.waytoodanny.timetable.genetic.GeneticsProperties;
+import com.waytoodanny.timetable.genetic.GeneticProperties;
 import com.waytoodanny.timetable.genetic.algorithm.Mutation;
 import com.waytoodanny.timetable.genetic.constraint.ScheduleConstraint;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class MutationImpl implements Mutation {
 
-  private final GeneticsProperties geneticsProperties;
+  private final GeneticProperties geneticProperties;
   private final Random random;
   private final Collection<ScheduleConstraint> scheduleConstraints;
 
@@ -35,7 +35,7 @@ public class MutationImpl implements Mutation {
 
   private EvaluatedChromosome mutationResult(EvaluatedChromosome evaluatedChromosome,
                                              GeneticInputData data) {
-    if (Math.random() > geneticsProperties.getMutationRate()) {
+    if (Math.random() > geneticProperties.getMutationRate()) {
       return evaluatedChromosome;
     }
     return new EvaluatedChromosome(mutatedChromosome(evaluatedChromosome, data), scheduleConstraints);

@@ -3,12 +3,16 @@ package com.waytoodanny.timetable.genetic.algorithm.impl.parentsprovider;
 import com.waytoodanny.timetable.domain.Parents;
 import com.waytoodanny.timetable.domain.Population;
 import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
-import com.waytoodanny.timetable.genetic.GeneticsProperties;
+import com.waytoodanny.timetable.genetic.GeneticProperties;
 import com.waytoodanny.timetable.genetic.algorithm.NextGenParentsSupplier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -18,12 +22,12 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class GroupedTournamentSelection implements NextGenParentsSupplier {
 
-  private final GeneticsProperties geneticsProperties;
+  private final GeneticProperties geneticProperties;
   private final Random random;
 
   @Override
   public Collection<Parents> apply(Population population) {
-    return IntStream.range(0, geneticsProperties.getPopulationSize())
+    return IntStream.range(0, geneticProperties.getPopulationSize())
         .mapToObj(i -> parents(population))
         .collect(toList());
   }
@@ -34,7 +38,7 @@ public class GroupedTournamentSelection implements NextGenParentsSupplier {
 
     List<Integer> fitnessValues = new ArrayList<>(groupedByFitness.keySet());
     int selectionSize =
-        Math.min(fitnessValues.size(), geneticsProperties.getTournamentSelectionSize());
+        Math.min(fitnessValues.size(), geneticProperties.getTournamentSelectionSize());
 
     EvaluatedChromosome parent1;
     EvaluatedChromosome parent2;

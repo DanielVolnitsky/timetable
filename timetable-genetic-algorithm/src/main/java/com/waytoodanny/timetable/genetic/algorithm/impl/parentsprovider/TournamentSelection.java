@@ -3,11 +3,15 @@ package com.waytoodanny.timetable.genetic.algorithm.impl.parentsprovider;
 import com.waytoodanny.timetable.domain.Parents;
 import com.waytoodanny.timetable.domain.Population;
 import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
-import com.waytoodanny.timetable.genetic.GeneticsProperties;
+import com.waytoodanny.timetable.genetic.GeneticProperties;
 import com.waytoodanny.timetable.genetic.algorithm.NextGenParentsSupplier;
 import lombok.RequiredArgsConstructor;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -15,12 +19,12 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class TournamentSelection implements NextGenParentsSupplier {
 
-  private final GeneticsProperties geneticsProperties;
+  private final GeneticProperties geneticProperties;
   private final Random random;
 
   @Override
   public Collection<Parents> apply(Population population) {
-    return IntStream.range(0, geneticsProperties.getPopulationSize())
+    return IntStream.range(0, geneticProperties.getPopulationSize())
         .mapToObj(i -> parents(population))
         .collect(toList());
   }
@@ -41,7 +45,7 @@ public class TournamentSelection implements NextGenParentsSupplier {
     int size = pop.size();
     do {
       result.add(pop.get(random.nextInt(size)));
-    } while (result.size() < geneticsProperties.getTournamentSelectionSize());
+    } while (result.size() < geneticProperties.getTournamentSelectionSize());
 
     return result;
   }

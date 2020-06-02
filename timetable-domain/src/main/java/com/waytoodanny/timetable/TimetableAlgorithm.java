@@ -1,5 +1,5 @@
 package com.waytoodanny.timetable;
 
-public interface TimetableSupplier {
+public interface TimetableAlgorithm {
   Timetable timetable(InputData inputData);
 }

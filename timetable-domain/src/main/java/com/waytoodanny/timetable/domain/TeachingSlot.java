@@ -1,6 +1,5 @@
-package com.waytoodanny.timetable;
+package com.waytoodanny.timetable.domain;
 
-import com.waytoodanny.timetable.domain.TimeCoordinates;
 import com.waytoodanny.timetable.domain.university.Room;
 import com.waytoodanny.timetable.domain.university.TeachingClass;
 import lombok.Builder;

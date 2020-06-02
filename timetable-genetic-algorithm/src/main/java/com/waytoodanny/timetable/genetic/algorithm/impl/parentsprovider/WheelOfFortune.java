@@ -3,21 +3,27 @@ package com.waytoodanny.timetable.genetic.algorithm.impl.parentsprovider;
 import com.waytoodanny.timetable.domain.Parents;
 import com.waytoodanny.timetable.domain.Population;
 import com.waytoodanny.timetable.domain.chromosome.EvaluatedChromosome;
-import com.waytoodanny.timetable.genetic.GeneticsProperties;
+import com.waytoodanny.timetable.genetic.GeneticProperties;
 import com.waytoodanny.timetable.genetic.algorithm.NextGenParentsSupplier;
 import lombok.RequiredArgsConstructor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.IntStream;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 //TODO optimize
 @RequiredArgsConstructor
 public class WheelOfFortune implements NextGenParentsSupplier {
 
   private final Random random;
-  private final GeneticsProperties geneticsProperties;
+  private final GeneticProperties geneticProperties;
 
   @Override
   public Collection<Parents> apply(Population population) {
@@ -39,7 +45,7 @@ public class WheelOfFortune implements NextGenParentsSupplier {
     var fortuneEntries = new ArrayList<List<EvaluatedChromosome>>();
     collect.forEach((k, v) -> IntStream.range(0, k).forEach(i -> fortuneEntries.add(v)));
 
-    return IntStream.range(0, geneticsProperties.getPopulationSize())
+    return IntStream.range(0, geneticProperties.getPopulationSize())
         .mapToObj(i -> parents(fortuneEntries))
         .collect(toList());
   }

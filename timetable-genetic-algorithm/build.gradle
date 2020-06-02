@@ -13,12 +13,12 @@ repositories {
 ext {
     springBootVersion = '2.2.5.RELEASE'
     vavr = '0.10.0'
+    lombok = '1.18.12'
 }
 
 dependencies {
 
     implementation project(':timetable-domain')
-    implementation project(':timetable-service')
 
     implementation "org.springframework.boot:spring-boot:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
